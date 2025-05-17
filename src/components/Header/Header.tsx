@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export default function Header() {
   return (
     <header>
@@ -6,9 +8,11 @@ export default function Header() {
           <div className="mr-2">
             <div className="avatar">
               <div className="w-12 rounded-full">
-                <img
+                <Image
                   alt="Profile Picture"
                   src="https://i.pravatar.cc/300?img=47"
+                  width={300}
+                  height={300}
                 />
               </div>
             </div>
@@ -38,10 +42,7 @@ export default function Header() {
               placeholder="Search for a keyword ..."
             />
           </label>
-          <button
-            className="btn text-neutral-50 w-auto text-label-lg"
-            data-theme="dark"
-          >
+          <button className="btn btn-neutral text-neutral-50 w-auto text-label-lg">
             Join newsletter
           </button>
         </div>
