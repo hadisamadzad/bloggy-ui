@@ -5,12 +5,6 @@ layer(utilities);
   html {
     font-family: "Inter", sans-serif;
   }
-
-  html[data-theme="dark"] {
-    --rounded-box: 1.5rem; /* Example: large border radius for boxes */
-    --rounded-btn: 2rem; /* Example: large border radius for buttons */
-    --rounded-badge: 1rem; /* Example: large border radius for badges */
-  }
 }
 
 @utility btn {

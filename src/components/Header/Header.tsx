@@ -22,6 +22,7 @@ export default function Header() {
             <p className="text-label-md text-base-content/70">UI/UX Designer</p>
           </div>
         </div>
+
         <div className="flex flex-row gap-2">
           <label className="input w-72 flex items-center gap-2">
             <svg
