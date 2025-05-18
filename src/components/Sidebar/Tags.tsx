@@ -86,7 +86,7 @@ export default function Tags() {
         </div>
       </div>
       <div className="flex justify-end">
-        <button className="btn btn-secondary btn-ghost w-auto text-label-lg">
+        <button className="btn btn-link text-base-content/80 w-auto text-label-lg">
           More tags
         </button>
       </div>
