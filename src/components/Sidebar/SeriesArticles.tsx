@@ -7,7 +7,7 @@ export default function SeriesArticles() {
       <div className="divider" />
 
       <div className="flex flex-col gap-1">
-        <div className="collapse collapse-arrow bg-base-content/10 rounded-lg">
+        <div className="collapse collapse-arrow bg-base-content/5 rounded-lg">
           <input type="checkbox" name="my-accordion-2" />
           <div className="collapse-title text-body-md font-medium">
             User research & Strategy (4 Parts)
@@ -34,7 +34,7 @@ export default function SeriesArticles() {
           </div>
         </div>
 
-        <div className="collapse collapse-arrow bg-base-content/10 rounded-lg">
+        <div className="collapse collapse-arrow bg-base-content/5 rounded-lg">
           <input type="checkbox" name="my-accordion-2" />
           <div className="collapse-title text-body-md font-medium">
             User research & Strategy (4 Parts)
@@ -61,7 +61,7 @@ export default function SeriesArticles() {
           </div>
         </div>
 
-        <div className="collapse collapse-arrow bg-base-content/10 rounded-lg">
+        <div className="collapse collapse-arrow bg-base-content/5 rounded-lg">
           <input type="checkbox" name="my-accordion-2" />
           <div className="collapse-title text-body-md font-medium">
             User research & Strategy (4 Parts)
@@ -88,7 +88,7 @@ export default function SeriesArticles() {
           </div>
         </div>
 
-        <div className="collapse collapse-arrow bg-base-content/10 rounded-lg">
+        <div className="collapse collapse-arrow bg-base-content/5 rounded-lg">
           <input type="checkbox" name="my-accordion-2" />
           <div className="collapse-title text-body-md font-medium">
             User research & Strategy (4 Parts)
@@ -115,7 +115,7 @@ export default function SeriesArticles() {
           </div>
         </div>
 
-        <div className="collapse collapse-arrow bg-base-content/10 rounded-lg">
+        <div className="collapse collapse-arrow bg-base-content/5 rounded-lg">
           <input type="checkbox" name="my-accordion-2" />
           <div className="collapse-title text-body-md font-medium">
             User research & Strategy (4 Parts)
@@ -142,7 +142,7 @@ export default function SeriesArticles() {
           </div>
         </div>
 
-        <div className="collapse collapse-arrow bg-base-content/10 rounded-lg">
+        <div className="collapse collapse-arrow bg-base-content/5 rounded-lg">
           <input type="checkbox" name="my-accordion-2" />
           <div className="collapse-title text-body-md font-medium">
             User research & Strategy (4 Parts)
