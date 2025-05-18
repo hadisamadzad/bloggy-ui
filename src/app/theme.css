@@ -1,0 +1,100 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap")
+layer(utilities);
+
+@layer base {
+  html {
+    font-family: "Inter", sans-serif;
+  }
+
+  html[data-theme="dark"] {
+    --rounded-box: 1.5rem; /* Example: large border radius for boxes */
+    --rounded-btn: 2rem; /* Example: large border radius for buttons */
+    --rounded-badge: 1rem; /* Example: large border radius for badges */
+  }
+}
+
+@utility btn {
+  @apply rounded-lg;
+}
+
+@utility input {
+  @apply rounded-lg;
+}
+
+@layer utilities {
+  .text-display-lg {
+    font-size: 64px;
+    line-height: 74px;
+    letter-spacing: -0.35px;
+    font-weight: 700;
+  }
+
+  .text-headline-lg {
+    font-size: 40px;
+    line-height: 48px;
+    font-weight: 600;
+  }
+
+  .text-headline-md {
+    font-size: 32px;
+    line-height: 40px;
+    font-weight: 600;
+  }
+
+  .text-headline-sm {
+    font-size: 28px;
+    line-height: 36px;
+    font-weight: 600;
+  }
+
+  .text-title-lg {
+    font-size: 20px;
+    line-height: 28px;
+    font-weight: 600;
+  }
+
+  .text-title-md {
+    font-size: 16px;
+    line-height: 20px;
+    letter-spacing: 1px;
+    font-weight: 500;
+  }
+
+  .text-title-sm {
+    font-size: 14px;
+    line-height: 18px;
+    letter-spacing: 0.1px;
+    font-weight: 700;
+  }
+
+  .text-body-lg {
+    font-size: 20px;
+    line-height: 32px;
+    letter-spacing: 0.5px;
+  }
+
+  .text-body-md {
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: 0.25px;
+  }
+
+  .text-body-sm {
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 0.3px;
+  }
+
+  .text-label-lg {
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 1px;
+    font-weight: 500;
+  }
+
+  .text-label-md {
+    font-size: 12px;
+    line-height: 16px;
+    letter-spacing: 1px;
+  }
+}

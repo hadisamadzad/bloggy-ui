@@ -18,17 +18,17 @@ export default function Header() {
             </div>
           </div>
           <div className="flex flex-col gap-1">
-            <p className="text-title-md text-neutral-950">Maria Style</p>
-            <p className="text-label-md text-neutral-500">UI/UX Designer</p>
+            <p className="text-title-md">Maria Style</p>
+            <p className="text-label-md text-base-content/70">UI/UX Designer</p>
           </div>
         </div>
         <div className="flex flex-row gap-2">
-          <label className="input input-bordered w-72 border-neutral-500 flex items-center gap-2">
+          <label className="input w-72 flex items-center gap-2">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 16 16"
               fill="currentColor"
-              className="h-4 w-4 opacity-70"
+              className="h-5 w-5 opacity-70"
             >
               <path
                 fillRule="evenodd"
@@ -42,7 +42,7 @@ export default function Header() {
               placeholder="Search for a keyword ..."
             />
           </label>
-          <button className="btn btn-neutral text-neutral-50 w-auto text-label-lg">
+          <button className="btn btn-secondary text-label-lg">
             Join newsletter
           </button>
         </div>
