@@ -1,5 +1,23 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@plugin "daisyui" {
+  themes: light, dark, forest, lofi;
+}
 
-@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+@plugin "daisyui/theme" {
+  name: "light";
+  default: true;
+  --color-primary: oklch(95.51% 0 0);
+  --color-primary-content: oklch(0.232607 0.013807 253.101);
+  --color-secondary: oklch(0.232607 0.013807 253.101);
+  --color-secondary-content: oklch(95.51% 0 0);
+}
+
+@plugin "daisyui/theme" {
+  name: "dark";
+  --color-primary: oklch(0.232607 0.013807 253.101);
+  --color-primary-content: oklch(95.51% 0 0);
+  --color-secondary: oklch(95.51% 0 0);
+  --color-secondary-content: oklch(0.232607 0.013807 253.101);
+}
+
+@import "./theme.css";
