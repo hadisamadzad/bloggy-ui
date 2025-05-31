@@ -1,17 +1,39 @@
 import Image from "next/image";
 
-const articleTitle =
-  "Crafting Seamless Experiences: 10 UI/UX Design Trends for 2024";
+type ArticleListItemProps = {
+  title: string;
+  summary: string;
+  thumbnailUrl: string;
+  readingTime: string;
+  publishedAt: string;
+  updatedAt: string;
+};
 
-export default function ArticleListItem() {
+function formatDate(dateString: string) {
+  const date = new Date(dateString);
+  return date.toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+}
+
+export default function ArticleListItem({
+  title,
+  summary,
+  thumbnailUrl,
+  readingTime,
+  publishedAt,
+  updatedAt,
+}: ArticleListItemProps) {
   return (
     <div className="flex gap-4">
       <div className="flex-none w-[180px] h-30 pt-3">
         <a href="">
           <Image
-            alt={articleTitle}
-            title={articleTitle}
-            src="https://picsum.photos/540/400"
+            alt={title}
+            title={title}
+            src={thumbnailUrl}
             className="object-cover rounded-lg"
             width={540}
             height={400}
@@ -21,19 +43,14 @@ export default function ArticleListItem() {
 
       <div className="grow">
         <div className="flex justify-between text-neutral-600 mb-1">
-          <time className="text-label-md">10 Aug 2024</time>
-          <time className="text-label-md">11 Nov 2024</time>
+          <time className="text-label-md">{formatDate(publishedAt)}</time>
+          <time className="text-label-md">{formatDate(updatedAt)}</time>
         </div>
 
         <a href="">
-          <h2 className="text-title-lg">{articleTitle}</h2>
+          <h2 className="text-title-lg">{title}</h2>
         </a>
-        <p className="text-body-sm text-neutral-500">
-          Discover the top 10 UI/UX design trends shaping 2024, from AI-driven
-          personalization to bold minimalism. This guide will help you create
-          engaging, user-centric experiences that stand out in the evolving
-          digital landscape.
-        </p>
+        <p className="text-body-sm text-neutral-500">{summary}</p>
         <div className="flex justify-between mt-4 text-label-md text-neutral-500">
           <div className="flex gap-6">
             <span className="flex items-center">
@@ -67,7 +84,7 @@ export default function ArticleListItem() {
               14.5K
             </span>
           </div>
-          <span>4 min read</span>
+          <span>{readingTime}</span>
         </div>
       </div>
     </div>
