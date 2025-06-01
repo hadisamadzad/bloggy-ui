@@ -6,10 +6,16 @@ import AboutMe from "@/components/Sidebar/AboutMe";
 import SeriesArticleParts from "@/components/Sidebar/SeriesArticleParts";
 import SeriesArticles from "@/components/Sidebar/SeriesArticles";
 import Tags from "@/components/Sidebar/Tags";
-import { ApiArticle, PaginatedApiArticle } from "@/types/ApiArticle";
+import {
+  ApiArticle,
+  ArticleQueryModel,
+  ArticleSortBy,
+  PaginatedApiArticle,
+} from "@/types/ApiArticle";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
-// Add this mapping function in your file (e.g., page.tsx)
+// Map API article to internal article type
 function mapApiArticleToArticle(apiArticle: ApiArticle): Article {
   return {
     title: apiArticle.title,
@@ -22,16 +28,22 @@ function mapApiArticleToArticle(apiArticle: ApiArticle): Article {
 }
 
 export default function Page() {
+  // URL search parameters
+  const searchParams = useSearchParams();
+  const keyword = searchParams.get("keyword");
+  const page = searchParams.get("page");
+
+  const [sortBy, setSortBy] = useState<ArticleSortBy>(ArticleSortBy.Latest);
   const [articles, setArticles] = useState<Article[]>([]);
 
   useEffect(() => {
-    const queryModel = {
-      keyword: "",
-      statuses: [],
-      tagIds: [],
-      sortBy: "CreatedAtOldest",
-      page: 1,
-      pageSize: 10,
+    const queryModel: ArticleQueryModel = {
+      Keyword: keyword || "",
+      Statuses: [],
+      TagIds: [],
+      SortBy: sortBy.toString(),
+      Page: page ? parseInt(page) : 1,
+      PageSize: 10,
     };
 
     // Convert model to query string
@@ -49,10 +61,11 @@ export default function Page() {
     )
       .then((res) => res.json())
       .then((data: PaginatedApiArticle) => {
-        const mapped = data.results.map(mapApiArticleToArticle);
-        setArticles(mapped);
-      });
-  }, []);
+        const mappedArticles = data.results.map(mapApiArticleToArticle);
+        setArticles(mappedArticles);
+      })
+      .then(() => {});
+  }, [sortBy, keyword, page]);
 
   return (
     <>
@@ -60,7 +73,11 @@ export default function Page() {
       <section className="max-w-[1440px] mx-auto px-24">
         <div className="flex gap-6">
           <div className="flex-2">
-            <ArticleList articles={articles} />
+            <ArticleList
+              articles={articles}
+              sortedBy={sortBy}
+              onSortChange={setSortBy}
+            />
           </div>
 
           <div className="flex-1">

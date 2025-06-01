@@ -1,3 +1,4 @@
+import { ArticleSortBy } from "@/types/ApiArticle";
 import ArticleListItem from "./ArticleListItem";
 import ArticleSortTab from "./ArticleSortTab";
 
@@ -12,13 +13,19 @@ export type Article = {
 
 type ArticleListProps = {
   articles: Article[];
+  sortedBy?: ArticleSortBy;
+  onSortChange?: (sortBy: ArticleSortBy) => void;
 };
 
-export default function ArticleList({ articles }: ArticleListProps) {
+export default function ArticleList({
+  articles,
+  sortedBy = ArticleSortBy.Latest,
+  onSortChange,
+}: ArticleListProps) {
   return (
     <div className="p-4 rounded-lg border border-neutral-500">
       <div className="pb-4">
-        <ArticleSortTab />
+        <ArticleSortTab sortedBy={sortedBy} onSortChange={onSortChange} />
       </div>
       {articles.map((article, index) => (
         <div key={index}>
