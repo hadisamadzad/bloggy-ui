@@ -1,7 +1,7 @@
 import ArticleListItem from "./ArticleListItem";
 import ArticleSortTab from "./ArticleSortTab";
 
-type Article = {
+export type Article = {
   title: string;
   summary: string;
   thumbnailUrl: string;
