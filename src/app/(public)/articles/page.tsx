@@ -6,26 +6,11 @@ import AboutMe from "@/components/Sidebar/AboutMe";
 import SeriesArticleParts from "@/components/Sidebar/SeriesArticleParts";
 import SeriesArticles from "@/components/Sidebar/SeriesArticles";
 import Tags from "@/components/Sidebar/Tags";
-import {
-  ApiArticle,
-  ArticleQueryModel,
-  ArticleSortBy,
-  PaginatedApiArticle,
-} from "@/types/ApiArticle";
+import { listArticles } from "@/services/blogApi";
+import { ApiArticleFilter, ApiArticleSortBy } from "@/types/blog-api";
+import { mapApiArticleToArticle } from "@/utils/type-mappers";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-
-// Map API article to internal article type
-function mapApiArticleToArticle(apiArticle: ApiArticle): Article {
-  return {
-    title: apiArticle.title,
-    summary: apiArticle.summary,
-    thumbnailUrl: apiArticle.thumbnailUrl,
-    readingTime: `${apiArticle.timeToReadInMinute} min read`,
-    publishedAt: apiArticle.publishedAt || apiArticle.createdAt, // fallback if publishedAt is null
-    updatedAt: apiArticle.updatedAt,
-  };
-}
 
 export default function Page() {
   // URL search parameters
@@ -33,40 +18,38 @@ export default function Page() {
   const keyword = searchParams.get("keyword");
   const page = searchParams.get("page");
 
-  const [sortBy, setSortBy] = useState<ArticleSortBy>(ArticleSortBy.Latest);
   const [articles, setArticles] = useState<Article[]>([]);
+  const [sortBy, setSortBy] = useState<ApiArticleSortBy>(
+    ApiArticleSortBy.Latest
+  );
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const filter: ApiArticleFilter = {
+    Keyword: keyword || "",
+    Statuses: [],
+    TagIds: [],
+    SortBy: sortBy.toString(),
+    Page: page ? parseInt(page) : 1,
+    PageSize: 10,
+  };
 
   useEffect(() => {
-    const queryModel: ArticleQueryModel = {
-      Keyword: keyword || "",
-      Statuses: [],
-      TagIds: [],
-      SortBy: sortBy.toString(),
-      Page: page ? parseInt(page) : 1,
-      PageSize: 10,
-    };
+    setLoading(true);
+    setError(null);
 
-    // Convert model to query string
-    const params = new URLSearchParams();
-    Object.entries(queryModel).forEach(([key, value]) => {
-      if (Array.isArray(value)) {
-        value.forEach((v) => params.append(key, v));
-      } else {
-        params.append(key, value as string);
-      }
-    });
-
-    fetch(
-      `https://bloggy-api.hadisamadzad.com/blog/articles?${params.toString()}`
-    )
-      .then((res) => res.json())
-      .then((data: PaginatedApiArticle) => {
-        const mappedArticles = data.results.map(mapApiArticleToArticle);
-        setArticles(mappedArticles);
+    listArticles(filter)
+      .then((apiArticles) => {
+        const articles = apiArticles?.results.map(mapApiArticleToArticle) ?? [];
+        setArticles(articles);
       })
-      .then(() => {});
-  }, [sortBy, keyword, page]);
+      .catch(() => setError("Failed to load articles."))
+      .finally(() => setLoading(false));
+  }, [page, sortBy, keyword]);
 
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
+  if (articles.length === 0) return <div>No articles found.</div>;
   return (
     <>
       <Hero />

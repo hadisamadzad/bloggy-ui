@@ -1,9 +1,9 @@
-import { ArticleSortBy } from "@/types/ApiArticle";
+import { ApiArticleSortBy } from "@/types/blog-api";
 import React from "react";
 
 type ArticleSortTabProps = {
-  sortedBy?: ArticleSortBy;
-  onSortChange?: (sortBy: ArticleSortBy) => void;
+  sortedBy?: ApiArticleSortBy;
+  onSortChange?: (sortBy: ApiArticleSortBy) => void;
 };
 
 export default function ArticleSortTab({
@@ -16,33 +16,33 @@ export default function ArticleSortTab({
         <a
           role="tab"
           className={`tab h-12 text-body-md ${
-            sortedBy === ArticleSortBy.Latest
+            sortedBy === ApiArticleSortBy.Latest
               ? "tab-active border-b-2 border-base-content"
               : ""
           }`}
-          onClick={() => onSortChange?.(ArticleSortBy.Latest)}
+          onClick={() => onSortChange?.(ApiArticleSortBy.Latest)}
         >
           Latest
         </a>
         <a
           role="tab"
           className={`tab h-12 text-body-md ${
-            sortedBy === ArticleSortBy.Popular
+            sortedBy === ApiArticleSortBy.Popular
               ? "tab-active border-b-2 border-base-content"
               : ""
           }`}
-          onClick={() => onSortChange?.(ArticleSortBy.Popular)}
+          onClick={() => onSortChange?.(ApiArticleSortBy.Popular)}
         >
           Popular
         </a>
         <a
           role="tab"
           className={`tab h-12 text-body-md ${
-            sortedBy === ArticleSortBy.Oldest
+            sortedBy === ApiArticleSortBy.Oldest
               ? "tab-active border-b-2 border-base-content"
               : ""
           }`}
-          onClick={() => onSortChange?.(ArticleSortBy.Oldest)}
+          onClick={() => onSortChange?.(ApiArticleSortBy.Oldest)}
         >
           Oldest
         </a>
