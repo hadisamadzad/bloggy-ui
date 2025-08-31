@@ -1,3 +1,4 @@
+import { formatDate } from "@/utils/date-tools";
 import Image from "next/image";
 
 type ArticleListItemProps = {
@@ -8,15 +9,6 @@ type ArticleListItemProps = {
   publishedAt: string;
   updatedAt: string;
 };
-
-function formatDate(dateString: string) {
-  const date = new Date(dateString);
-  return date.toLocaleDateString("en-GB", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-  });
-}
 
 export default function ArticleListItem({
   title,
