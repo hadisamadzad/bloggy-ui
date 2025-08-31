@@ -9,14 +9,14 @@ import Tags from "@/components/Sidebar/Tags";
 import { listArticles } from "@/services/blogApi";
 import { ApiArticleFilter, ApiArticleSortBy } from "@/types/blog-api";
 import { mapApiArticleToArticle } from "@/utils/type-mappers";
-import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function Page() {
+  // TODO This code is commented out because `useSearchParams` is not working in CSR in this way.
   // URL search parameters
-  const searchParams = useSearchParams();
-  const keyword = searchParams.get("keyword");
-  const page = searchParams.get("page");
+  //const searchParams = useSearchParams();
+  //const keyword = searchParams.get("keyword");
+  //const page = searchParams.get("page");
 
   const [articles, setArticles] = useState<Article[]>([]);
   const [sortBy, setSortBy] = useState<ApiArticleSortBy>(
@@ -26,12 +26,12 @@ export default function Page() {
   const [error, setError] = useState<string | null>(null);
 
   const filter: ApiArticleFilter = {
-    Keyword: keyword || "",
+    Keyword: "", //keyword || "",
     Statuses: [],
     TagIds: [],
     SortBy: sortBy.toString(),
-    Page: page ? parseInt(page) : 1,
-    PageSize: 10,
+    Page: 1, //page ? parseInt(page) : 1,
+    PageSize: 14,
   };
 
   useEffect(() => {
@@ -45,7 +45,7 @@ export default function Page() {
       })
       .catch(() => setError("Failed to load articles."))
       .finally(() => setLoading(false));
-  }, [page, sortBy, keyword]);
+  }, [sortBy]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
