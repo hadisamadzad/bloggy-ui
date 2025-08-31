@@ -4,7 +4,7 @@ export default function Footer() {
   return (
     <footer className="mt-32">
       <div className="bg-primary/90 pt-16 pb-8" data-theme="dark">
-        <div className="container flex flex-col w-full mx-[96px] items-center gap-4">
+        <div className="container flex flex-col items-center gap-4 w-[1440px] mx-auto px-24">
           <Image
             alt="Profile Picture"
             src="https://i.pravatar.cc/300?img=47"
@@ -13,7 +13,7 @@ export default function Footer() {
             height={112}
           />
           <p className="text-title-lg text-white">Maria Style</p>
-          <p className="w-2/3 text-body-md text-neutral-50">
+          <p className="w-3/4 text-body-md text-neutral-50">
             Lorem ipsum dolor sit amet consectetur. Est aliquam ultricies
             natoque fusce. Praesent ut odio tincidunt consectetur sem. Vulputate
             sit felis odio vulputate erat aliquam eu velit. Ultrices vivamus
@@ -86,7 +86,7 @@ export default function Footer() {
           </div>
         </div>
       </div>
-      <div className="flex w-full h-8 bg-neutral-100 text-neutral-900 text-body-sm py-2 px-24 items-center ">
+      <div className="flex w-[1440px] mx-auto px-24 h-8 bg-neutral-100 text-neutral-900 text-body-sm py-2 items-center ">
         <p>
           Copyright © 2025 Bloggy. All rights reserved. Feel free to share our
           content, and we’d love it if you mention us as the source.
