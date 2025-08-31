@@ -14,6 +14,21 @@ const nextConfig: NextConfig = {
         hostname: 'picsum.photos',
         pathname: '/**',  // Allows any path under picsum.photos
       },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+        pathname: '/**',  // Allows any path under picsum.photos
+      },
+      {
+        protocol: 'https',
+        hostname: 'unsplash.com',
+        pathname: '/**',  // Allows any path under picsum.photos
+      },
+      {
+        protocol: 'https',
+        hostname: 'source.unsplash.com',
+        pathname: '/**',  // Allows any path under picsum.photos
+      },
     ]
   },
 };
