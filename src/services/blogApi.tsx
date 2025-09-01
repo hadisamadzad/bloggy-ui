@@ -1,4 +1,6 @@
-import { ApiArticleFilter, ApiArticles } from "@/types/blog-api";
+import { ApiArticle, ApiArticleFilter, ApiArticles } from "@/types/blog-api";
+
+const baseUrl: string = "https://bloggy-api.hadisamadzad.com/blog";
 
 export async function listArticles(
   filter: ApiArticleFilter
@@ -14,15 +16,24 @@ export async function listArticles(
   });
 
   try {
-    const res = await fetch(
-      `https://bloggy-api.hadisamadzad.com/blog/articles?${params.toString()}`
-    );
+    const res = await fetch(`${baseUrl}/articles?${params.toString()}`);
     if (!res.ok) throw new Error("Failed to fetch articles");
 
     const data: ApiArticles = await res.json();
     return data;
-  } catch (err) {
-    console.error("Error fetching articles:", err);
+  } catch {
+    return null;
+  }
+}
+
+export async function getArticle(id: string): Promise<ApiArticle | null> {
+  try {
+    const res = await fetch(`${baseUrl}/articles/${encodeURIComponent(id)}`);
+    if (!res.ok) throw new Error(`Failed to fetch article ${id}`);
+
+    const data: ApiArticle = await res.json();
+    return data;
+  } catch {
     return null;
   }
 }
