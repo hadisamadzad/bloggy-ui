@@ -1,6 +1,6 @@
 import { ApiArticleSortBy } from "@/types/blog-api";
 import ArticleListItem from "./ArticleListItem";
-import ArticleSortTab from "./ArticleSortTab";
+import ArticleListSortTab from "./ArticleListSortTab";
 
 export type Article = {
   title: string;
@@ -25,7 +25,7 @@ export default function ArticleList({
   return (
     <div className="p-4 rounded-lg border border-neutral-500">
       <div className="pb-4">
-        <ArticleSortTab sortedBy={sortedBy} onSortChange={onSortChange} />
+        <ArticleListSortTab sortedBy={sortedBy} onSortChange={onSortChange} />
       </div>
       {articles.map((article, index) => (
         <div key={index}>
