@@ -1,8 +1,8 @@
-import { ApiArticleSortBy } from "@/types/blog-api";
+import { ArticleSortBy } from "@/types/blog";
 import ArticleListItem from "./ArticleListItem";
 import ArticleListSortTab from "./ArticleListSortTab";
 
-export type Article = {
+type Article = {
   title: string;
   summary: string;
   thumbnailUrl: string;
@@ -13,13 +13,13 @@ export type Article = {
 
 type ArticleListProps = {
   articles: Article[];
-  sortedBy?: ApiArticleSortBy;
-  onSortChange?: (sortBy: ApiArticleSortBy) => void;
+  sortedBy?: ArticleSortBy;
+  onSortChange?: (sortBy: ArticleSortBy) => void;
 };
 
 export default function ArticleList({
   articles,
-  sortedBy = ApiArticleSortBy.Latest,
+  sortedBy = ArticleSortBy.Latest,
   onSortChange,
 }: ArticleListProps) {
   return (

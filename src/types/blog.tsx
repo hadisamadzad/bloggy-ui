@@ -1,6 +1,4 @@
-import { ArticleStatus } from "./blog";
-
-export type ApiArticle = {
+export type Article = {
   articleId: string;
   authorId: string;
   title: string;
@@ -10,7 +8,7 @@ export type ApiArticle = {
   slug: string;
   thumbnailUrl: string;
   coverImageUrl: string;
-  timeToReadInMinute: number;
+  readingTime: string;
   likes: number;
   tagIds: string[];
   status: ArticleStatus;
@@ -20,18 +18,15 @@ export type ApiArticle = {
   archivedAt: string | null;
 };
 
-export type ApiArticles = {
-  page: number;
-  pageSize: number;
-  totalCount: number;
-  results: ApiArticle[];
-};
+// FIX Modify to use PublishedAt for sorting
+export enum ArticleSortBy {
+  Latest = "CreatedAtNewest",
+  Oldest = "CreatedAtOldest",
+  Popular = "LikesMost",
+}
 
-export type ApiArticleFilter = {
-  Keyword: string;
-  Statuses: string[];
-  TagIds: string[];
-  SortBy: string;
-  Page: number;
-  PageSize: number;
-};
+export enum ArticleStatus {
+  Draft = "Draft",
+  Published = "Published",
+  Archived = "Archived",
+}
