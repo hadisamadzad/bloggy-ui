@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import { formatDate } from "@/utils/date-tools";
 
 interface ArticleHeaderProps {
   articleId: string;
@@ -13,15 +14,6 @@ interface ArticleHeaderProps {
   views: number;
   createdAt: string;
   updatedAt: string;
-}
-
-function formatDate(dateString: string) {
-  const date = new Date(dateString);
-  return date.toLocaleDateString("en-GB", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-  });
 }
 
 export default function ArticleHeader({
