@@ -11,6 +11,7 @@ export type Article = {
   readingTime: string;
   likes: number;
   tagIds: string[];
+  tagSlugs: string[];
   status: ArticleStatus;
   createdAt: string; // ISO string
   updatedAt: string; // ISO string

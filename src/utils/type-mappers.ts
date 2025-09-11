@@ -16,6 +16,7 @@ export function mapApiArticleToArticle(apiArticle: ApiArticle): Article {
     readingTime: `${apiArticle.timeToReadInMinute} min read`,
     likes: apiArticle.likes,
     tagIds: apiArticle.tagIds,
+    tagSlugs: apiArticle.tagSlugs,
     status: apiArticle.status,
     createdAt: apiArticle.createdAt,
     updatedAt: apiArticle.updatedAt,

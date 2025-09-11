@@ -64,18 +64,14 @@ export default function ArticleHeader({
               <span className="text-label-md">{comments} Comments</span>
               <span className="text-label-md">{views} Views</span>
             </div>
-            <div className="text-body-sm">
-              Share{" "}
-              <Link
-                className="underline"
-                href={`/articles/${articleId}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {/* FIXME */}
-                {`https://bloggy.hadisamadzad.com/articles/${articleId}`}
-              </Link>
-            </div>
+            <Link
+              className="text-body-sm underline"
+              href={`/articles/${articleId}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Share
+            </Link>
           </div>
         </div>
       </div>

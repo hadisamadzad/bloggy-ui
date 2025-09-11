@@ -13,6 +13,7 @@ export type ApiArticle = {
   timeToReadInMinute: number;
   likes: number;
   tagIds: string[];
+  tagSlugs: string[];
   status: ArticleStatus;
   createdAt: string; // ISO string
   updatedAt: string; // ISO string
