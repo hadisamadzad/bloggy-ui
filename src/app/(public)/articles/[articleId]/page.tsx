@@ -3,13 +3,12 @@
 import ArticleHeader from "@/components/Article/ArticleHeader";
 import AboutMe from "@/components/Sidebar/AboutMe";
 import SeriesArticleParts from "@/components/Sidebar/SeriesArticleParts";
-import SeriesArticles from "@/components/Sidebar/SeriesArticles";
-import Tags from "@/components/Sidebar/Tags";
 import { getArticle } from "@/services/blogApi";
 import { Article } from "@/types/blog";
 import { mapApiArticleToArticle } from "@/utils/type-mappers";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import ArticleBody from "@/components/Article/ArticleBody";
 
 export default function Page() {
   const { articleId } = useParams();
@@ -44,22 +43,25 @@ export default function Page() {
           title={article.title}
           subtitle={article.subtitle}
           summary={article.summary}
-          authorName={"Hadi Samadzad"} // FIXME: Replace with real data
+          authorName={"Hadi Samadzad"} // FIXME Replace with real data
           readingTime={article.readingTime}
           likes={article.likes}
-          comments={99} // FIXME: Replace with real data
-          views={187} // FIXME: Replace with real data
+          comments={99} // FIXME Replace with real data
+          views={187} // FIXME Replace with real data
           createdAt={article.createdAt}
           updatedAt={article.updatedAt}
         />
         <div className="flex gap-6">
-          <div className="flex-2">Article with ID: {articleId}</div>
-
+          <div className="flex-2">
+            <ArticleBody
+              articleId={article.articleId}
+              articleContent={article.content}
+              tags={article.tagSlugs}
+              likes={article.likes}
+              comments={99} // FIXME Replace with real data
+            />
+          </div>
           <div className="flex-1">
-            <Tags />
-            <div className="mt-6" />
-            <SeriesArticles />
-            <div className="mt-6" />
             <SeriesArticleParts />
             <div className="mt-6" />
             <AboutMe />
