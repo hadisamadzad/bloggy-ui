@@ -7,12 +7,12 @@ export default function Footer() {
         <div className="container flex flex-col items-center gap-4 w-[1440px] mx-auto px-24">
           <Image
             alt="Profile Picture"
-            src="https://i.pravatar.cc/300?img=47"
+            src="https://i.pravatar.cc/300?img=59"
             className="w-28 h-28 rounded-full object-cover"
             width={112}
             height={112}
           />
-          <p className="text-title-lg text-white">Maria Style</p>
+          <p className="text-title-lg text-white">Hadi Samadzad</p>
           <p className="w-3/4 text-body-md text-neutral-50">
             Lorem ipsum dolor sit amet consectetur. Est aliquam ultricies
             natoque fusce. Praesent ut odio tincidunt consectetur sem. Vulputate

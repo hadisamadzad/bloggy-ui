@@ -10,7 +10,7 @@ export default function Header() {
               <div className="w-12 rounded-full">
                 <Image
                   alt="Profile Picture"
-                  src="https://i.pravatar.cc/300?img=47"
+                  src="https://i.pravatar.cc/300?img=59"
                   width={300}
                   height={300}
                 />
@@ -18,8 +18,10 @@ export default function Header() {
             </div>
           </div>
           <div className="flex flex-col gap-1">
-            <p className="text-title-md">Maria Style</p>
-            <p className="text-label-md text-base-content/70">UI/UX Designer</p>
+            <p className="text-title-md">Hadi Samadzad</p>
+            <p className="text-label-md text-base-content/70">
+              Software Engineer
+            </p>
           </div>
         </div>
 
