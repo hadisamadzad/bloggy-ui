@@ -38,7 +38,7 @@ export default function ArticleHeader({
         </div>
 
         <div className="w-3/4">
-          <p className="text-body-lg">
+          <p className="text-body-md">
             <span className="font-bold">Summary: </span>
             {summary}
           </p>
