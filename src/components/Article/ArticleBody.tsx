@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import ArticleTags from "./ArticleTags";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -9,7 +10,9 @@ import { xonokai as codeStyle } from "react-syntax-highlighter/dist/esm/styles/p
 
 interface ArticleBodyProps {
   articleId: string;
-  articleContent: string;
+  title: string;
+  coverImageUrl: string;
+  content: string;
   tags: string[];
   likes: number;
   comments: number;
@@ -17,7 +20,9 @@ interface ArticleBodyProps {
 
 export default function ArticleBody({
   articleId,
-  articleContent,
+  title,
+  coverImageUrl,
+  content,
   tags,
   likes,
   comments,
@@ -25,15 +30,23 @@ export default function ArticleBody({
   return (
     <>
       <div className="flex flex-col gap-8">
-        <style jsx global>{`
-          .prose > pre {
-            margin: 0;
-            padding: 0;
-            border-radius: 0;
-            background: none;
-          }
-        `}</style>
+        <Image
+          src={coverImageUrl}
+          alt={title}
+          width={1000}
+          height={600}
+          className="w-full max-h-[500px] rounded-lg object-cover"
+        />
         <div className="prose max-w-none">
+          {/* NOTE Markdown component creates an extra 'pre' element around 'code' blocks */}
+          <style jsx global>{`
+            .prose > pre {
+              margin: 0;
+              padding: 0;
+              border-radius: 0;
+              background: none;
+            }
+          `}</style>
           <ReactMarkdown
             remarkPlugins={[remarkGfm]}
             components={{
@@ -57,7 +70,7 @@ export default function ArticleBody({
               },
             }}
           >
-            {articleContent}
+            {content}
           </ReactMarkdown>
         </div>
 

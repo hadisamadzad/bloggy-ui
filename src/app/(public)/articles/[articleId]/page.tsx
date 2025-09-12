@@ -55,7 +55,9 @@ export default function Page() {
           <div className="flex-2">
             <ArticleBody
               articleId={article.articleId}
-              articleContent={article.content}
+              title={article.title}
+              coverImageUrl={article.coverImageUrl}
+              content={article.content}
               tags={article.tagSlugs}
               likes={article.likes}
               comments={99} // FIXME Replace with real data
