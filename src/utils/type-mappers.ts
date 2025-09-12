@@ -6,11 +6,11 @@ export function mapApiArticleToArticle(apiArticle: ApiArticle): Article {
   return {
     articleId: apiArticle.articleId,
     authorId: apiArticle.authorId,
+    slug: apiArticle.slug,
     title: apiArticle.title,
     subtitle: apiArticle.subtitle,
     summary: apiArticle.summary,
     content: apiArticle.content,
-    slug: apiArticle.slug,
     thumbnailUrl: apiArticle.thumbnailUrl,
     coverImageUrl: apiArticle.coverImageUrl,
     readingTime: `${apiArticle.timeToReadInMinute} min read`,

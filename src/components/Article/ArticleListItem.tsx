@@ -1,7 +1,9 @@
 import { formatDate } from "@/utils/date-tools";
 import Image from "next/image";
+import Link from "next/link";
 
 type ArticleListItemProps = {
+  slug: string;
   title: string;
   summary: string;
   thumbnailUrl: string;
@@ -11,6 +13,7 @@ type ArticleListItemProps = {
 };
 
 export default function ArticleListItem({
+  slug,
   title,
   summary,
   thumbnailUrl,
@@ -21,7 +24,7 @@ export default function ArticleListItem({
   return (
     <div className="flex gap-4">
       <div className="flex-none w-[180px] h-30 pt-3">
-        <a href="">
+        <Link href={`/articles/${slug}`}>
           <Image
             alt={title}
             title={title}
@@ -30,7 +33,7 @@ export default function ArticleListItem({
             width={540}
             height={400}
           />
-        </a>
+        </Link>
       </div>
 
       <div className="grow">
@@ -39,9 +42,9 @@ export default function ArticleListItem({
           <time className="text-label-md">{formatDate(updatedAt)}</time>
         </div>
 
-        <a href="">
+        <Link href={`/articles/${slug}`}>
           <h2 className="text-title-lg">{title}</h2>
-        </a>
+        </Link>
         <p className="text-body-sm text-neutral-500">{summary}</p>
         <div className="flex justify-between mt-4 text-label-md text-neutral-500">
           <div className="flex gap-6">

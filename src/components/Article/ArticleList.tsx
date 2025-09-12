@@ -3,6 +3,7 @@ import ArticleListItem from "./ArticleListItem";
 import ArticleListSortTab from "./ArticleListSortTab";
 
 type Article = {
+  slug: string;
   title: string;
   summary: string;
   thumbnailUrl: string;
@@ -30,6 +31,7 @@ export default function ArticleList({
       {articles.map((article, index) => (
         <div key={index}>
           <ArticleListItem
+            slug={article.slug}
             title={article.title}
             summary={article.summary}
             thumbnailUrl={article.thumbnailUrl}

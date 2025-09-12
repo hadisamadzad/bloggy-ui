@@ -26,10 +26,12 @@ export async function listArticles(
   }
 }
 
-export async function getArticle(id: string): Promise<ApiArticle | null> {
+export async function getArticleBySlug(
+  slug: string
+): Promise<ApiArticle | null> {
   try {
-    const res = await fetch(`${baseUrl}/articles/${encodeURIComponent(id)}`);
-    if (!res.ok) throw new Error(`Failed to fetch article ${id}`);
+    const res = await fetch(`${baseUrl}/articles/${encodeURIComponent(slug)}`);
+    if (!res.ok) throw new Error(`Failed to fetch article ${slug}`);
 
     const data: ApiArticle = await res.json();
     return data;

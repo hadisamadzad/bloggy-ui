@@ -3,7 +3,7 @@
 import ArticleHeader from "@/components/Article/ArticleHeader";
 import AboutMe from "@/components/Sidebar/AboutMe";
 import SeriesArticleParts from "@/components/Sidebar/SeriesArticleParts";
-import { getArticle } from "@/services/blogApi";
+import { getArticleBySlug } from "@/services/blogApi";
 import { Article } from "@/types/blog";
 import { mapApiArticleToArticle } from "@/utils/type-mappers";
 import { useParams } from "next/navigation";
@@ -22,7 +22,7 @@ export default function Page() {
     setLoading(true);
     setError(null);
 
-    getArticle(String(articleId))
+    getArticleBySlug(String(articleId))
       .then((apiArticle) => {
         const article =
           apiArticle === null ? null : mapApiArticleToArticle(apiArticle);

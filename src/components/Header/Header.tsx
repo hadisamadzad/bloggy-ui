@@ -1,30 +1,32 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Header() {
   return (
     <header>
       <div className="w-full h-[72px] flex flex-row justify-between items-center px-24 py-3">
-        <div className="flex flex-row items-center">
-          <div className="mr-2">
-            <div className="avatar">
-              <div className="w-12 rounded-full">
-                <Image
-                  alt="Profile Picture"
-                  src="https://i.pravatar.cc/300?img=59"
-                  width={300}
-                  height={300}
-                />
+        <Link href="/articles">
+          <div className="flex flex-row items-center">
+            <div className="mr-2">
+              <div className="avatar">
+                <div className="w-12 rounded-full">
+                  <Image
+                    alt="Profile Picture"
+                    src="https://i.pravatar.cc/300?img=59"
+                    width={300}
+                    height={300}
+                  />
+                </div>
               </div>
             </div>
+            <div className="flex flex-col gap-1">
+              <p className="text-title-md">Hadi Samadzad</p>
+              <p className="text-label-md text-base-content/70">
+                Software Engineer
+              </p>
+            </div>
           </div>
-          <div className="flex flex-col gap-1">
-            <p className="text-title-md">Hadi Samadzad</p>
-            <p className="text-label-md text-base-content/70">
-              Software Engineer
-            </p>
-          </div>
-        </div>
-
+        </Link>
         <div className="flex flex-row gap-2">
           <label className="input w-72 flex items-center gap-2">
             <svg
