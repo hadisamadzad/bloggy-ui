@@ -1,16 +1,6 @@
-import { ArticleSortBy } from "@/types/blog";
+import { Article, ArticleSortBy } from "@/types/article";
 import ArticleListItem from "./ArticleListItem";
 import ArticleListSortTab from "./ArticleListSortTab";
-
-type Article = {
-  slug: string;
-  title: string;
-  summary: string;
-  thumbnailUrl: string;
-  readingTime: string;
-  publishedAt: string; // ISO string
-  updatedAt: string; // ISO string
-};
 
 type ArticleListProps = {
   articles: Article[];
@@ -30,15 +20,7 @@ export default function ArticleList({
       </div>
       {articles.map((article, index) => (
         <div key={index}>
-          <ArticleListItem
-            slug={article.slug}
-            title={article.title}
-            summary={article.summary}
-            thumbnailUrl={article.thumbnailUrl}
-            readingTime={article.readingTime}
-            publishedAt={article.publishedAt}
-            updatedAt={article.updatedAt}
-          />
+          <ArticleListItem article={article} />
           {index < articles.length - 1 && <div className="divider" />}
         </div>
       ))}

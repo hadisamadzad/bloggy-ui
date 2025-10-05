@@ -6,10 +6,9 @@ import AboutMe from "@/components/Sidebar/AboutMe";
 import SeriesArticleParts from "@/components/Sidebar/SeriesArticleParts";
 import SeriesArticles from "@/components/Sidebar/SeriesArticles";
 import Tags from "@/components/Sidebar/Tags";
-import { listArticles } from "@/services/blogApi";
-import { Article, ArticleSortBy } from "@/types/blog";
-import { ApiArticleFilter } from "@/types/blog-api";
-import { mapApiArticleToArticle } from "@/utils/type-mappers";
+import { listArticles } from "@/services/article-api";
+import { ApiArticleFilter, Article, ArticleSortBy } from "@/types/article";
+import { mapApiArticleToArticle } from "@/lib/type-mappers";
 import { useEffect, useState } from "react";
 
 export default function Page() {

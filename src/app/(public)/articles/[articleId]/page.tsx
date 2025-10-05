@@ -3,12 +3,12 @@
 import ArticleHeader from "@/components/Article/ArticleHeader";
 import AboutMe from "@/components/Sidebar/AboutMe";
 import SeriesArticleParts from "@/components/Sidebar/SeriesArticleParts";
-import { getArticleBySlug } from "@/services/blogApi";
-import { Article } from "@/types/blog";
-import { mapApiArticleToArticle } from "@/utils/type-mappers";
+import { getArticleBySlug } from "@/services/article-api";
+import { mapApiArticleToArticle } from "@/lib/type-mappers";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import ArticleBody from "@/components/Article/ArticleBody";
+import { Article } from "@/types/article";
 
 export default function Page() {
   const { articleId } = useParams();

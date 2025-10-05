@@ -1,4 +1,4 @@
-import { ArticleSortBy } from "@/types/blog";
+import { ArticleSortBy } from "@/types/article";
 import React from "react";
 
 type ArticleListSortTabProps = {

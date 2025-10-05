@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { formatDate } from "@/utils/date-tools";
+import { formatDate } from "@/lib/date-tools";
 
 interface ArticleHeaderProps {
   articleId: string;

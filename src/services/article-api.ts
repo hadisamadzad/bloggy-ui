@@ -1,4 +1,4 @@
-import { ApiArticle, ApiArticleFilter, ApiArticles } from "@/types/blog-api";
+import { ApiArticle, ApiArticleFilter, ApiArticles } from "@/types/article";
 
 const baseUrl: string = "https://bloggy-api.hadisamadzad.com/blog";
 

@@ -1,5 +1,4 @@
-import { Article } from "@/types/blog";
-import { ApiArticle } from "@/types/blog-api";
+import { ApiArticle, Article } from "@/types/article";
 
 // Map API article to internal article type
 export function mapApiArticleToArticle(apiArticle: ApiArticle): Article {
@@ -21,6 +20,6 @@ export function mapApiArticleToArticle(apiArticle: ApiArticle): Article {
     createdAt: apiArticle.createdAt,
     updatedAt: apiArticle.updatedAt,
     publishedAt: apiArticle.publishedAt,
-    archivedAt: apiArticle.archivedAt
+    archivedAt: apiArticle.archivedAt,
   };
 }
