@@ -47,7 +47,7 @@ export default function ArticleHeader({ article }: ArticleHeaderProps) {
             </div>
             <Link
               className="text-body-sm underline"
-              href={`/articles/${article.articleId}`}
+              href={`/articles/${article.slug}`}
               target="_blank"
               rel="noopener noreferrer"
             >
