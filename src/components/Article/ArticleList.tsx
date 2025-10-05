@@ -1,42 +1,26 @@
-import { ApiArticleSortBy } from "@/types/blog-api";
+import { Article, ArticleSortBy } from "@/types/article";
 import ArticleListItem from "./ArticleListItem";
-import ArticleSortTab from "./ArticleSortTab";
-
-export type Article = {
-  title: string;
-  summary: string;
-  thumbnailUrl: string;
-  readingTime: string;
-  publishedAt: string; // ISO string
-  updatedAt: string; // ISO string
-};
+import ArticleListSortTab from "./ArticleListSortTab";
 
 type ArticleListProps = {
   articles: Article[];
-  sortedBy?: ApiArticleSortBy;
-  onSortChange?: (sortBy: ApiArticleSortBy) => void;
+  sortedBy?: ArticleSortBy;
+  onSortChange?: (sortBy: ArticleSortBy) => void;
 };
 
 export default function ArticleList({
   articles,
-  sortedBy = ApiArticleSortBy.Latest,
+  sortedBy = ArticleSortBy.Latest,
   onSortChange,
 }: ArticleListProps) {
   return (
     <div className="p-4 rounded-lg border border-neutral-500">
       <div className="pb-4">
-        <ArticleSortTab sortedBy={sortedBy} onSortChange={onSortChange} />
+        <ArticleListSortTab sortedBy={sortedBy} onSortChange={onSortChange} />
       </div>
       {articles.map((article, index) => (
         <div key={index}>
-          <ArticleListItem
-            title={article.title}
-            summary={article.summary}
-            thumbnailUrl={article.thumbnailUrl}
-            readingTime={article.readingTime}
-            publishedAt={article.publishedAt}
-            updatedAt={article.updatedAt}
-          />
+          <ArticleListItem article={article} />
           {index < articles.length - 1 && <div className="divider" />}
         </div>
       ))}

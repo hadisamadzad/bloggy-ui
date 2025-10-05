@@ -1,14 +1,14 @@
 "use client";
 
-import ArticleList, { Article } from "@/components/Article/ArticleList";
+import ArticleList from "@/components/Article/ArticleList";
 import Hero from "@/components/Hero/Hero";
 import AboutMe from "@/components/Sidebar/AboutMe";
 import SeriesArticleParts from "@/components/Sidebar/SeriesArticleParts";
 import SeriesArticles from "@/components/Sidebar/SeriesArticles";
 import Tags from "@/components/Sidebar/Tags";
-import { listArticles } from "@/services/blogApi";
-import { ApiArticleFilter, ApiArticleSortBy } from "@/types/blog-api";
-import { mapApiArticleToArticle } from "@/utils/type-mappers";
+import { listArticles } from "@/services/article-api";
+import { ApiArticleFilter, Article, ArticleSortBy } from "@/types/article";
+import { mapApiArticleToArticle } from "@/lib/type-mappers";
 import { useEffect, useState } from "react";
 
 export default function Page() {
@@ -19,22 +19,19 @@ export default function Page() {
   //const page = searchParams.get("page");
 
   const [articles, setArticles] = useState<Article[]>([]);
-  const [sortBy, setSortBy] = useState<ApiArticleSortBy>(
-    ApiArticleSortBy.Latest
-  );
+  const [sortBy, setSortBy] = useState<ArticleSortBy>(ArticleSortBy.Latest);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  const filter: ApiArticleFilter = {
-    Keyword: "", //keyword || "",
-    Statuses: [],
-    TagIds: [],
-    SortBy: sortBy.toString(),
-    Page: 1, //page ? parseInt(page) : 1,
-    PageSize: 14,
-  };
-
   useEffect(() => {
+    const filter: ApiArticleFilter = {
+      Keyword: "", //keyword || "",
+      Statuses: [],
+      TagIds: [],
+      SortBy: sortBy.toString(),
+      Page: 1, //page ? parseInt(page) : 1,
+      PageSize: 14,
+    };
     setLoading(true);
     setError(null);
 

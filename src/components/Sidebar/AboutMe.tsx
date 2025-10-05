@@ -9,12 +9,12 @@ export default function AboutMe() {
       <div className="flex flex-col items-center gap-4">
         <Image
           alt="Profile Picture"
-          src="https://i.pravatar.cc/300?img=47"
+          src="https://i.pravatar.cc/300?img=59"
           className="rounded-full object-cover"
           width={112}
           height={112}
         />
-        <p className="text-title-lg">Maria Style</p>
+        <p className="text-title-lg">Hadi Samadzad</p>
         <p className="w-full text-body-md">
           Lorem ipsum dolor sit amet consectetur. Est aliquam ultricies natoque
           fusce. Praesent ut odio tincidunt consectetur sem. Vulputate sit felis

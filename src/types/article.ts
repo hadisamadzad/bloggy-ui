@@ -11,7 +11,8 @@ export type ApiArticle = {
   timeToReadInMinute: number;
   likes: number;
   tagIds: string[];
-  status: ApiArticleStatus;
+  tagSlugs: string[];
+  status: ArticleStatus;
   createdAt: string; // ISO string
   updatedAt: string; // ISO string
   publishedAt: string | null;
@@ -25,19 +26,6 @@ export type ApiArticles = {
   results: ApiArticle[];
 };
 
-// FIX Modify to use PublishedAt for sorting
-export enum ApiArticleSortBy {
-  Latest = "CreatedAtNewest",
-  Oldest = "CreatedAtOldest",
-  Popular = "LikesMost",
-}
-
-export enum ApiArticleStatus {
-  Draft = "Draft",
-  Published = "Published",
-  Archived = "Archived",
-}
-
 export type ApiArticleFilter = {
   Keyword: string;
   Statuses: string[];
@@ -46,3 +34,37 @@ export type ApiArticleFilter = {
   Page: number;
   PageSize: number;
 };
+
+export type Article = {
+  articleId: string;
+  authorId: string;
+  title: string;
+  subtitle: string;
+  summary: string;
+  content: string;
+  slug: string;
+  thumbnailUrl: string;
+  coverImageUrl: string;
+  readingTime: string;
+  likes: number;
+  tagIds: string[];
+  tagSlugs: string[];
+  status: ArticleStatus;
+  createdAt: string; // ISO string
+  updatedAt: string; // ISO string
+  publishedAt: string | null;
+  archivedAt: string | null;
+};
+
+// FIX Modify to use PublishedAt for sorting
+export enum ArticleSortBy {
+  Latest = "CreatedAtNewest",
+  Oldest = "CreatedAtOldest",
+  Popular = "LikesMost",
+}
+
+export enum ArticleStatus {
+  Draft = "Draft",
+  Published = "Published",
+  Archived = "Archived",
+}

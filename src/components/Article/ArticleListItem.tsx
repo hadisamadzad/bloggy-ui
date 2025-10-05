@@ -1,48 +1,40 @@
-import { formatDate } from "@/utils/date-tools";
+import { formatDate } from "@/lib/date-tools";
+import { Article } from "@/types/article";
 import Image from "next/image";
+import Link from "next/link";
 
-type ArticleListItemProps = {
-  title: string;
-  summary: string;
-  thumbnailUrl: string;
-  readingTime: string;
-  publishedAt: string;
-  updatedAt: string;
-};
+interface ArticleListItemProps {
+  article: Article;
+}
 
-export default function ArticleListItem({
-  title,
-  summary,
-  thumbnailUrl,
-  readingTime,
-  publishedAt,
-  updatedAt,
-}: ArticleListItemProps) {
+export default function ArticleListItem({ article }: ArticleListItemProps) {
   return (
     <div className="flex gap-4">
       <div className="flex-none w-[180px] h-30 pt-3">
-        <a href="">
+        <Link href={`/articles/${article.slug}`}>
           <Image
-            alt={title}
-            title={title}
-            src={thumbnailUrl}
+            alt={article.title}
+            title={article.title}
+            src={article.thumbnailUrl}
             className="object-cover rounded-lg"
             width={540}
             height={400}
           />
-        </a>
+        </Link>
       </div>
 
       <div className="grow">
         <div className="flex justify-between text-neutral-600 mb-1">
-          <time className="text-label-md">{formatDate(publishedAt)}</time>
-          <time className="text-label-md">{formatDate(updatedAt)}</time>
+          <time className="text-label-md">
+            {article.publishedAt ? formatDate(article.publishedAt) : ""}
+          </time>
+          <time className="text-label-md">{formatDate(article.updatedAt)}</time>
         </div>
 
-        <a href="">
-          <h2 className="text-title-lg">{title}</h2>
-        </a>
-        <p className="text-body-sm text-neutral-500">{summary}</p>
+        <Link href={`/articles/${article.slug}`}>
+          <h2 className="text-title-lg">{article.title}</h2>
+        </Link>
+        <p className="text-body-sm text-neutral-500">{article.summary}</p>
         <div className="flex justify-between mt-4 text-label-md text-neutral-500">
           <div className="flex gap-6">
             <span className="flex items-center">
@@ -76,7 +68,7 @@ export default function ArticleListItem({
               14.5K
             </span>
           </div>
-          <span>{readingTime}</span>
+          <span>{article.readingTime}</span>
         </div>
       </div>
     </div>
