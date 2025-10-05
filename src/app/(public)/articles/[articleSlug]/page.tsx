@@ -7,9 +7,9 @@ import ArticleBody from "@/components/Article/ArticleBody";
 import { Article } from "@/types/article";
 
 interface PageProps {
-  params: {
+  params: Promise<{
     articleSlug: string; // matches [articleSlug] in the folder name
-  };
+  }>;
 }
 
 export default async function Page({ params }: PageProps) {
