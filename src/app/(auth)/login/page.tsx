@@ -1,12 +1,38 @@
 "use client";
 
-import { useState } from "react";
+import { useState, FormEvent } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { login } from "@/services/identity-api";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+  const router = useRouter();
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError("");
+
+    try {
+      // The service handles token storage automatically
+      await login(email, password);
+
+      // Redirect to articles page after successful login
+      router.push("/articles");
+    } catch (err) {
+      setError("Login failed. Please check your credentials.");
+      console.error("Login error:", err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="flex m-52 justify-center">
@@ -21,18 +47,30 @@ export default function LoginPage() {
           </p>
         </div>
 
-        <form className="flex flex-col gap-4">
+        {error && (
+          <div className="alert alert-error">
+            <span>{error}</span>
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <input
             type="email"
             placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             className="input input-bordered w-full h-12"
+            required
           />
 
           <div className="relative">
             <input
               type={showPassword ? "text" : "password"}
               placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               className="input input-bordered w-full h-12 pr-10"
+              required
             />
             <button
               type="button"
@@ -55,9 +93,10 @@ export default function LoginPage() {
 
           <button
             type="submit"
-            className="btn btn-block bg-black text-white hover:bg-gray-800"
+            disabled={isLoading}
+            className="btn btn-block bg-black text-white hover:bg-gray-800 disabled:loading"
           >
-            Login
+            {isLoading ? "Signing in..." : "Login"}
           </button>
         </form>
 
