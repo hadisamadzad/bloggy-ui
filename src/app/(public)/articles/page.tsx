@@ -23,16 +23,15 @@ export default function Page() {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  const filter: ApiArticleFilter = {
-    Keyword: "", //keyword || "",
-    Statuses: [],
-    TagIds: [],
-    SortBy: sortBy.toString(),
-    Page: 1, //page ? parseInt(page) : 1,
-    PageSize: 14,
-  };
-
   useEffect(() => {
+    const filter: ApiArticleFilter = {
+      Keyword: "", //keyword || "",
+      Statuses: [],
+      TagIds: [],
+      SortBy: sortBy.toString(),
+      Page: 1, //page ? parseInt(page) : 1,
+      PageSize: 14,
+    };
     setLoading(true);
     setError(null);
 
