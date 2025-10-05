@@ -12,7 +12,6 @@ import { Article } from "@/types/article";
 
 export default function Page() {
   const { articleId } = useParams();
-  console.log("articleId:", articleId);
   const [article, setArticle] = useState<Article | null>(null);
 
   const [loading, setLoading] = useState<boolean>(true);
