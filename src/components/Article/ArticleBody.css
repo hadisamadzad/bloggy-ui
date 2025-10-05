@@ -1,0 +1,7 @@
+/* Article Body Styles */
+.prose > pre {
+  margin: 0 !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  background: none !important;
+}

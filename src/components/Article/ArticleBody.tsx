@@ -1,5 +1,4 @@
-"use client";
-
+"use server";
 import Link from "next/link";
 import Image from "next/image";
 import ArticleTags from "./ArticleTags";
@@ -7,46 +6,25 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { xonokai as codeStyle } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { Article } from "@/types/article";
+import "./ArticleBody.css";
 
 interface ArticleBodyProps {
-  articleId: string;
-  title: string;
-  coverImageUrl: string;
-  content: string;
-  tags: string[];
-  likes: number;
-  comments: number;
+  article: Article;
 }
 
-export default function ArticleBody({
-  articleId,
-  title,
-  coverImageUrl,
-  content,
-  tags,
-  likes,
-  comments,
-}: ArticleBodyProps) {
+export default async function ArticleBody({ article }: ArticleBodyProps) {
   return (
     <>
       <div className="flex flex-col gap-8">
         <Image
-          src={coverImageUrl}
-          alt={title}
+          src={article.coverImageUrl}
+          alt={article.title}
           width={1000}
           height={600}
           className="w-full max-h-[500px] rounded-lg object-cover"
         />
         <div className="prose max-w-none">
-          {/* NOTE Markdown component creates an extra 'pre' element around 'code' blocks */}
-          <style jsx global>{`
-            .prose > pre {
-              margin: 0;
-              padding: 0;
-              border-radius: 0;
-              background: none;
-            }
-          `}</style>
           <ReactMarkdown
             remarkPlugins={[remarkGfm]}
             components={{
@@ -70,20 +48,19 @@ export default function ArticleBody({
               },
             }}
           >
-            {content}
+            {article.content}
           </ReactMarkdown>
         </div>
 
-        <ArticleTags tags={tags}></ArticleTags>
+        <ArticleTags tags={article.tagSlugs}></ArticleTags>
 
         <div className="flex items-center justify-between pt-2 border-t-1 border-gray-100">
           <div className="flex gap-6">
-            <span className="text-label-md">{likes} Likes</span>
-            <span className="text-label-md">{comments} Comments</span>
+            <span className="text-label-md">{article.likes} Likes</span>
           </div>
           <Link
             className="text-body-sm underline"
-            href={`/articles/${articleId}`}
+            href={`/articles/${article.articleId}`}
             target="_blank"
             rel="noopener noreferrer"
           >
