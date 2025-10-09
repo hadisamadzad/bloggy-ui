@@ -47,7 +47,7 @@ export default function ArticleListItem({ article }: ArticleListItemProps) {
               />
               324
             </span>
-            <span className="flex items-center">
+            {/*<span className="flex items-center">
               <Image
                 src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAACuUlEQVR4nO2Zy2sTURjFb62gouDCJ0h148aFFRHduBDBjS4ElfkHfKGBSbjnXJgshNmJ4kJBQZGi6B8gbkR8QLG6MNbHTi0UH1BRFF2JVqsduXChldxJMulM7g3kwIEwIZnzy3e/zH0I0VNPPXVCfVLKTQCOAxgCMAzgPYBvJP9o69fmmn5viOQxpdSg/qxwLSnlNpIXSE6QTNr0hPmOrZ3O30dyP8nROYS3GsATpdS+wqukfzV9s7wBLK6R3JI7QBzH80meNuO9aIjEVGcKwEl971wgSK4E8KBTAKwHGg7DcMWcIKIoWktyzBUEZ2BeAxhoC6JcLq8C8MY1BGdgxvXoyAQhpVxkGs45AP+HeRzH8cKWQQCcdx2a6T7XajV2kpz2IHCS4mkp5Y6GEHEczwPwzIOwSZMh9kJnbVSNA65DskWbGUBqbzh7XrTh+2kQA573RmLplTV1IHpa7UG4JOPwOmKryHXXwZjdV20Vee5BsCSjn9pAPnsQLMnoTzaQSQ+CJRk9aeuRnx4ESzL6hw3kgwfBkiwG8NEG4v3UhPUetYFc7sKKXLGBHHYdjNl9KG1tPtVF1firlFpdB2JgbncRyB2RJqXUri4C2ZsKYnplxHVINnet6W6k3lgG8Mvz3tjeEGJWr5xwHZjpPiNalVm73/SwGo/CMFzQMoipymLP9rbGACwX7ahUKi0BcM8DiFfWZW0bu47XHELcrVary0Re0uvjDgP8BhAHQdAv8pSUcn2nIACMmPPF/AXgYAcgHpLcLYqU3hArKPxbAGf1qbAoWiTX6Sdqk0BfSB4FcIrkLZIv9aoTwHe9JCX5VR/Y6OYFcFFXuFKpbCg8/GyRvNRkTI9LKTcKn6WUGtT/IA0gbkRRtFT4rCAI+vUpUQpETUq5R3SDaCaPepwDeGfGdwxgs+tsPQnP9Q9U1gamimC6yQAAAABJRU5ErkJggg=="
                 alt="comments"
@@ -56,7 +56,7 @@ export default function ArticleListItem({ article }: ArticleListItemProps) {
                 height={20}
               />
               16
-            </span>
+            </span>*/}
             <span className="flex items-center">
               <Image
                 src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAAsTAAALEwEAmpwYAAABMklEQVR4nO2UPU7DQBCFUyAafgpqpBwFk+M4crHvk40SIbnEHCM3QAkngCoXSEcVAgegoAwasZHAGjumsSgy0jQ78+a9nZndweBg/9pCCBeSxpIeJa0lfUZfx7Ox5fy5cFmWR8AE+AC2e9xyJobpVLwoiktg2aHwtuZLw7YWB4bASx0s6SGEcAWcRE8kzR0Sww7d4mmangIrB3TTJEjS1MlfWS1P/cxTPvieyTFwD7xJ2kiq7CziFg7JrF488fpqbYlKK4e8slgI4bphJslPgmcvaXdVU+4QvFssz/MzDyvpqTOBpI0Tf7VYlmXnXQiStmvKaRFwF7GjvS1qGfJ8N2QjiQP+NWR70XuH3LamkqZNawrcdl7TtocGLGxbDBiFjBqUNz+0Xr6KXj67Xr7rg/VqX1gNJpvt/VsXAAAAAElFTkSuQmCC"

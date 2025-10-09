@@ -1,7 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { isAuthenticated, getUserInfo, logout } from "@/services/identity-api";
+import {
+  isAuthenticated,
+  getLocalUserInfo,
+  logout,
+} from "@/services/identity-api";
 import { useRouter } from "next/navigation";
 
 export default function AdminBar() {
@@ -18,7 +22,7 @@ export default function AdminBar() {
       setIsLoggedIn(authenticated);
 
       if (authenticated) {
-        setUserInfo(getUserInfo());
+        setUserInfo(getLocalUserInfo());
       } else {
         setUserInfo(null);
       }
@@ -70,14 +74,27 @@ export default function AdminBar() {
       </div>
       <div className="flex items-center gap-4">
         <button
-          onClick={handleLogout}
+          onClick={() => {
+            router.push("/articles");
+          }}
+          className=" hover:underline transition-colors cursor-pointer"
+        >
+          Home
+        </button>
+        {" | "}
+        <button
+          onClick={() => {
+            router.push("/articles/new");
+          }}
           className=" hover:underline transition-colors cursor-pointer"
         >
           New Article
         </button>
         {" | "}
         <button
-          onClick={handleLogout}
+          onClick={() => {
+            router.push("/settings");
+          }}
           className=" hover:underline transition-colors cursor-pointer"
         >
           Settings

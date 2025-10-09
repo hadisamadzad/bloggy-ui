@@ -1,19 +1,22 @@
 "use client";
 
-import { useState, FormEvent } from "react";
+import { useState, FormEvent, Suspense } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { login } from "@/services/identity-api";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { getRedirectUrl, getSafeRedirectUrl } from "@/lib/redirect-utils";
 
-export default function LoginPage() {
+function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectUrl = getRedirectUrl(searchParams);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -24,8 +27,9 @@ export default function LoginPage() {
       // The service handles token storage automatically
       await login(email, password);
 
-      // Redirect to articles page after successful login
-      router.push("/articles");
+      // Redirect to intended page using safe redirect logic
+      const targetUrl = getSafeRedirectUrl(redirectUrl, "/articles");
+      router.push(targetUrl);
     } catch (err) {
       setError("Login failed. Please check your credentials.");
       console.error("Login error:", err);
@@ -35,7 +39,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex m-52 justify-center">
+    <div className="flex min-h-svh items-center -m-6 justify-center">
       <div className="w-full max-w-sm flex flex-col gap-4">
         <div className="text-center flex flex-col gap-4">
           <h1 className="text-headline-lg">Sign in</h1>
@@ -46,6 +50,28 @@ export default function LoginPage() {
             </Link>
           </p>
         </div>
+
+        {redirectUrl && (
+          <div className="alert alert-info">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              className="stroke-current shrink-0 w-6 h-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              ></path>
+            </svg>
+            <span>
+              You&apos;ll be redirected to <strong>{redirectUrl}</strong> after
+              login
+            </span>
+          </div>
+        )}
 
         {error && (
           <div className="alert alert-error">
@@ -127,5 +153,26 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+function LoginPageFallback() {
+  return (
+    <div className="flex min-h-svh items-center -m-6 justify-center">
+      <div className="w-full max-w-sm flex flex-col gap-4">
+        <div className="text-center flex flex-col gap-4">
+          <h1 className="text-headline-lg">Sign in</h1>
+          <div className="loading loading-spinner loading-md mx-auto"></div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<LoginPageFallback />}>
+      <LoginForm />
+    </Suspense>
   );
 }
