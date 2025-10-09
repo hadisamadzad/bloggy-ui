@@ -13,8 +13,8 @@ const getBaseUrl = (service: string): string => {
     },
     // Development URLs
     development: {
-      identity: "http://localhost:6001/api/identity",
-      blog: "http://localhost:6001/api/blog",
+      identity: "https://bloggy.hadisamadzad.com/api/identity",
+      blog: "https://bloggy.hadisamadzad.com/api/blog",
     }
   };
 

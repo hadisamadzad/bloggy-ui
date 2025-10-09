@@ -187,26 +187,6 @@ export function isAuthenticated(): boolean {
   return !!getLocalAccessToken();
 }
 
-// Utility function to decode JWT token (optional, for debugging)
-export function getTokenExpiry(token?: string): Date | null {
-  try {
-    const accessToken = token || getLocalAccessToken();
-    if (!accessToken) return null;
-
-    // JWT tokens have 3 parts separated by dots
-    const parts = accessToken.split('.');
-    if (parts.length !== 3) return null;
-
-    // Decode the payload (second part)
-    const payload = JSON.parse(atob(parts[1]));
-
-    // JWT exp is in seconds, convert to milliseconds
-    return payload.exp ? new Date(payload.exp * 1000) : null;
-  } catch {
-    return null;
-  }
-}
-
 // Check if refresh token is available (by attempting refresh)
 export async function hasValidRefreshToken(): Promise<boolean> {
   try {
