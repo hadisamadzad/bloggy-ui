@@ -1,6 +1,7 @@
 import { ApiLoginResult } from "@/types/auth";
+import { IDENTITY_API_URL } from "@/config/api";
 
-const baseUrl: string = "https://bloggy.hadisamadzad.com/api/identity";
+const baseUrl: string = IDENTITY_API_URL;
 
 // Auth API functions
 export async function login(email: string, password: string): Promise<ApiLoginResult> {
