@@ -1,3 +1,5 @@
+import { redirect } from "next/navigation";
+
 export default function Page() {
-  return <h1>Hello, the is the root page</h1>;
+  redirect("/articles");
 }
