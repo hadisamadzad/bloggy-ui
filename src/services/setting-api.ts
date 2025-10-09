@@ -1,6 +1,6 @@
 import { ApiSetting } from "@/types/setting";
 
-const baseUrl: string = "https://bloggy-api.hadisamadzad.com/blog";
+const baseUrl: string = "https://bloggy.hadisamadzad.com/api/blog";
 
 export async function getBlogSettings(): Promise<ApiSetting | null> {
   try {

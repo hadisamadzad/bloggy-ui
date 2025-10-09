@@ -1,6 +1,6 @@
 import { ApiArticle, ApiArticleFilter, ApiArticles } from "@/types/article";
 
-const baseUrl: string = "https://bloggy-api.hadisamadzad.com/blog";
+const baseUrl: string = "https://bloggy.hadisamadzad.com/api/blog";
 
 export async function listArticles(
   filter: ApiArticleFilter
