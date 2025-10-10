@@ -7,6 +7,7 @@ import {
   logout,
 } from "@/services/identity-api";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function AdminBar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -73,32 +74,26 @@ export default function AdminBar() {
         </span>
       </div>
       <div className="flex items-center gap-4">
-        <button
-          onClick={() => {
-            router.push("/articles");
-          }}
+        <Link
+          href="/articles"
           className=" hover:underline transition-colors cursor-pointer"
         >
           Home
-        </button>
+        </Link>
         {" | "}
-        <button
-          onClick={() => {
-            router.push("/articles/new");
-          }}
+        <Link
+          href="/articles/new"
           className=" hover:underline transition-colors cursor-pointer"
         >
           New Article
-        </button>
+        </Link>
         {" | "}
-        <button
-          onClick={() => {
-            router.push("/settings");
-          }}
+        <Link
+          href="/settings"
           className=" hover:underline transition-colors cursor-pointer"
         >
           Settings
-        </button>
+        </Link>
         {" | "}
         <button
           onClick={handleLogout}
