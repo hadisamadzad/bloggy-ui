@@ -68,3 +68,13 @@ export enum ArticleStatus {
   Published = "Published",
   Archived = "Archived",
 }
+
+export interface CreateArticleApiRequest {
+  title: string;
+  subtitle?: string;
+  summary?: string;
+  content: string;
+  coverImageUrl?: string;
+  thumbnailUrl?: string;
+  tagIds?: string[];
+}
