@@ -193,10 +193,10 @@ export default function SettingsPage() {
           ...blogFormData,
           updatedAt: new Date().toISOString(),
         });
-        
+
         // Refresh the router to update server components (like HeaderBrand)
         router.refresh();
-        
+
         setShowSuccessTick(true);
 
         // Hide success tick after 3 seconds
