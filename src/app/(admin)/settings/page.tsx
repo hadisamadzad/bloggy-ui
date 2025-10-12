@@ -10,16 +10,21 @@ import {
   Shield,
   Calendar,
   Key,
+  Settings as SettingsIcon,
   Save,
   AlertCircle,
   Globe,
   Image as ImageIcon,
+  FileText,
+  Search,
   Link as LinkIcon,
   Plus,
   Trash2,
   Move,
   Eye,
   EyeOff,
+  Check,
+  CheckCircle,
 } from "lucide-react";
 
 interface BlogSettings {
@@ -63,6 +68,7 @@ export default function SettingsPage() {
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [showSuccessTick, setShowSuccessTick] = useState(false);
 
   // Form states
   const [blogFormData, setBlogFormData] = useState<
@@ -188,6 +194,12 @@ export default function SettingsPage() {
       });
 
       setSuccessMessage("Blog settings updated successfully!");
+      setShowSuccessTick(true);
+
+      // Hide success tick after 3 seconds
+      setTimeout(() => {
+        setShowSuccessTick(false);
+      }, 3000);
     } catch (err) {
       setError("Failed to update blog settings. Please try again.");
       console.error("Update error:", err);
@@ -218,6 +230,12 @@ export default function SettingsPage() {
       }
 
       setSuccessMessage("Profile updated successfully!");
+      setShowSuccessTick(true);
+
+      // Hide success tick after 3 seconds
+      setTimeout(() => {
+        setShowSuccessTick(false);
+      }, 3000);
     } catch (err) {
       setError("Failed to update profile. Please try again.");
       console.error("Update error:", err);
@@ -259,6 +277,12 @@ export default function SettingsPage() {
       });
 
       setSuccessMessage("Password changed successfully!");
+      setShowSuccessTick(true);
+
+      // Hide success tick after 3 seconds
+      setTimeout(() => {
+        setShowSuccessTick(false);
+      }, 3000);
     } catch (err) {
       setError(
         "Failed to change password. Please check your current password."
@@ -366,26 +390,7 @@ export default function SettingsPage() {
           </p>
         </div>
 
-        {/* Success/Error Messages */}
-        {successMessage && (
-          <div className="alert alert-success mb-6">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="stroke-current shrink-0 h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-            <span>{successMessage}</span>
-          </div>
-        )}
-
+        {/* Error Messages */}
         {error && (
           <div className="alert alert-error mb-6">
             <AlertCircle className="w-6 h-6" />
@@ -695,7 +700,15 @@ export default function SettingsPage() {
               </div>
 
               {/* Save Button */}
-              <div className="flex justify-end mt-6">
+              <div className="flex items-center justify-end gap-3 mt-6">
+                {showSuccessTick && (
+                  <div className="flex items-center gap-2 text-green-600">
+                    <CheckCircle className="w-6 h-6 text-green-600" />
+                    <span className="text-sm font-bold text-green-600">
+                      Saved!
+                    </span>
+                  </div>
+                )}
                 <button
                   type="submit"
                   className="btn btn-primary"
@@ -905,7 +918,15 @@ export default function SettingsPage() {
 
                     <div className="divider"></div>
 
-                    <div className="flex justify-end gap-3">
+                    <div className="flex items-center justify-end gap-3">
+                      {showSuccessTick && (
+                        <div className="flex items-center gap-2 text-green-600">
+                          <CheckCircle className="w-6 h-6 text-green-600" />
+                          <span className="text-sm font-bold text-green-600">
+                            Saved!
+                          </span>
+                        </div>
+                      )}
                       <button
                         type="button"
                         className="btn btn-outline"
@@ -1081,7 +1102,15 @@ export default function SettingsPage() {
                     </div>
                   </div>
 
-                  <div className="flex justify-end">
+                  <div className="flex items-center justify-end gap-3">
+                    {showSuccessTick && (
+                      <div className="flex items-center gap-2 text-green-600">
+                        <CheckCircle className="w-6 h-6 text-green-600" />
+                        <span className="text-sm font-bold text-green-600">
+                          Saved!
+                        </span>
+                      </div>
+                    )}
                     <button
                       type="submit"
                       className="btn btn-primary"
