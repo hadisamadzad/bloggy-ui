@@ -5,6 +5,7 @@ import {
   updateUser,
   getUserProfile,
   getLocalUserId,
+  updateUserPassword,
 } from "@/services/identity-api";
 import { getBlogSettings, updateBlogSettings } from "@/services/setting-api";
 import { SocialNetworkName } from "@/types/setting";
@@ -25,6 +26,7 @@ import {
   Eye,
   EyeOff,
   CheckCircle,
+  X,
 } from "lucide-react";
 
 interface BlogSettings {
@@ -268,26 +270,38 @@ export default function SettingsPage() {
     setIsSaving(true);
 
     try {
-      // TODO: Call API to change password
-      // await changePassword(passwordForm.currentPassword, passwordForm.newPassword);
+      // Get userId from localStorage for better performance
+      const userId = getLocalUserId();
+      if (!userId) {
+        throw new Error("User ID not available");
+      }
 
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      // Call API to change password
+      const success = await updateUserPassword(
+        userId,
+        passwordForm.currentPassword,
+        passwordForm.newPassword
+      );
 
-      setPasswordForm({
-        currentPassword: "",
-        newPassword: "",
-        confirmPassword: "",
-        showCurrentPassword: false,
-        showNewPassword: false,
-        showConfirmPassword: false,
-      });
+      if (success) {
+        setPasswordForm({
+          currentPassword: "",
+          newPassword: "",
+          confirmPassword: "",
+          showCurrentPassword: false,
+          showNewPassword: false,
+          showConfirmPassword: false,
+        });
 
-      setShowSuccessTick(true);
+        setShowSuccessTick(true);
 
-      // Hide success tick after 3 seconds
-      setTimeout(() => {
-        setShowSuccessTick(false);
-      }, 3000);
+        // Hide success tick after 3 seconds
+        setTimeout(() => {
+          setShowSuccessTick(false);
+        }, 3000);
+      } else {
+        throw new Error("Password update failed");
+      }
     } catch (err) {
       setError(
         "Failed to change password. Please check your current password."
@@ -399,7 +413,13 @@ export default function SettingsPage() {
         {error && (
           <div className="alert alert-error mb-6">
             <AlertCircle className="w-6 h-6" />
-            <span>{error}</span>
+            <span className="flex-1">{error}</span>
+            <button
+              onClick={() => setError("")}
+              className="btn btn-ghost btn-sm btn-square"
+            >
+              <X className="w-4 h-4" />
+            </button>
           </div>
         )}
 
@@ -952,8 +972,8 @@ export default function SettingsPage() {
 
         {/* Security Tab */}
         {activeTab === "security" && userProfile && (
-          <div className="space-y-6">
-            {/* Change Password */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Change Password - Left Column */}
             <div className="card border border-base-content/20">
               <div className="card-body">
                 <h2 className="card-title text-title-lg mb-4">
@@ -1001,88 +1021,86 @@ export default function SettingsPage() {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="form-control">
-                      <label className="label pb-1">
-                        <span className="label-text">New Password</span>
-                      </label>
-                      <div className="relative">
-                        <input
-                          type={
-                            passwordForm.showNewPassword ? "text" : "password"
-                          }
-                          placeholder="Enter new password"
-                          className="input input-bordered w-full pr-10"
-                          value={passwordForm.newPassword}
-                          onChange={(e) =>
-                            setPasswordForm({
-                              ...passwordForm,
-                              newPassword: e.target.value,
-                            })
-                          }
-                          required
-                        />
-                        <button
-                          type="button"
-                          className="absolute inset-y-0 right-3 flex items-center text-gray-400"
-                          onClick={() =>
-                            setPasswordForm({
-                              ...passwordForm,
-                              showNewPassword: !passwordForm.showNewPassword,
-                            })
-                          }
-                        >
-                          {passwordForm.showNewPassword ? (
-                            <EyeOff size={18} />
-                          ) : (
-                            <Eye size={18} />
-                          )}
-                        </button>
-                      </div>
-                    </div>
-
-                    <div className="form-control">
-                      <label className="label pb-1">
-                        <span className="label-text">Confirm New Password</span>
-                      </label>
-                      <div className="relative">
-                        <input
-                          type={
-                            passwordForm.showConfirmPassword
-                              ? "text"
-                              : "password"
-                          }
-                          placeholder="Confirm new password"
-                          className="input input-bordered w-full pr-10"
-                          value={passwordForm.confirmPassword}
-                          onChange={(e) =>
-                            setPasswordForm({
-                              ...passwordForm,
-                              confirmPassword: e.target.value,
-                            })
-                          }
-                          required
-                        />
-                        <button
-                          type="button"
-                          className="absolute inset-y-0 right-3 flex items-center text-gray-400"
-                          onClick={() =>
-                            setPasswordForm({
-                              ...passwordForm,
-                              showConfirmPassword:
-                                !passwordForm.showConfirmPassword,
-                            })
-                          }
-                        >
-                          {passwordForm.showConfirmPassword ? (
-                            <EyeOff size={18} />
-                          ) : (
-                            <Eye size={18} />
-                          )}
-                        </button>
-                      </div>
+                  <div className="form-control">
+                    <label className="label pb-1">
+                      <span className="label-text">New Password</span>
+                    </label>
+                    <div className="relative">
+                      <input
+                        type={
+                          passwordForm.showNewPassword ? "text" : "password"
+                        }
+                        placeholder="Enter new password"
+                        className="input input-bordered w-full pr-10"
+                        value={passwordForm.newPassword}
+                        onChange={(e) =>
+                          setPasswordForm({
+                            ...passwordForm,
+                            newPassword: e.target.value,
+                          })
+                        }
+                        required
+                      />
+                      <button
+                        type="button"
+                        className="absolute inset-y-0 right-3 flex items-center text-gray-400"
+                        onClick={() =>
+                          setPasswordForm({
+                            ...passwordForm,
+                            showNewPassword: !passwordForm.showNewPassword,
+                          })
+                        }
+                      >
+                        {passwordForm.showNewPassword ? (
+                          <EyeOff size={18} />
+                        ) : (
+                          <Eye size={18} />
+                        )}
+                      </button>
                     </div>
                   </div>
+
+                  <div className="form-control">
+                    <label className="label pb-1">
+                      <span className="label-text">Confirm New Password</span>
+                    </label>
+                    <div className="relative">
+                      <input
+                        type={
+                          passwordForm.showConfirmPassword ? "text" : "password"
+                        }
+                        placeholder="Confirm new password"
+                        className="input input-bordered w-full pr-10"
+                        value={passwordForm.confirmPassword}
+                        onChange={(e) =>
+                          setPasswordForm({
+                            ...passwordForm,
+                            confirmPassword: e.target.value,
+                          })
+                        }
+                        required
+                      />
+                      <button
+                        type="button"
+                        className="absolute inset-y-0 right-3 flex items-center text-gray-400"
+                        onClick={() =>
+                          setPasswordForm({
+                            ...passwordForm,
+                            showConfirmPassword:
+                              !passwordForm.showConfirmPassword,
+                          })
+                        }
+                      >
+                        {passwordForm.showConfirmPassword ? (
+                          <EyeOff size={18} />
+                        ) : (
+                          <Eye size={18} />
+                        )}
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="divider"></div>
 
                   <div className="flex items-center justify-end gap-3">
                     {showSuccessTick && (
@@ -1115,7 +1133,7 @@ export default function SettingsPage() {
               </div>
             </div>
 
-            {/* Email Verification */}
+            {/* Email Verification - Right Column */}
             <div className="card border border-base-300">
               <div className="card-body">
                 <div className="flex items-center gap-3 mb-4">
@@ -1125,30 +1143,47 @@ export default function SettingsPage() {
                   </h2>
                 </div>
 
-                <div className="flex items-center justify-between p-4 border border-base-300 rounded-lg">
-                  <div className="flex items-center gap-3">
-                    {/* FIXME Check email validation here */}
-                    <div
-                      className={`w-3 h-3 rounded-full ${
-                        true ? "bg-success" : "bg-warning"
-                      }`}
-                    ></div>
-                    <div>
-                      <div className="font-medium">{userProfile.email}</div>
-                      <div className="text-sm text-base-content/70">
-                        {/* FIXME Check email validation here */}
-                        {true
-                          ? "Email is verified"
-                          : "Email needs verification"}
+                <div className="space-y-4">
+                  <p className="text-body-md text-base-content/70">
+                    Keep your account secure by ensuring your email is verified
+                  </p>
+
+                  <div className="flex items-center justify-between p-4 border border-base-300 rounded-lg">
+                    <div className="flex items-center gap-3">
+                      {/* FIXME Check email validation here */}
+                      <div
+                        className={`w-3 h-3 rounded-full ${
+                          true ? "bg-success" : "bg-warning"
+                        }`}
+                      ></div>
+                      <div>
+                        <div className="font-medium">{userProfile.email}</div>
+                        <div className="text-sm text-base-content/70">
+                          {/* FIXME Check email validation here */}
+                          {true
+                            ? "Email is verified"
+                            : "Email needs verification"}
+                        </div>
                       </div>
                     </div>
+                    {/* FIXME Check email validation here */}
+                    {!true && (
+                      <button className="btn btn-outline btn-sm">
+                        Send Verification Email
+                      </button>
+                    )}
                   </div>
-                  {/* FIXME Check email validation here */}
-                  {!true && (
-                    <button className="btn btn-outline btn-sm">
-                      Send Verification Email
-                    </button>
-                  )}
+
+                  {/* Additional security info */}
+                  <div className="mt-6 p-4 bg-base-200 rounded-lg">
+                    <h3 className="font-semibold mb-2">Security Tips</h3>
+                    <ul className="text-sm text-base-content/70 space-y-1">
+                      <li>• Use a strong, unique password</li>
+                      <li>• Don&apos;t share your password with anyone</li>
+                      <li>• Change your password regularly</li>
+                      <li>• Keep your email address verified</li>
+                    </ul>
+                  </div>
                 </div>
               </div>
             </div>

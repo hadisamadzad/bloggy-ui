@@ -186,6 +186,31 @@ export async function updateUser(userId: string, profileData: UpdateUserApiReque
   }
 }
 
+// Update user password
+export async function updateUserPassword(userId: string, currentPassword: string, newPassword: string): Promise<boolean> {
+  try {
+    const res = await authenticatedFetch(`${baseUrl}/users/${userId}/password`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        currentPassword,
+        newPassword
+      }),
+    });
+
+    if (!res.ok) {
+      throw new Error(`Failed to update password`);
+    }
+
+    return true;
+  } catch (error) {
+    console.error('Update password error:', error);
+    return false;
+  }
+}
+
 // Get user profile
 export async function getUserProfile(): Promise<UserProfileApiResponse | null> {
   try {
