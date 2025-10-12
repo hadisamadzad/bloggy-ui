@@ -6,7 +6,9 @@ const baseUrl: string = BLOG_API_URL;
 
 export async function getBlogSettings(): Promise<ApiSetting | null> {
   try {
-    const res = await fetch(`${baseUrl}/settings`);
+    const res = await fetch(`${baseUrl}/settings`, {
+      next: { revalidate: 60 } // Revalidate every 60 seconds
+    });
 
     if (!res.ok) throw new Error(`Failed to fetch blog settings`);
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, FormEvent } from "react";
+import { useRouter } from "next/navigation";
 import {
   updateUser,
   getUserProfile,
@@ -63,6 +64,7 @@ interface UserProfile {
 }
 
 export default function SettingsPage() {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState<"blog" | "account" | "security">(
     "blog"
   );
@@ -191,6 +193,10 @@ export default function SettingsPage() {
           ...blogFormData,
           updatedAt: new Date().toISOString(),
         });
+        
+        // Refresh the router to update server components (like HeaderBrand)
+        router.refresh();
+        
         setShowSuccessTick(true);
 
         // Hide success tick after 3 seconds
