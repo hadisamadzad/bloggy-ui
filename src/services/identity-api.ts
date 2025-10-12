@@ -29,12 +29,28 @@ export async function login(email: string, password: string): Promise<LoginApiRe
 
   const data: LoginApiResponse = await res.json();
 
-  // Store only access token and user info in localStorage
+  // Store access token and initial user info in localStorage
   // Refresh token will be in httpOnly cookie set by server
   setTokens(data.accessToken, {
     email: data.email,
     fullName: data.fullName
   });
+
+  // Fetch user profile to get complete user data and update localStorage
+  try {
+    const profile = await getUserProfile();
+    if (profile) {
+      // Update localStorage with userId only
+      setTokens(data.accessToken, {
+        email: data.email,
+        fullName: data.fullName,
+        userId: profile.userId
+      });
+    }
+  } catch (error) {
+    console.warn('Failed to fetch user profile after login:', error);
+    // Continue with login even if profile fetch fails
+  }
 
   // Notify components of auth state change
   if (typeof window !== 'undefined') {
@@ -197,7 +213,12 @@ export function getLocalAccessToken(): string | null {
   return localStorage.getItem(ACCESS_TOKEN_KEY);
 }
 
-export function getLocalUserInfo(): { email: string; fullName: string } | null {
+export function getLocalUserId(): string | null {
+  const userInfo = getLocalUserInfo();
+  return userInfo?.userId || null;
+}
+
+export function getLocalUserInfo(): { email: string; fullName: string; userId?: string } | null {
   if (typeof window === 'undefined') return null;
   const userInfo = localStorage.getItem(USER_INFO_KEY);
   return userInfo ? JSON.parse(userInfo) : null;
@@ -205,7 +226,7 @@ export function getLocalUserInfo(): { email: string; fullName: string } | null {
 
 export function setTokens(
   accessToken: string,
-  userInfo: { email: string; fullName: string }): void {
+  userInfo: { email: string; fullName: string; userId?: string }): void {
   if (typeof window === 'undefined') return;
 
   localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);

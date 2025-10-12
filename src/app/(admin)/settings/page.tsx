@@ -1,7 +1,11 @@
 "use client";
 
 import { useState, useEffect, FormEvent } from "react";
-import { updateUser, getUserProfile } from "@/services/identity-api";
+import {
+  updateUser,
+  getUserProfile,
+  getLocalUserId,
+} from "@/services/identity-api";
 import { getBlogSettings, updateBlogSettings } from "@/services/setting-api";
 import { SocialNetworkName } from "@/types/setting";
 import {
@@ -208,23 +212,27 @@ export default function SettingsPage() {
     setError("");
 
     try {
-      if (!userProfile) {
-        throw new Error("User profile not loaded");
+      // Get userId from localStorage for better performance
+      const userId = getLocalUserId();
+      if (!userId) {
+        throw new Error("User ID not available");
       }
 
       // Call API to update user profile
-      const success = await updateUser(userProfile.userId, {
+      const success = await updateUser(userId, {
         firstName: userFormData.firstName,
         lastName: userFormData.lastName,
       });
 
       if (success) {
         // Update local state with the form data
-        setUserProfile({
-          ...userProfile,
-          firstName: userFormData.firstName,
-          lastName: userFormData.lastName,
-        });
+        if (userProfile) {
+          setUserProfile({
+            ...userProfile,
+            firstName: userFormData.firstName,
+            lastName: userFormData.lastName,
+          });
+        }
 
         setShowSuccessTick(true);
 
