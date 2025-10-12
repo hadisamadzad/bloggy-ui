@@ -1,10 +1,10 @@
-import { ApiArticle, ApiArticleFilter, ApiArticles } from "@/types/article";
+import { ApiArticle, ArticleFilter, ApiArticles } from "@/types/article";
 import { BLOG_API_URL } from "@/config/api";
 
 const baseUrl: string = BLOG_API_URL;
 
 export async function listArticles(
-  filter: ApiArticleFilter
+  filter: ArticleFilter
 ): Promise<ApiArticles | null> {
   // Construct query parameters out of filter
   const params = new URLSearchParams();

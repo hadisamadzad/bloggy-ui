@@ -1,10 +1,10 @@
-import { ApiLoginResult } from "@/types/auth";
+import { LoginApiResponse, UpdateUserProfileApiRequest as UpdateUserApiRequest, UserProfileApiResponse } from "@/types/auth";
 import { IDENTITY_API_URL } from "@/config/api";
 
 const baseUrl: string = IDENTITY_API_URL;
 
 // Auth API functions
-export async function login(email: string, password: string): Promise<ApiLoginResult> {
+export async function login(email: string, password: string): Promise<LoginApiResponse> {
   const res = await fetch(`${baseUrl}/auth/login`, {
     method: "POST",
     headers: {
@@ -27,14 +27,30 @@ export async function login(email: string, password: string): Promise<ApiLoginRe
     throw new Error(`Login failed: ${res.status} ${res.statusText}`);
   }
 
-  const data: ApiLoginResult = await res.json();
+  const data: LoginApiResponse = await res.json();
 
-  // Store only access token and user info in localStorage
+  // Store access token and initial user info in localStorage
   // Refresh token will be in httpOnly cookie set by server
   setTokens(data.accessToken, {
     email: data.email,
     fullName: data.fullName
   });
+
+  // Fetch user profile to get complete user data and update localStorage
+  try {
+    const profile = await getUserProfile();
+    if (profile) {
+      // Update localStorage with userId only
+      setTokens(data.accessToken, {
+        email: data.email,
+        fullName: data.fullName,
+        userId: profile.userId
+      });
+    }
+  } catch (error) {
+    console.warn('Failed to fetch user profile after login:', error);
+    // Continue with login even if profile fetch fails
+  }
 
   // Notify components of auth state change
   if (typeof window !== 'undefined') {
@@ -148,6 +164,70 @@ export async function authenticatedFetch(url: string, options: RequestInit = {})
   return response;
 }
 
+// Update user profile
+export async function updateUser(userId: string, profileData: UpdateUserApiRequest): Promise<boolean> {
+  try {
+    const res = await authenticatedFetch(`${baseUrl}/users/${userId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(profileData),
+    });
+
+    if (!res.ok) {
+      throw new Error(`Failed to update user profile`);
+    }
+
+    return true;
+  } catch (error) {
+    console.error('Update user profile error:', error);
+    return false;
+  }
+}
+
+// Update user password
+export async function updateUserPassword(userId: string, currentPassword: string, newPassword: string): Promise<boolean> {
+  try {
+    const res = await authenticatedFetch(`${baseUrl}/users/${userId}/password`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        currentPassword,
+        newPassword
+      }),
+    });
+
+    if (!res.ok) {
+      throw new Error(`Failed to update password`);
+    }
+
+    return true;
+  } catch (error) {
+    console.error('Update password error:', error);
+    return false;
+  }
+}
+
+// Get user profile
+export async function getUserProfile(): Promise<UserProfileApiResponse | null> {
+  try {
+    const res = await authenticatedFetch(`${baseUrl}/auth/profile`);
+
+    if (!res.ok) {
+      throw new Error(`Failed to fetch user profile`);
+    }
+
+    const data: UserProfileApiResponse = await res.json();
+    return data;
+  } catch (error) {
+    console.error('Get user profile error:', error);
+    return null;
+  }
+}
+
 // Token storage keys
 const ACCESS_TOKEN_KEY = 'bloggy_access_token';
 const USER_INFO_KEY = 'bloggy_user_info';
@@ -158,7 +238,12 @@ export function getLocalAccessToken(): string | null {
   return localStorage.getItem(ACCESS_TOKEN_KEY);
 }
 
-export function getLocalUserInfo(): { email: string; fullName: string } | null {
+export function getLocalUserId(): string | null {
+  const userInfo = getLocalUserInfo();
+  return userInfo?.userId || null;
+}
+
+export function getLocalUserInfo(): { email: string; fullName: string; userId?: string } | null {
   if (typeof window === 'undefined') return null;
   const userInfo = localStorage.getItem(USER_INFO_KEY);
   return userInfo ? JSON.parse(userInfo) : null;
@@ -166,7 +251,7 @@ export function getLocalUserInfo(): { email: string; fullName: string } | null {
 
 export function setTokens(
   accessToken: string,
-  userInfo: { email: string; fullName: string }): void {
+  userInfo: { email: string; fullName: string; userId?: string }): void {
   if (typeof window === 'undefined') return;
 
   localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);

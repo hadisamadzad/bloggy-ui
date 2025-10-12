@@ -8,6 +8,7 @@ export function useAuth() {
   const [userInfo, setUserInfo] = useState<{
     email: string;
     fullName: string;
+    userId?: string;
   } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
