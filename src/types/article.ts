@@ -26,7 +26,7 @@ export type ApiArticles = {
   results: ApiArticle[];
 };
 
-export type ApiArticleFilter = {
+export type ArticleFilter = {
   Keyword: string;
   Statuses: string[];
   TagIds: string[];

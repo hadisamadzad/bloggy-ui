@@ -1,10 +1,10 @@
-import { ApiLoginResult } from "@/types/auth";
+import { LoginApiResponse, UpdateUserProfileApiRequest as UpdateUserApiRequest, UserProfileApiResponse } from "@/types/auth";
 import { IDENTITY_API_URL } from "@/config/api";
 
 const baseUrl: string = IDENTITY_API_URL;
 
 // Auth API functions
-export async function login(email: string, password: string): Promise<ApiLoginResult> {
+export async function login(email: string, password: string): Promise<LoginApiResponse> {
   const res = await fetch(`${baseUrl}/auth/login`, {
     method: "POST",
     headers: {
@@ -27,7 +27,7 @@ export async function login(email: string, password: string): Promise<ApiLoginRe
     throw new Error(`Login failed: ${res.status} ${res.statusText}`);
   }
 
-  const data: ApiLoginResult = await res.json();
+  const data: LoginApiResponse = await res.json();
 
   // Store only access token and user info in localStorage
   // Refresh token will be in httpOnly cookie set by server
@@ -146,6 +146,45 @@ export async function authenticatedFetch(url: string, options: RequestInit = {})
   }
 
   return response;
+}
+
+// Update user profile
+export async function updateUser(userId: string, profileData: UpdateUserApiRequest): Promise<boolean> {
+  try {
+    const res = await authenticatedFetch(`${baseUrl}/users/${userId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(profileData),
+    });
+
+    if (!res.ok) {
+      throw new Error(`Failed to update user profile`);
+    }
+
+    return true;
+  } catch (error) {
+    console.error('Update user profile error:', error);
+    return false;
+  }
+}
+
+// Get user profile
+export async function getUserProfile(): Promise<UserProfileApiResponse | null> {
+  try {
+    const res = await authenticatedFetch(`${baseUrl}/auth/profile`);
+
+    if (!res.ok) {
+      throw new Error(`Failed to fetch user profile`);
+    }
+
+    const data: UserProfileApiResponse = await res.json();
+    return data;
+  } catch (error) {
+    console.error('Get user profile error:', error);
+    return null;
+  }
 }
 
 // Token storage keys

@@ -7,7 +7,7 @@ import SeriesArticleParts from "@/components/Sidebar/SeriesArticleParts";
 import SeriesArticles from "@/components/Sidebar/SeriesArticles";
 import Tags from "@/components/Sidebar/Tags";
 import { listArticles } from "@/services/article-api";
-import { ApiArticleFilter, Article, ArticleSortBy } from "@/types/article";
+import { ArticleFilter, Article, ArticleSortBy } from "@/types/article";
 import { mapApiArticleToArticle } from "@/lib/type-mappers";
 import { useEffect, useState } from "react";
 
@@ -24,7 +24,7 @@ export default function Page() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const filter: ApiArticleFilter = {
+    const filter: ArticleFilter = {
       Keyword: "", //keyword || "",
       Statuses: [],
       TagIds: [],

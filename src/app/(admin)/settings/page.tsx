@@ -1,29 +1,25 @@
 "use client";
 
 import { useState, useEffect, FormEvent } from "react";
-import { getLocalUserInfo } from "@/services/identity-api";
+import { updateUser, getUserProfile } from "@/services/identity-api";
+import { getBlogSettings, updateBlogSettings } from "@/services/setting-api";
 import { SocialNetworkName } from "@/types/setting";
 import {
   User,
   Mail,
-  Phone,
   Shield,
   Calendar,
   Key,
-  Settings as SettingsIcon,
   Save,
   AlertCircle,
   Globe,
   Image as ImageIcon,
-  FileText,
-  Search,
   Link as LinkIcon,
   Plus,
   Trash2,
   Move,
   Eye,
   EyeOff,
-  Check,
   CheckCircle,
 } from "lucide-react";
 
@@ -47,15 +43,17 @@ interface SocialLink {
 }
 
 interface UserProfile {
+  userId: string;
   email: string;
+  isEmailConfirmed: boolean;
   firstName: string;
   lastName: string;
-  mobile?: string;
+  fullName: string;
   role: string;
-  isEmailConfirmed: boolean;
+  status: string;
   lastLoginDate: string;
   createdAt: string;
-  state: string;
+  updatedAt: string;
 }
 
 export default function SettingsPage() {
@@ -67,7 +65,6 @@ export default function SettingsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
   const [showSuccessTick, setShowSuccessTick] = useState(false);
 
   // Form states
@@ -88,7 +85,6 @@ export default function SettingsPage() {
   const [userFormData, setUserFormData] = useState({
     firstName: "",
     lastName: "",
-    mobile: "",
   });
 
   const [passwordForm, setPasswordForm] = useState({
@@ -107,66 +103,65 @@ export default function SettingsPage() {
   const loadSettings = async () => {
     setIsLoading(true);
     try {
-      // Load user info from localStorage (later can be from API)
-      const userInfo = getLocalUserInfo();
-      if (userInfo) {
-        const mockUserProfile: UserProfile = {
-          email: userInfo.email,
-          firstName: "Hadi",
-          lastName: "Samadzad",
-          mobile: undefined,
-          role: "Owner",
-          isEmailConfirmed: false,
-          lastLoginDate: "2025-10-09T05:22:57.642Z",
-          createdAt: "2025-03-16T18:24:44.415Z",
-          state: "Active",
+      // Load user profile from API
+      const userProfileData = await getUserProfile();
+      if (userProfileData) {
+        // Add additional UI fields that might not come from API
+        const userProfile: UserProfile = {
+          ...userProfileData,
         };
 
-        setUserProfile(mockUserProfile);
+        setUserProfile(userProfile);
         setUserFormData({
-          firstName: mockUserProfile.firstName,
-          lastName: mockUserProfile.lastName,
-          mobile: mockUserProfile.mobile || "",
+          firstName: userProfile.firstName,
+          lastName: userProfile.lastName,
         });
+      } else {
+        setError("Failed to load user profile");
       }
 
-      // Mock blog settings based on your DB structure
-      const mockBlogSettings: BlogSettings = {
-        blogTitle: "Hadi Samadzad",
-        blogSubtitle: "Software Engineer",
-        blogDescription: "Headless blog description",
-        blogPageTitle: "Bloggy | Headless Blog",
-        seoMetaTitle: "",
-        seoMetaDescription: "",
-        blogUrl: "blog.hadisamadzad.com",
-        blogLogoUrl: "https://i.pravatar.cc/300?img=59",
-        socials: [
-          {
-            order: 1,
-            name: SocialNetworkName.Linkedin,
-            url: "https://www.linkedin.com/in/hadisamadzad/",
-          },
-          {
-            order: 2,
-            name: SocialNetworkName.Medium,
-            url: "https://medium.com/@hadi.samadzad",
-          },
-        ],
-        updatedAt: "2025-10-04T14:38:18.375Z",
-      };
-
-      setBlogSettings(mockBlogSettings);
-      setBlogFormData({
-        blogTitle: mockBlogSettings.blogTitle,
-        blogSubtitle: mockBlogSettings.blogSubtitle,
-        blogDescription: mockBlogSettings.blogDescription,
-        blogPageTitle: mockBlogSettings.blogPageTitle,
-        seoMetaTitle: mockBlogSettings.seoMetaTitle,
-        seoMetaDescription: mockBlogSettings.seoMetaDescription,
-        blogUrl: mockBlogSettings.blogUrl,
-        blogLogoUrl: mockBlogSettings.blogLogoUrl,
-        socials: [...mockBlogSettings.socials],
-      });
+      // Load blog settings from API
+      const blogSettingsData = await getBlogSettings();
+      if (blogSettingsData) {
+        setBlogSettings(blogSettingsData);
+        setBlogFormData({
+          blogTitle: blogSettingsData.blogTitle,
+          blogSubtitle: blogSettingsData.blogSubtitle,
+          blogDescription: blogSettingsData.blogDescription,
+          blogPageTitle: blogSettingsData.blogPageTitle,
+          seoMetaTitle: blogSettingsData.seoMetaTitle,
+          seoMetaDescription: blogSettingsData.seoMetaDescription,
+          blogUrl: blogSettingsData.blogUrl,
+          blogLogoUrl: blogSettingsData.blogLogoUrl,
+          socials: [...blogSettingsData.socials],
+        });
+      } else {
+        // Fallback to default settings if API fails
+        const defaultSettings: BlogSettings = {
+          blogTitle: "",
+          blogSubtitle: "",
+          blogDescription: "",
+          blogPageTitle: "",
+          seoMetaTitle: "",
+          seoMetaDescription: "",
+          blogUrl: "",
+          blogLogoUrl: "",
+          socials: [],
+          updatedAt: new Date().toISOString(),
+        };
+        setBlogSettings(defaultSettings);
+        setBlogFormData({
+          blogTitle: "",
+          blogSubtitle: "",
+          blogDescription: "",
+          blogPageTitle: "",
+          seoMetaTitle: "",
+          seoMetaDescription: "",
+          blogUrl: "",
+          blogLogoUrl: "",
+          socials: [],
+        });
+      }
     } catch (err) {
       setError("Failed to load settings");
       console.error("Load settings error:", err);
@@ -179,27 +174,26 @@ export default function SettingsPage() {
     e.preventDefault();
     setIsSaving(true);
     setError("");
-    setSuccessMessage("");
 
     try {
-      // TODO: Call API to update blog settings
-      // await updateBlogSettings(blogFormData);
+      // Call API to update blog settings
+      const success = await updateBlogSettings(blogFormData);
 
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      if (success) {
+        // Update local state with the form data and new timestamp
+        setBlogSettings({
+          ...blogFormData,
+          updatedAt: new Date().toISOString(),
+        });
+        setShowSuccessTick(true);
 
-      setBlogSettings({
-        ...blogFormData,
-        updatedAt: new Date().toISOString(),
-      });
-
-      setSuccessMessage("Blog settings updated successfully!");
-      setShowSuccessTick(true);
-
-      // Hide success tick after 3 seconds
-      setTimeout(() => {
-        setShowSuccessTick(false);
-      }, 3000);
+        // Hide success tick after 3 seconds
+        setTimeout(() => {
+          setShowSuccessTick(false);
+        }, 3000);
+      } else {
+        throw new Error("Failed to update settings");
+      }
     } catch (err) {
       setError("Failed to update blog settings. Please try again.");
       console.error("Update error:", err);
@@ -212,30 +206,35 @@ export default function SettingsPage() {
     e.preventDefault();
     setIsSaving(true);
     setError("");
-    setSuccessMessage("");
 
     try {
-      // TODO: Call API to update user profile
-      // await updateUserProfile(userFormData);
+      if (!userProfile) {
+        throw new Error("User profile not loaded");
+      }
 
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      // Call API to update user profile
+      const success = await updateUser(userProfile.userId, {
+        firstName: userFormData.firstName,
+        lastName: userFormData.lastName,
+      });
 
-      if (userProfile) {
+      if (success) {
+        // Update local state with the form data
         setUserProfile({
           ...userProfile,
           firstName: userFormData.firstName,
           lastName: userFormData.lastName,
-          mobile: userFormData.mobile || undefined,
         });
+
+        setShowSuccessTick(true);
+
+        // Hide success tick after 3 seconds
+        setTimeout(() => {
+          setShowSuccessTick(false);
+        }, 3000);
+      } else {
+        throw new Error("Failed to update profile");
       }
-
-      setSuccessMessage("Profile updated successfully!");
-      setShowSuccessTick(true);
-
-      // Hide success tick after 3 seconds
-      setTimeout(() => {
-        setShowSuccessTick(false);
-      }, 3000);
     } catch (err) {
       setError("Failed to update profile. Please try again.");
       console.error("Update error:", err);
@@ -247,7 +246,6 @@ export default function SettingsPage() {
   const handlePasswordSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError("");
-    setSuccessMessage("");
 
     if (passwordForm.newPassword !== passwordForm.confirmPassword) {
       setError("New passwords do not match.");
@@ -276,7 +274,6 @@ export default function SettingsPage() {
         showConfirmPassword: false,
       });
 
-      setSuccessMessage("Password changed successfully!");
       setShowSuccessTick(true);
 
       // Hide success tick after 3 seconds
@@ -352,8 +349,8 @@ export default function SettingsPage() {
     }
   };
 
-  const getStateBadgeColor = (state: string) => {
-    switch (state) {
+  const getStatusBadgeColor = (status: string) => {
+    switch (status) {
       case "Active":
         return "badge-success";
       case "Inactive":
@@ -711,7 +708,7 @@ export default function SettingsPage() {
                 )}
                 <button
                   type="submit"
-                  className="btn btn-primary"
+                  className="btn btn-secondary"
                   disabled={isSaving}
                 >
                   {isSaving ? (
@@ -779,11 +776,11 @@ export default function SettingsPage() {
                           Status
                         </span>
                         <span
-                          className={`badge ${getStateBadgeColor(
-                            userProfile.state
+                          className={`badge ${getStatusBadgeColor(
+                            userProfile.status
                           )}`}
                         >
-                          {userProfile.state}
+                          {userProfile.status}
                         </span>
                       </div>
 
@@ -810,7 +807,7 @@ export default function SettingsPage() {
                     <div className="space-y-2 text-sm">
                       <div className="flex items-center gap-2 text-base-content/70">
                         <Calendar className="w-4 h-4" />
-                        <span>Joined {formatDate(userProfile.createdAt)}</span>
+                        <span>Owned {formatDate(userProfile.createdAt)}</span>
                       </div>
                       <div className="flex items-center gap-2 text-base-content/70">
                         <User className="w-4 h-4" />
@@ -895,27 +892,6 @@ export default function SettingsPage() {
                       </label>
                     </div>
 
-                    <div className="form-control">
-                      <label className="label pb-1">
-                        <span className="label-text">Mobile Number</span>
-                      </label>
-                      <div className="relative">
-                        <input
-                          type="tel"
-                          placeholder="Enter your mobile number"
-                          className="input input-bordered w-full"
-                          value={userFormData.mobile}
-                          onChange={(e) =>
-                            setUserFormData({
-                              ...userFormData,
-                              mobile: e.target.value,
-                            })
-                          }
-                        />
-                        <Phone className="absolute right-3 top-3 w-5 h-5 text-base-content/40" />
-                      </div>
-                    </div>
-
                     <div className="divider"></div>
 
                     <div className="flex items-center justify-end gap-3">
@@ -934,10 +910,8 @@ export default function SettingsPage() {
                           setUserFormData({
                             firstName: userProfile.firstName,
                             lastName: userProfile.lastName,
-                            mobile: userProfile.mobile || "",
                           });
                           setError("");
-                          setSuccessMessage("");
                         }}
                       >
                         Reset
@@ -945,7 +919,7 @@ export default function SettingsPage() {
 
                       <button
                         type="submit"
-                        className="btn btn-primary"
+                        className="btn btn-secondary"
                         disabled={isSaving}
                       >
                         {isSaving ? (
@@ -1113,7 +1087,7 @@ export default function SettingsPage() {
                     )}
                     <button
                       type="submit"
-                      className="btn btn-primary"
+                      className="btn btn-secondary"
                       disabled={isSaving}
                     >
                       {isSaving ? (
@@ -1145,23 +1119,24 @@ export default function SettingsPage() {
 
                 <div className="flex items-center justify-between p-4 border border-base-300 rounded-lg">
                   <div className="flex items-center gap-3">
+                    {/* FIXME Check email validation here */}
                     <div
                       className={`w-3 h-3 rounded-full ${
-                        userProfile.isEmailConfirmed
-                          ? "bg-success"
-                          : "bg-warning"
+                        true ? "bg-success" : "bg-warning"
                       }`}
                     ></div>
                     <div>
                       <div className="font-medium">{userProfile.email}</div>
                       <div className="text-sm text-base-content/70">
-                        {userProfile.isEmailConfirmed
+                        {/* FIXME Check email validation here */}
+                        {true
                           ? "Email is verified"
                           : "Email needs verification"}
                       </div>
                     </div>
                   </div>
-                  {!userProfile.isEmailConfirmed && (
+                  {/* FIXME Check email validation here */}
+                  {!true && (
                     <button className="btn btn-outline btn-sm">
                       Send Verification Email
                     </button>
