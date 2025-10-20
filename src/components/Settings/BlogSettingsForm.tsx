@@ -1,0 +1,366 @@
+"use client";
+
+import { FormEvent } from "react";
+import { SocialLink, SocialNetworkName } from "@/types/setting";
+import {
+  Globe,
+  Image as ImageIcon,
+  LinkIcon,
+  Plus,
+  Trash2,
+  Move,
+  Save,
+  CheckCircle,
+} from "lucide-react";
+
+export interface FormData {
+  blogTitle: string;
+  blogSubtitle: string;
+  blogDescription: string;
+  blogPageTitle: string;
+  seoMetaTitle: string;
+  seoMetaDescription: string;
+  blogUrl: string;
+  blogLogoUrl: string;
+  socials: SocialLink[];
+}
+
+interface BlogSettingsFormProps {
+  formData: FormData;
+  onFormDataChange: (data: FormData) => void;
+  onSubmit: (e: FormEvent) => void;
+  isSaving: boolean;
+  showSuccessTick: boolean;
+}
+
+export default function BlogSettingsForm({
+  formData,
+  onFormDataChange,
+  onSubmit,
+  isSaving,
+  showSuccessTick,
+}: BlogSettingsFormProps) {
+  const addSocialLink = () => {
+    const newOrder = Math.max(...formData.socials.map((s) => s.order), 0) + 1;
+    onFormDataChange({
+      ...formData,
+      socials: [
+        ...formData.socials,
+        { order: newOrder, name: SocialNetworkName.Twitter, url: "" },
+      ],
+    });
+  };
+
+  const removeSocialLink = (index: number) => {
+    onFormDataChange({
+      ...formData,
+      socials: formData.socials.filter((_, i) => i !== index),
+    });
+  };
+
+  const updateSocialLink = (
+    index: number,
+    field: "name" | "url",
+    value: string | SocialNetworkName
+  ) => {
+    const updatedSocials = [...formData.socials];
+    if (field === "name") {
+      updatedSocials[index][field] = value as SocialNetworkName;
+    } else {
+      updatedSocials[index][field] = value as string;
+    }
+    onFormDataChange({
+      ...formData,
+      socials: updatedSocials,
+    });
+  };
+
+  return (
+    <div className="space-y-6">
+      <form onSubmit={onSubmit}>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Basic Information */}
+          <div className="card border border-base-content/20">
+            <div className="card-body">
+              <h2 className="card-title text-title-lg mb-4">
+                Basic Information
+              </h2>
+
+              <div className="space-y-4">
+                <div className="form-control">
+                  <label className="label pb-1">
+                    <span className="label-text font-medium">Blog Title</span>
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Your blog title"
+                    className="input input-bordered w-full"
+                    value={formData.blogTitle}
+                    onChange={(e) =>
+                      onFormDataChange({
+                        ...formData,
+                        blogTitle: e.target.value,
+                      })
+                    }
+                    required
+                  />
+                </div>
+
+                <div className="form-control">
+                  <label className="label pb-1">
+                    <span className="label-text font-medium">
+                      Blog Subtitle
+                    </span>
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Your role or tagline"
+                    className="input input-bordered w-full"
+                    value={formData.blogSubtitle}
+                    onChange={(e) =>
+                      onFormDataChange({
+                        ...formData,
+                        blogSubtitle: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+
+                <div className="form-control">
+                  <label className="label pb-1">
+                    <span className="label-text font-medium">
+                      Blog Description
+                    </span>
+                  </label>
+                  <textarea
+                    placeholder="Brief description of your blog"
+                    className="textarea textarea-bordered h-24 w-full"
+                    value={formData.blogDescription}
+                    onChange={(e) =>
+                      onFormDataChange({
+                        ...formData,
+                        blogDescription: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+
+                <div className="form-control">
+                  <label className="label pb-1">
+                    <span className="label-text font-medium">Page Title</span>
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Browser tab title"
+                    className="input input-bordered w-full"
+                    value={formData.blogPageTitle}
+                    onChange={(e) =>
+                      onFormDataChange({
+                        ...formData,
+                        blogPageTitle: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* SEO & Technical */}
+          <div className="card border border-base-content/20">
+            <div className="card-body">
+              <h2 className="card-title text-title-lg mb-4">SEO & Technical</h2>
+
+              <div className="space-y-4">
+                <div className="form-control">
+                  <label className="label pb-1">
+                    <span className="label-text font-medium">Blog URL</span>
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="url"
+                      placeholder="blog.yourdomain.com"
+                      className="input input-bordered w-full"
+                      value={formData.blogUrl}
+                      onChange={(e) =>
+                        onFormDataChange({
+                          ...formData,
+                          blogUrl: e.target.value,
+                        })
+                      }
+                    />
+                    <Globe className="absolute right-3 top-3 w-5 h-5 text-base-content/40" />
+                  </div>
+                </div>
+
+                <div className="form-control">
+                  <label className="label pb-1">
+                    <span className="label-text font-medium">Logo URL</span>
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="url"
+                      placeholder="https://example.com/logo.png"
+                      className="input input-bordered w-full"
+                      value={formData.blogLogoUrl}
+                      onChange={(e) =>
+                        onFormDataChange({
+                          ...formData,
+                          blogLogoUrl: e.target.value,
+                        })
+                      }
+                    />
+                    <ImageIcon className="absolute right-3 top-3 w-5 h-5 text-base-content/40" />
+                  </div>
+                </div>
+
+                <div className="form-control">
+                  <label className="label pb-1">
+                    <span className="label-text font-medium">
+                      SEO Meta Title
+                    </span>
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="SEO optimized title"
+                    className="input input-bordered w-full"
+                    value={formData.seoMetaTitle}
+                    onChange={(e) =>
+                      onFormDataChange({
+                        ...formData,
+                        seoMetaTitle: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+
+                <div className="form-control">
+                  <label className="label pb-1">
+                    <span className="label-text font-medium">
+                      SEO Meta Description
+                    </span>
+                  </label>
+                  <textarea
+                    placeholder="SEO meta description (155 characters max)"
+                    className="textarea textarea-bordered h-24 rounded-lg w-full"
+                    maxLength={155}
+                    value={formData.seoMetaDescription}
+                    onChange={(e) =>
+                      onFormDataChange({
+                        ...formData,
+                        seoMetaDescription: e.target.value,
+                      })
+                    }
+                  />
+                  <label className="label">
+                    <span className="label-text-alt">
+                      {formData.seoMetaDescription.length}/155 characters
+                    </span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Social Links */}
+        <div className="card border border-base-content/20 mt-6">
+          <div className="card-body">
+            <div className="flex items-center justify-between ">
+              <h2 className="card-title text-title-lg mb-4">Social Links</h2>
+              <button
+                type="button"
+                className="btn btn-outline btn-sm"
+                onClick={addSocialLink}
+              >
+                <Plus className="w-4 h-4" />
+                Add Link
+              </button>
+            </div>
+
+            <div className="space-y-3">
+              {formData.socials.map((social, index) => (
+                <div key={index} className="flex gap-3 items-center">
+                  <div className="flex items-center gap-2 text-base-content/50">
+                    <Move className="w-4 h-4" />
+                    <span className="text-sm">#{social.order}</span>
+                  </div>
+                  <select
+                    className="select select-bordered flex-1"
+                    value={social.name}
+                    onChange={(e) =>
+                      updateSocialLink(
+                        index,
+                        "name",
+                        e.target.value as SocialNetworkName
+                      )
+                    }
+                  >
+                    {Object.values(SocialNetworkName).map((networkName) => (
+                      <option key={networkName} value={networkName}>
+                        {networkName}
+                      </option>
+                    ))}
+                  </select>
+                  <input
+                    type="url"
+                    placeholder="https://example.com/profile"
+                    className="input input-bordered flex-1"
+                    value={social.url}
+                    onChange={(e) =>
+                      updateSocialLink(index, "url", e.target.value)
+                    }
+                  />
+                  <button
+                    type="button"
+                    className="btn btn-outline btn-error"
+                    onClick={() => removeSocialLink(index)}
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
+              ))}
+
+              {formData.socials.length === 0 && (
+                <div className="text-center py-8 text-base-content/50">
+                  <LinkIcon className="w-12 h-12 mx-auto mb-2 opacity-50" />
+                  <p>No social links added yet</p>
+                  <p className="text-sm">
+                    Click &ldquo;Add Link&rdquo; to get started
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Save Button */}
+        <div className="flex items-center justify-end gap-3 mt-6">
+          {showSuccessTick && (
+            <div className="flex items-center gap-2 text-green-600">
+              <CheckCircle className="w-6 h-6 text-green-600" />
+              <span className="text-sm font-bold text-green-600">Saved!</span>
+            </div>
+          )}
+          <button
+            type="submit"
+            className="btn btn-secondary"
+            disabled={isSaving}
+          >
+            {isSaving ? (
+              <>
+                <span className="loading loading-spinner loading-sm"></span>
+                Saving...
+              </>
+            ) : (
+              <>
+                <Save className="w-4 h-4" />
+                Save Blog Settings
+              </>
+            )}
+          </button>
+        </div>
+      </form>
+    </div>
+  );
+}

@@ -1,4 +1,4 @@
-import { LoginApiResponse, UpdateUserProfileApiRequest as UpdateUserApiRequest, UserProfileApiResponse } from "@/types/auth";
+import { LoginApiResponse, UpdateUserProfileApiRequest as UpdateUserApiRequest, GetUserProfileApiResponse } from "@/types/auth-api";
 import { IDENTITY_API_URL } from "@/config/api";
 
 const baseUrl: string = IDENTITY_API_URL;
@@ -212,7 +212,7 @@ export async function updateUserPassword(userId: string, currentPassword: string
 }
 
 // Get user profile
-export async function getUserProfile(): Promise<UserProfileApiResponse | null> {
+export async function getUserProfile(): Promise<GetUserProfileApiResponse | null> {
   try {
     const res = await authenticatedFetch(`${baseUrl}/auth/profile`);
 
@@ -220,7 +220,7 @@ export async function getUserProfile(): Promise<UserProfileApiResponse | null> {
       throw new Error(`Failed to fetch user profile`);
     }
 
-    const data: UserProfileApiResponse = await res.json();
+    const data: GetUserProfileApiResponse = await res.json();
     return data;
   } catch (error) {
     console.error('Get user profile error:', error);

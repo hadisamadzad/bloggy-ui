@@ -1,4 +1,10 @@
-export interface ApiSocial {
+export interface SocialLink {
+  order: number;
+  name: SocialNetworkName;
+  url: string;
+}
+
+export interface ApiSocialLink {
   order: number;
   name: SocialNetworkName;
   url: string;
@@ -13,7 +19,7 @@ export interface ApiSetting {
   seoMetaDescription: string;
   blogUrl: string;
   blogLogoUrl: string;
-  socials: ApiSocial[];
+  socials: ApiSocialLink[];
   updatedAt: string;
 }
 

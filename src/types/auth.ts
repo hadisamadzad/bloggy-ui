@@ -1,15 +1,4 @@
-export interface LoginApiResponse {
-  email: string;
-  fullName: string;
-  accessToken: string;
-}
-
-export interface UpdateUserProfileApiRequest {
-  firstName: string;
-  lastName: string;
-}
-
-export interface UserProfileApiResponse {
+export interface UserProfile {
   userId: string;
   email: string;
   isEmailConfirmed: boolean;
