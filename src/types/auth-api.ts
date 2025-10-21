@@ -1,3 +1,5 @@
+import { UserRole } from "./auth";
+
 export interface LoginApiResponse {
   email: string;
   fullName: string;
@@ -16,7 +18,7 @@ export interface GetUserProfileApiResponse {
   firstName: string;
   lastName: string;
   fullName: string;
-  role: string;
+  role: UserRole;
   status: string;
   lastLoginDate: string;
   createdAt: string;

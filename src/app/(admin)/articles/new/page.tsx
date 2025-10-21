@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { createArticle } from "@/services/article-api";
-import { CreateArticleApiRequest } from "@/types/article";
 import { useAuth } from "@/hooks/useAuth";
 import {
   FileText,
@@ -19,6 +18,7 @@ import {
   ArrowLeft,
   AlertCircle,
 } from "lucide-react";
+import { CreateArticleApiRequest } from "@/types/article-api";
 
 interface ArticleFormData {
   title: string;

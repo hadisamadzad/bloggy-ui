@@ -1,53 +1,16 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { isAuthenticated, getLocalUserInfo, logout } from "@/services/auth-api";
+import { logout } from "@/services/auth-api";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function AdminBar() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userInfo, setUserInfo] = useState<{
-    email: string;
-    fullName: string;
-  } | null>(null);
+  const { isLoggedIn, userInfo } = useAuth();
   const router = useRouter();
-
-  useEffect(() => {
-    const checkAuthStatus = () => {
-      const authenticated = isAuthenticated();
-      setIsLoggedIn(authenticated);
-
-      if (authenticated) {
-        setUserInfo(getLocalUserInfo());
-      } else {
-        setUserInfo(null);
-      }
-    };
-
-    // Check initial status
-    checkAuthStatus();
-
-    // Listen for storage changes (when user logs in/out in another tab)
-    const handleStorageChange = () => {
-      checkAuthStatus();
-    };
-
-    window.addEventListener("storage", handleStorageChange);
-
-    // Also listen for custom events when login/logout happens in same tab
-    window.addEventListener("auth-change", handleStorageChange);
-
-    return () => {
-      window.removeEventListener("storage", handleStorageChange);
-      window.removeEventListener("auth-change", handleStorageChange);
-    };
-  }, []);
 
   const handleLogout = async () => {
     await logout();
-    setIsLoggedIn(false);
-    setUserInfo(null);
 
     // Dispatch custom event to notify other components
     window.dispatchEvent(new Event("auth-change"));

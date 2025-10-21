@@ -1,5 +1,6 @@
 import { LoginApiResponse, GetUserProfileApiResponse } from "@/types/auth-api";
 import { IDENTITY_API_URL } from "@/config/api";
+import { UserInfo } from "@/types/auth";
 
 const baseUrl: string = IDENTITY_API_URL;
 
@@ -30,26 +31,25 @@ export async function login(
     throw new Error(`Login failed: ${res.status} ${res.statusText}`);
   }
 
-  const data: LoginApiResponse = await res.json();
-
+  const loginResult: LoginApiResponse = await res.json();
+  const userInfo: UserInfo = {
+    email: loginResult.email,
+    fullName: loginResult.fullName,
+    userId: null,
+    role: null
+  };
   // Store access token and initial user info in localStorage
   // Refresh token will be in httpOnly cookie set by server
-  setTokens(data.accessToken, {
-    email: data.email,
-    fullName: data.fullName,
-    userId: undefined // Will fetch full profile next
-  });
+  setTokens(loginResult.accessToken, userInfo);
 
   // Fetch user profile to get complete user data and update localStorage
   try {
     const profile = await getUserProfile();
     if (profile) {
-      // Update localStorage with userId only
-      setTokens(data.accessToken, {
-        email: data.email,
-        fullName: data.fullName,
-        userId: profile.userId
-      });
+      // Update userInfo with userId and role from profile
+      userInfo.userId = profile.userId;
+      userInfo.role = profile.role;
+      setTokens(loginResult.accessToken, userInfo);
     }
   } catch (error) {
     console.warn('Failed to fetch user profile after login:', error);
@@ -61,7 +61,7 @@ export async function login(
     window.dispatchEvent(new Event('auth-change'));
   }
 
-  return data;
+  return loginResult;
 }
 
 // Auth API functions: Logout
@@ -106,7 +106,7 @@ export async function refreshAccessToken(): Promise<boolean> {
     }
 
     // Refresh endpoint returns only { accessToken: string }
-    const data: { accessToken: string } = await res.json();
+    const refreshResult: { accessToken: string } = await res.json();
 
     // We only update the access token, keep existing user info
     const existingUserInfo = getLocalUserInfo();
@@ -116,7 +116,7 @@ export async function refreshAccessToken(): Promise<boolean> {
       return false;
     }
 
-    setTokens(data.accessToken, existingUserInfo);
+    setTokens(refreshResult.accessToken, existingUserInfo);
     return true;
   } catch {
     clearTokens();
@@ -203,7 +203,7 @@ export function getLocalUserId(): string | null {
   return userInfo?.userId || null;
 }
 
-export function getLocalUserInfo(): { email: string; fullName: string; userId?: string } | null {
+export function getLocalUserInfo(): UserInfo | null {
   if (typeof window === 'undefined') return null;
   const userInfo = localStorage.getItem(USER_INFO_KEY);
   return userInfo ? JSON.parse(userInfo) : null;
@@ -211,7 +211,7 @@ export function getLocalUserInfo(): { email: string; fullName: string; userId?: 
 
 export function setTokens(
   accessToken: string,
-  userInfo: { email: string; fullName: string; userId?: string }): void {
+  userInfo: UserInfo): void {
   if (typeof window === 'undefined') return;
 
   localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
