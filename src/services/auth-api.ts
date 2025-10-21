@@ -130,7 +130,6 @@ export async function authenticatedFetch(
   options: RequestInit = {}
 ): Promise<Response> {
   const token = getLocalAccessToken();
-  console.log('Using access token:', token);
   if (!token) {
     throw new Error('Authentication required');
   }
