@@ -1,6 +1,9 @@
-import { ApiArticle, ArticleFilter, ApiArticles, CreateArticleApiRequest } from "@/types/article";
+import {
+  ArticleFilter,
+} from "@/types/article";
 import { BLOG_API_URL } from "@/config/api";
-import { getLocalAccessToken } from "@/services/identity-api";
+import { getLocalAccessToken } from "@/services/auth-api";
+import { ApiArticle, ApiArticles, CreateArticleApiRequest } from "@/types/article-api";
 
 const baseUrl: string = BLOG_API_URL;
 
@@ -59,9 +62,9 @@ export async function createArticle(
     content: article.content,
     slug: article.title
       .toLowerCase()
-      .replace(/[^a-z0-9\s-]/g, '') // Remove special characters
-      .replace(/\s+/g, '-') // Replace spaces with hyphens
-      .replace(/-+/g, '-') // Replace multiple hyphens with single
+      .replace(/[^a-z0-9\s-]/g, "") // Remove special characters
+      .replace(/\s+/g, "-") // Replace spaces with hyphens
+      .replace(/-+/g, "-") // Replace multiple hyphens with single
       .trim(),
     thumbnailUrl: article.thumbnailUrl || "https://picsum.photos/540/400",
     coverImageUrl: article.coverImageUrl || "https://picsum.photos/540/400",
@@ -80,7 +83,9 @@ export async function createArticle(
 
     if (!res.ok) {
       const errorText = await res.text();
-      throw new Error(`Failed to create article: ${res.status} ${res.statusText} - ${errorText}`);
+      throw new Error(
+        `Failed to create article: ${res.status} ${res.statusText} - ${errorText}`
+      );
     }
 
     const data: ApiArticle = await res.json();

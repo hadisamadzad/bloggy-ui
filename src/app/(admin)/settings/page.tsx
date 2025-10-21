@@ -2,14 +2,9 @@
 
 import { useState, useEffect, FormEvent } from "react";
 import { useRouter } from "next/navigation";
-import {
-  updateUser,
-  getUserProfile,
-  getLocalUserId,
-  updateUserPassword,
-} from "@/services/identity-api";
+import { getLocalUserId, getUserProfile } from "@/services/auth-api";
 import { getBlogSettings, updateBlogSettings } from "@/services/setting-api";
-import { SocialLink, SocialNetworkName } from "@/types/setting";
+import { SocialLink } from "@/types/setting";
 import {
   BlogSettingsForm,
   AccountSettingsForm,
@@ -23,6 +18,7 @@ import {
   type PasswordFormData,
   type SettingsTab,
 } from "@/components/Settings";
+import { updateUser, updateUserPassword } from "@/services/user-api";
 
 interface BlogSettings {
   blogTitle: string;
@@ -148,6 +144,7 @@ export default function SettingsPage() {
     }
   };
 
+  // Handlers
   const handleBlogSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setIsSaving(true);

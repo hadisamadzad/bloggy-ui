@@ -1,10 +1,13 @@
-import { LoginApiResponse, UpdateUserProfileApiRequest as UpdateUserApiRequest, GetUserProfileApiResponse } from "@/types/auth-api";
+import { LoginApiResponse, GetUserProfileApiResponse } from "@/types/auth-api";
 import { IDENTITY_API_URL } from "@/config/api";
 
 const baseUrl: string = IDENTITY_API_URL;
 
-// Auth API functions
-export async function login(email: string, password: string): Promise<LoginApiResponse> {
+// Auth API functions: Login
+export async function login(
+  email: string,
+  password: string
+): Promise<LoginApiResponse> {
   const res = await fetch(`${baseUrl}/auth/login`, {
     method: "POST",
     headers: {
@@ -33,7 +36,8 @@ export async function login(email: string, password: string): Promise<LoginApiRe
   // Refresh token will be in httpOnly cookie set by server
   setTokens(data.accessToken, {
     email: data.email,
-    fullName: data.fullName
+    fullName: data.fullName,
+    userId: undefined // Will fetch full profile next
   });
 
   // Fetch user profile to get complete user data and update localStorage
@@ -60,6 +64,7 @@ export async function login(email: string, password: string): Promise<LoginApiRe
   return data;
 }
 
+// Auth API functions: Logout
 export async function logout(): Promise<void> {
   // Clear local tokens immediately for better UX
   clearTokens();
@@ -82,6 +87,7 @@ export async function logout(): Promise<void> {
   }
 }
 
+// Auth API functions: Refresh Token
 // Add token refresh functionality using httpOnly cookie
 export async function refreshAccessToken(): Promise<boolean> {
   try {
@@ -104,14 +110,13 @@ export async function refreshAccessToken(): Promise<boolean> {
 
     // We only update the access token, keep existing user info
     const existingUserInfo = getLocalUserInfo();
-    if (existingUserInfo) {
-      setTokens(data.accessToken, existingUserInfo);
-    } else {
-      // If no user info exists, clear everything
+
+    if (!existingUserInfo) {
       clearTokens();
       return false;
     }
 
+    setTokens(data.accessToken, existingUserInfo);
     return true;
   } catch {
     clearTokens();
@@ -120,9 +125,12 @@ export async function refreshAccessToken(): Promise<boolean> {
 }
 
 // Add authenticated fetch wrapper
-export async function authenticatedFetch(url: string, options: RequestInit = {}): Promise<Response> {
+export async function authenticatedFetch(
+  url: string,
+  options: RequestInit = {}
+): Promise<Response> {
   const token = getLocalAccessToken();
-
+  console.log('Using access token:', token);
   if (!token) {
     throw new Error('Authentication required');
   }
@@ -162,53 +170,6 @@ export async function authenticatedFetch(url: string, options: RequestInit = {})
   }
 
   return response;
-}
-
-// Update user profile
-export async function updateUser(userId: string, profileData: UpdateUserApiRequest): Promise<boolean> {
-  try {
-    const res = await authenticatedFetch(`${baseUrl}/users/${userId}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(profileData),
-    });
-
-    if (!res.ok) {
-      throw new Error(`Failed to update user profile`);
-    }
-
-    return true;
-  } catch (error) {
-    console.error('Update user profile error:', error);
-    return false;
-  }
-}
-
-// Update user password
-export async function updateUserPassword(userId: string, currentPassword: string, newPassword: string): Promise<boolean> {
-  try {
-    const res = await authenticatedFetch(`${baseUrl}/users/${userId}/password`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        currentPassword,
-        newPassword
-      }),
-    });
-
-    if (!res.ok) {
-      throw new Error(`Failed to update password`);
-    }
-
-    return true;
-  } catch (error) {
-    console.error('Update password error:', error);
-    return false;
-  }
 }
 
 // Get user profile

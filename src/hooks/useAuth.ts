@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { isAuthenticated, getLocalUserInfo } from "@/services/identity-api";
+import { isAuthenticated, getLocalUserInfo } from "@/services/auth-api";
 
 export function useAuth() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);

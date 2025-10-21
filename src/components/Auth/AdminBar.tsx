@@ -1,11 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import {
-  isAuthenticated,
-  getLocalUserInfo,
-  logout,
-} from "@/services/identity-api";
+import { isAuthenticated, getLocalUserInfo, logout } from "@/services/auth-api";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 

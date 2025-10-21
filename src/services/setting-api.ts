@@ -1,13 +1,13 @@
 import { ApiSetting } from "@/types/setting";
 import { BLOG_API_URL } from "@/config/api";
-import { authenticatedFetch } from "@/services/identity-api";
+import { authenticatedFetch } from "@/services/auth-api";
 
 const baseUrl: string = BLOG_API_URL;
 
 export async function getBlogSettings(): Promise<ApiSetting | null> {
   try {
     const res = await fetch(`${baseUrl}/settings`, {
-      next: { revalidate: 60 } // Revalidate every 60 seconds
+      next: { revalidate: 60 }, // Revalidate every 60 seconds
     });
 
     if (!res.ok) throw new Error(`Failed to fetch blog settings`);
@@ -19,7 +19,9 @@ export async function getBlogSettings(): Promise<ApiSetting | null> {
   }
 }
 
-export async function updateBlogSettings(settings: Omit<ApiSetting, "updatedAt">): Promise<boolean> {
+export async function updateBlogSettings(
+  settings: Omit<ApiSetting, "updatedAt">
+): Promise<boolean> {
   try {
     const res = await authenticatedFetch(`${baseUrl}/settings`, {
       method: "PUT",
@@ -29,8 +31,8 @@ export async function updateBlogSettings(settings: Omit<ApiSetting, "updatedAt">
       body: JSON.stringify(settings),
     });
 
-    if (!res.ok){
-     throw new Error(`Failed to update blog settings`);
+    if (!res.ok) {
+      throw new Error(`Failed to update blog settings`);
     }
     return true;
   } catch {
