@@ -130,10 +130,10 @@ export default function NewArticlePage() {
               </button>
             </div>
             <h1 className="text-3xl font-bold text-base-content mb-2">
-              Create New Article
+              Draft New Article
             </h1>
             <p className="text-base-content/70">
-              Write and publish your article with markdown support
+              Draft your article with markdown support
             </p>
           </div>
 
@@ -201,9 +201,6 @@ export default function NewArticlePage() {
                   <div className="form-control lg:col-span-2">
                     <label className="label pb-1">
                       <span className="label-text font-medium">Summary</span>
-                      <span className="label-text-alt">
-                        Brief description for SEO and previews
-                      </span>
                     </label>
                     <textarea
                       placeholder="Write a compelling summary that will appear in article previews and search results..."
@@ -445,7 +442,7 @@ Remember to make your content engaging and informative!`}
                 ) : (
                   <>
                     <Save className="w-4 h-4 mr-2" />
-                    Create Article
+                    Draft Article
                   </>
                 )}
               </button>
