@@ -1,24 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
 import { createArticle } from "@/services/article-api";
 import { useAuth } from "@/hooks/useAuth";
 import {
-  FileText,
-  Type,
-  Hash,
-  Image,
-  Tag,
-  Eye,
-  Edit3,
+  FileText as FileTextIcon,
+  Type as TypeIcon,
+  Image as ImageIcon,
+  Tag as TagIcon,
   Save,
-  ArrowLeft,
   AlertCircle,
 } from "lucide-react";
 import { CreateArticleApiRequest } from "@/types/article-api";
+import ContentEditor from "@/components/Article/ContentEditor";
 
 interface ArticleFormData {
   title: string;
@@ -43,19 +38,23 @@ export default function NewArticlePage() {
     tagIds: [],
   });
 
-  const [previewMode, setPreviewMode] = useState<"edit" | "preview" | "split">(
-    "split"
-  );
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleInputChange = (
+  const handleGenericInputChange = (
     field: keyof ArticleFormData,
     value: string | string[]
   ) => {
     setFormData((prev) => ({
       ...prev,
       [field]: value,
+    }));
+  };
+
+  const handleContentChange = (value: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      content: value,
     }));
   };
 
@@ -119,20 +118,10 @@ export default function NewArticlePage() {
         <div className="max-w-6xl mx-auto">
           {/* Header */}
           <div className="mb-8">
-            <div className="flex items-center gap-4 mb-4">
-              <button
-                type="button"
-                className="btn btn-ghost btn-sm"
-                onClick={() => router.back()}
-              >
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Back
-              </button>
-            </div>
-            <h1 className="text-3xl font-bold text-base-content mb-2">
+            <h1 className="text-headline-md font-bold text-base-content mb-2">
               Draft New Article
             </h1>
-            <p className="text-base-content/70">
+            <p className="text-body-md text-base-content/70">
               Draft your article with markdown support
             </p>
           </div>
@@ -156,7 +145,7 @@ export default function NewArticlePage() {
             <div className="card border border-base-content/20">
               <div className="card-body">
                 <h2 className="card-title text-title-lg mb-4 flex items-center gap-2">
-                  <FileText className="w-5 h-5" />
+                  <FileTextIcon className="w-5 h-5" />
                   Article Information
                 </h2>
 
@@ -173,11 +162,11 @@ export default function NewArticlePage() {
                         className="input input-bordered w-full"
                         value={formData.title}
                         onChange={(e) =>
-                          handleInputChange("title", e.target.value)
+                          handleGenericInputChange("title", e.target.value)
                         }
                         required
                       />
-                      <Type className="absolute right-3 top-3 w-5 h-5 text-base-content/40" />
+                      <TypeIcon className="absolute right-3 top-3 w-5 h-5 text-base-content/40" />
                     </div>
                   </div>
 
@@ -192,7 +181,7 @@ export default function NewArticlePage() {
                       className="input input-bordered w-full"
                       value={formData.subtitle}
                       onChange={(e) =>
-                        handleInputChange("subtitle", e.target.value)
+                        handleGenericInputChange("subtitle", e.target.value)
                       }
                     />
                   </div>
@@ -207,7 +196,7 @@ export default function NewArticlePage() {
                       className="textarea textarea-bordered h-24 w-full"
                       value={formData.summary}
                       onChange={(e) =>
-                        handleInputChange("summary", e.target.value)
+                        handleGenericInputChange("summary", e.target.value)
                       }
                     />
                   </div>
@@ -226,10 +215,13 @@ export default function NewArticlePage() {
                         className="input input-bordered w-full"
                         value={formData.coverImageUrl}
                         onChange={(e) =>
-                          handleInputChange("coverImageUrl", e.target.value)
+                          handleGenericInputChange(
+                            "coverImageUrl",
+                            e.target.value
+                          )
                         }
                       />
-                      <Image className="absolute right-3 top-3 w-5 h-5 text-base-content/40" />
+                      <ImageIcon className="absolute right-3 top-3 w-5 h-5 text-base-content/40" />
                     </div>
                   </div>
 
@@ -247,10 +239,13 @@ export default function NewArticlePage() {
                         className="input input-bordered w-full"
                         value={formData.thumbnailUrl}
                         onChange={(e) =>
-                          handleInputChange("thumbnailUrl", e.target.value)
+                          handleGenericInputChange(
+                            "thumbnailUrl",
+                            e.target.value
+                          )
                         }
                       />
-                      <Image className="absolute right-3 top-3 w-5 h-5 text-base-content/40" />
+                      <ImageIcon className="absolute right-3 top-3 w-5 h-5 text-base-content/40" />
                     </div>
                   </div>
 
@@ -266,7 +261,7 @@ export default function NewArticlePage() {
                         className="input input-bordered w-full"
                         value={formData.tagIds.join(", ")}
                         onChange={(e) =>
-                          handleInputChange(
+                          handleGenericInputChange(
                             "tagIds",
                             e.target.value
                               .split(",")
@@ -275,7 +270,7 @@ export default function NewArticlePage() {
                           )
                         }
                       />
-                      <Tag className="absolute right-3 top-3 w-5 h-5 text-base-content/40" />
+                      <TagIcon className="absolute right-3 top-3 w-5 h-5 text-base-content/40" />
                     </div>
                     <label className="label">
                       <span className="label-text-alt">
@@ -288,126 +283,10 @@ export default function NewArticlePage() {
             </div>
 
             {/* Content Editor */}
-            <div className="card border border-base-content/20">
-              <div className="card-body">
-                <div className="flex justify-between items-center mb-4">
-                  <h2 className="card-title text-title-lg flex items-center gap-2">
-                    <Edit3 className="w-5 h-5" />
-                    Article Content
-                  </h2>
-                  <div className="tabs tabs-boxed">
-                    <button
-                      type="button"
-                      className={`tab ${
-                        previewMode === "edit" ? "tab-active" : ""
-                      }`}
-                      onClick={() => setPreviewMode("edit")}
-                    >
-                      <Edit3 className="w-4 h-4 mr-2" />
-                      Edit
-                    </button>
-                    <button
-                      type="button"
-                      className={`tab ${
-                        previewMode === "split" ? "tab-active" : ""
-                      }`}
-                      onClick={() => setPreviewMode("split")}
-                    >
-                      <Hash className="w-4 h-4 mr-2" />
-                      Split
-                    </button>
-                    <button
-                      type="button"
-                      className={`tab ${
-                        previewMode === "preview" ? "tab-active" : ""
-                      }`}
-                      onClick={() => setPreviewMode("preview")}
-                    >
-                      <Eye className="w-4 h-4 mr-2" />
-                      Preview
-                    </button>
-                  </div>
-                </div>
-
-                <div
-                  className={`grid gap-6 ${
-                    previewMode === "split" ? "lg:grid-cols-2" : "grid-cols-1"
-                  }`}
-                >
-                  {(previewMode === "edit" || previewMode === "split") && (
-                    <div className="space-y-3">
-                      <label className="label pb-1">
-                        <span className="label-text font-medium">
-                          Markdown Content *
-                        </span>
-                        <span className="label-text-alt">
-                          Supports GitHub flavored markdown
-                        </span>
-                      </label>
-                      <textarea
-                        className="textarea textarea-bordered font-mono text-sm leading-relaxed h-96 w-full"
-                        value={formData.content}
-                        onChange={(e) =>
-                          handleInputChange("content", e.target.value)
-                        }
-                        placeholder={`# Your Article Title
-
-## Introduction
-Start writing your article content here. You can use **bold**, *italic*, and other markdown features.
-
-### Code Examples
-\`\`\`javascript
-function hello() {
-  console.log("Hello, World!");
-}
-\`\`\`
-
-### Lists
-- Item 1
-- Item 2
-- Item 3
-
-[Links work too](https://example.com)
-
-> Blockquotes for important notes
-
-Remember to make your content engaging and informative!`}
-                        required
-                      />
-                    </div>
-                  )}
-
-                  {(previewMode === "preview" || previewMode === "split") && (
-                    <div className="space-y-3">
-                      <label className="label pb-1">
-                        <span className="label-text font-medium">
-                          Live Preview
-                        </span>
-                      </label>
-                      <div className="border border-base-content/20 rounded-lg p-4 bg-base-50 h-96 overflow-y-auto">
-                        {formData.content ? (
-                          <div className="prose prose-base max-w-none">
-                            <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                              {formData.content}
-                            </ReactMarkdown>
-                          </div>
-                        ) : (
-                          <div className="flex items-center justify-center h-full text-center">
-                            <div>
-                              <Eye className="w-12 h-12 text-base-content/30 mx-auto mb-4" />
-                              <p className="text-base-content/50 italic">
-                                Start writing to see your content come to
-                                life...
-                              </p>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
+            <ContentEditor
+              content={formData.content}
+              handleContentChange={handleContentChange}
+            />
 
             {/* Action Buttons */}
             <div className="flex justify-end gap-4">
