@@ -145,7 +145,7 @@ export default function SettingsPage() {
   };
 
   // Handlers
-  const handleBlogSubmit = async (e: FormEvent) => {
+  const handleBlogSettingSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setIsSaving(true);
     setError("");
@@ -181,7 +181,7 @@ export default function SettingsPage() {
     }
   };
 
-  const handleUserSubmit = async (e: FormEvent) => {
+  const handleUserProfileSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setIsSaving(true);
     setError("");
@@ -226,7 +226,7 @@ export default function SettingsPage() {
     }
   };
 
-  const handlePasswordSubmit = async (e: FormEvent) => {
+  const handlePasswordChangeSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError("");
 
@@ -324,7 +324,7 @@ export default function SettingsPage() {
           <BlogSettingsForm
             formData={blogFormData}
             onFormDataChange={setBlogFormData}
-            onSubmit={handleBlogSubmit}
+            onSubmit={handleBlogSettingSubmit}
             isSaving={isSaving}
             showSuccessTick={showSuccessTick}
           />
@@ -336,7 +336,7 @@ export default function SettingsPage() {
             userProfile={userProfile}
             formData={userFormData}
             onFormDataChange={setUserFormData}
-            onSubmit={handleUserSubmit}
+            onSubmit={handleUserProfileSubmit}
             onReset={handleUserReset}
             isSaving={isSaving}
             showSuccessTick={showSuccessTick}
@@ -349,7 +349,7 @@ export default function SettingsPage() {
             userEmail={userProfile.email}
             passwordForm={passwordForm}
             onPasswordFormChange={setPasswordForm}
-            onSubmit={handlePasswordSubmit}
+            onSubmit={handlePasswordChangeSubmit}
             isSaving={isSaving}
             showSuccessTick={showSuccessTick}
           />
