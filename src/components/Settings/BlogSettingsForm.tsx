@@ -253,9 +253,7 @@ export default function BlogSettingsForm({
                     }
                   />
                   <label className="label">
-                    <span className="label-text-alt">
-                      {formData.seoMetaDescription.length}/155 characters
-                    </span>
+                    {formData.seoMetaDescription.length}/155 characters
                   </label>
                 </div>
               </div>
