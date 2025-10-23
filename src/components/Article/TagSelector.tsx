@@ -1,13 +1,16 @@
 "use client";
 
-import { Tag } from "lucide-react";
+import { Tag as TagIcon } from "lucide-react";
+import { Tag } from "@/types/tag";
 
 interface ContentEditorProps {
+  tags: Tag[];
   selectedTagIds: string[];
   onChange: (value: string[]) => void;
 }
 
 export default function TagSelector({
+  tags: tags,
   selectedTagIds,
   onChange,
 }: ContentEditorProps) {
@@ -31,7 +34,7 @@ export default function TagSelector({
             )
           }
         />
-        <Tag className="absolute right-3 top-3 w-5 h-5 text-base-content/40" />
+        <TagIcon className="absolute right-3 top-3 w-5 h-5 text-base-content/40" />
       </div>
       <label className="label">
         <span className="label-text-alt">

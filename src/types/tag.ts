@@ -1,5 +1,5 @@
 export type Tag = {
-  TagId: string;
-  Name: string;
-  Slug: string;
+  tagId: string;
+  name: string;
+  slug: string;
 };

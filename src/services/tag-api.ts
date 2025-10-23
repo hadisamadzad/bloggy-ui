@@ -21,7 +21,7 @@ export async function getTags(): Promise<Tag[]> {
       throw new Error(`Failed to fetch tags: ${res.status} ${res.statusText}`);
     }
 
-    const tags: Tag[] = await res.json();
+    const tags: Tag[] = (await res.json()).tags;
     return tags;
   } catch (error) {
     console.error("Error fetching tags:", error);
@@ -43,7 +43,7 @@ export async function searchTags(searchTerm: string): Promise<Tag[]> {
 
   const lowerSearch = searchTerm.toLowerCase();
   return allTags.filter(tag =>
-    tag.Name.toLowerCase().includes(lowerSearch) ||
-    tag.Slug.toLowerCase().includes(lowerSearch)
+    tag.name.toLowerCase().includes(lowerSearch) ||
+    tag.slug.toLowerCase().includes(lowerSearch)
   );
 }

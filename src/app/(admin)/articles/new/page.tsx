@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { createArticle } from "@/services/article-api";
 import { useAuth } from "@/hooks/useAuth";
@@ -14,6 +14,8 @@ import {
 import { CreateArticleApiRequest } from "@/types/article-api";
 import ContentEditor from "@/components/Article/ContentEditor";
 import TagSelector from "@/components/Article/TagSelector";
+import { getTags } from "@/services/tag-api";
+import { Tag } from "@/types/tag";
 
 interface ArticleFormData {
   title: string;
@@ -40,6 +42,18 @@ export default function NewArticlePage() {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [allTags, setAllTags] = useState<Tag[]>([]);
+
+  useEffect(() => {
+    getTags()
+      .then((tags) => {
+        setAllTags(tags);
+      })
+      .catch((err) => {
+        console.error("Failed to fetch tags:", err);
+        setAllTags([]);
+      });
+  }, []);
 
   const handleGenericInputChange = (
     field: keyof ArticleFormData,
@@ -257,6 +271,7 @@ export default function NewArticlePage() {
                   </div>
 
                   <TagSelector
+                    tags={allTags}
                     selectedTagIds={formData.tagIds}
                     onChange={handleTagsChange}
                   />
