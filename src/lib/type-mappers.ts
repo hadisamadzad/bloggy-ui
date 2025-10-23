@@ -1,4 +1,5 @@
-import { ApiArticle, Article } from "@/types/article";
+import { Article } from "@/types/article";
+import { ApiArticle } from "@/types/article-api";
 
 // Map API article to internal article type
 export function mapApiArticleToArticle(apiArticle: ApiArticle): Article {

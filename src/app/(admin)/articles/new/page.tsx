@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createArticle } from "@/services/article-api";
 import { useAuth } from "@/hooks/useAuth";
@@ -8,12 +8,12 @@ import {
   FileText as FileTextIcon,
   Type as TypeIcon,
   Image as ImageIcon,
-  Tag as TagIcon,
   Save,
   AlertCircle,
 } from "lucide-react";
 import { CreateArticleApiRequest } from "@/types/article-api";
 import ContentEditor from "@/components/Article/ContentEditor";
+import TagSelector from "@/components/Article/TagSelector";
 
 interface ArticleFormData {
   title: string;
@@ -55,6 +55,13 @@ export default function NewArticlePage() {
     setFormData((prev) => ({
       ...prev,
       content: value,
+    }));
+  };
+
+  const handleTagsChange = (value: string[]) => {
+    setFormData((prev) => ({
+      ...prev,
+      tagIds: value,
     }));
   };
 
@@ -249,35 +256,10 @@ export default function NewArticlePage() {
                     </div>
                   </div>
 
-                  {/* Tags */}
-                  <div className="form-control lg:col-span-2">
-                    <label className="label pb-1">
-                      <span className="label-text font-medium">Tags</span>
-                    </label>
-                    <div className="relative">
-                      <input
-                        type="text"
-                        placeholder="javascript, tutorial, web-development"
-                        className="input input-bordered w-full"
-                        value={formData.tagIds.join(", ")}
-                        onChange={(e) =>
-                          handleGenericInputChange(
-                            "tagIds",
-                            e.target.value
-                              .split(",")
-                              .map((tag) => tag.trim())
-                              .filter(Boolean)
-                          )
-                        }
-                      />
-                      <TagIcon className="absolute right-3 top-3 w-5 h-5 text-base-content/40" />
-                    </div>
-                    <label className="label">
-                      <span className="label-text-alt">
-                        Use commas to separate multiple tags
-                      </span>
-                    </label>
-                  </div>
+                  <TagSelector
+                    selectedTagIds={formData.tagIds}
+                    onChange={handleTagsChange}
+                  />
                 </div>
               </div>
             </div>
