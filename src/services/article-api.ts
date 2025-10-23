@@ -2,7 +2,7 @@ import {
   ArticleFilter,
 } from "@/types/article";
 import { BLOG_API_URL } from "@/config/api";
-import { getLocalAccessToken } from "@/services/auth-api";
+import { authenticatedFetch } from "@/services/auth-api";
 import { ApiArticle, ApiArticles, CreateArticleApiRequest } from "@/types/article-api";
 
 const baseUrl: string = BLOG_API_URL;
@@ -47,13 +47,7 @@ export async function getArticleBySlug(
 
 export async function createArticle(
   article: CreateArticleApiRequest
-): Promise<ApiArticle | null> {
-  const token = getLocalAccessToken();
-
-  if (!token) {
-    throw new Error("No authentication token");
-  }
-
+): Promise<string | null> {
   // Create the request payload matching the blog API schema
   const requestPayload = {
     title: article.title,
@@ -72,11 +66,10 @@ export async function createArticle(
   };
 
   try {
-    const res = await fetch(`${baseUrl}/articles`, {
+    const res = await authenticatedFetch(`${baseUrl}/articles`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(requestPayload),
     });
@@ -88,8 +81,8 @@ export async function createArticle(
       );
     }
 
-    const data: ApiArticle = await res.json();
-    return data;
+    const articleSlug: string = (await res.json()).slug;
+    return articleSlug;
   } catch (error) {
     console.error("Error creating article:", error);
     throw error; // Re-throw to let the component handle it

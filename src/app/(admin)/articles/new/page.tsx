@@ -104,10 +104,10 @@ export default function NewArticlePage() {
         tagIds: formData.tagIds.length > 0 ? formData.tagIds : undefined,
       };
 
-      const result = await createArticle(articleData);
+      const createdSlug = await createArticle(articleData);
 
-      if (result) {
-        router.push(`/articles/${result.slug}`);
+      if (createdSlug) {
+        router.push(`/articles/${createdSlug}`);
       } else {
         setError("Failed to create article. Please try again.");
       }
