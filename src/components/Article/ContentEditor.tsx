@@ -68,13 +68,10 @@ export default function ContentEditor({
         >
           {(contentPreviewMode === "edit" ||
             contentPreviewMode === "split") && (
-            <div className="space-y-3">
+            <div className="form-control">
               <label className="label pb-1">
                 <span className="label-text font-medium">
-                  Markdown Content *
-                </span>
-                <span className="label-text-alt">
-                  Supports GitHub flavored markdown
+                  Markdown Content * [Supports GitHub flavoured markdown]
                 </span>
               </label>
               <textarea
@@ -110,7 +107,7 @@ Remember to make your content engaging and informative!`}
 
           {(contentPreviewMode === "preview" ||
             contentPreviewMode === "split") && (
-            <div className="space-y-3">
+            <div className="form-control">
               <label className="label pb-1">
                 <span className="label-text font-medium">Live Preview</span>
               </label>
