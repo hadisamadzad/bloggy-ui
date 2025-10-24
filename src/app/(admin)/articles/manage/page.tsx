@@ -80,12 +80,11 @@ export default function Page() {
               articles={articles}
               sortedBy={sortBy}
               onSortChange={setSortBy}
-              showPopularSortOption={false}
-              showStatusFilters={true}
               onlyDrafts={onlyDrafts}
               onlyArchived={onlyArchived}
               onOnlyDraftsChange={setOnlyDrafts}
               onOnlyArchivedChange={setOnlyArchived}
+              isAdmin={true}
             />
           </div>
 

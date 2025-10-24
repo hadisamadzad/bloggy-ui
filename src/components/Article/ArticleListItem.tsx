@@ -2,12 +2,17 @@ import { formatDate } from "@/lib/date-tools";
 import { Article } from "@/types/article";
 import Image from "next/image";
 import Link from "next/link";
+import { Pencil } from "lucide-react";
 
 interface ArticleListItemProps {
   article: Article;
+  showStats?: boolean;
 }
 
-export default function ArticleListItem({ article }: ArticleListItemProps) {
+export default function ArticleListItem({
+  article,
+  showStats = true,
+}: ArticleListItemProps) {
   return (
     <div className="flex gap-4 min-h-36">
       <div className="flex-none w-[180px] h-30 pt-3">
@@ -41,11 +46,26 @@ export default function ArticleListItem({ article }: ArticleListItemProps) {
           )}
         </div>
         <div className="flex justify-between items-end mt-4 text-label-md text-neutral-500">
-          <div className="flex gap-6">
-            <span className="flex items-center">Likes 324</span>
-            <span className="flex items-center">Views 14.5K</span>
-          </div>
-          <span>{article.readingTime}</span>
+          {showStats ? (
+            <>
+              <div className="flex gap-6">
+                <span className="flex items-center">Likes 324</span>
+                <span className="flex items-center">Views 14.5K</span>
+              </div>
+              <span>{article.readingTime}</span>
+            </>
+          ) : (
+            <>
+              <div />
+              <Link
+                href={`/articles/edit/${article.articleId}`}
+                className="btn btn-sm btn-secondary btn-outline gap-2"
+              >
+                <Pencil size={14} />
+                Edit
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </div>

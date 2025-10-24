@@ -6,33 +6,31 @@ type ArticleListProps = {
   articles: Article[];
   sortedBy?: ArticleSortBy;
   onSortChange?: (sortBy: ArticleSortBy) => void;
-  showPopularSortOption?: boolean;
-  showStatusFilters?: boolean;
   onlyDrafts?: boolean;
   onlyArchived?: boolean;
   onOnlyDraftsChange?: (checked: boolean) => void;
   onOnlyArchivedChange?: (checked: boolean) => void;
+  isAdmin?: boolean;
 };
 
 export default function ArticleList({
   articles,
   sortedBy = ArticleSortBy.Latest,
   onSortChange,
-  showPopularSortOption = true,
-  showStatusFilters = false,
   onlyDrafts = false,
   onlyArchived = false,
   onOnlyDraftsChange,
   onOnlyArchivedChange,
+  isAdmin = false,
 }: ArticleListProps) {
   return (
     <div className="p-4 rounded-lg border border-base-content/30">
       <div className="pb-4">
         <ArticleListHeader
-          showPopular={showPopularSortOption}
+          showPopular={!isAdmin}
           sortedBy={sortedBy}
           onSortChange={onSortChange}
-          showStatusFilters={showStatusFilters}
+          showStatusFilters={isAdmin}
           onlyDrafts={onlyDrafts}
           onlyArchived={onlyArchived}
           onOnlyDraftsChange={onOnlyDraftsChange}
@@ -46,7 +44,7 @@ export default function ArticleList({
       ) : (
         articles.map((article, index) => (
           <div key={index}>
-            <ArticleListItem article={article} />
+            <ArticleListItem article={article} showStats={!isAdmin} />
             {index < articles.length - 1 && <div className="divider" />}
           </div>
         ))
