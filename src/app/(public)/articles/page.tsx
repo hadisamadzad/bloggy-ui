@@ -5,11 +5,13 @@ import Hero from "@/components/Hero/Hero";
 import AboutMe from "@/components/Sidebar/AboutMe";
 import SeriesArticleParts from "@/components/Sidebar/SeriesArticleParts";
 import SeriesArticles from "@/components/Sidebar/SeriesArticles";
-import Tags from "@/components/Sidebar/Tags";
+import SidebarTags from "@/components/Sidebar/SidebarTags";
 import { listPublishedArticles } from "@/services/article-api";
 import { ArticleFilter, Article, ArticleSortBy } from "@/types/article";
 import { mapApiArticleToArticle } from "@/lib/type-mappers";
 import { useEffect, useState } from "react";
+import { Tag } from "@/types/tag";
+import { listTags } from "@/services/tag-api";
 
 export default function Page() {
   // TODO This code is commented out because `useSearchParams` is not working in CSR in this way.
@@ -19,6 +21,7 @@ export default function Page() {
   //const page = searchParams.get("page");
 
   const [articles, setArticles] = useState<Article[]>([]);
+  const [tags, setTags] = useState<Tag[]>([]);
   const [sortBy, setSortBy] = useState<ArticleSortBy>(ArticleSortBy.Latest);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -42,6 +45,13 @@ export default function Page() {
       })
       .catch(() => setError("Failed to load articles."))
       .finally(() => setLoading(false));
+
+    listTags()
+      .then((tags) => {
+        setTags(tags);
+      })
+      .catch(() => setError("Failed to load tags."))
+      .finally(() => setLoading(false));
   }, [sortBy]);
 
   if (loading) return <div>Loading...</div>;
@@ -61,7 +71,7 @@ export default function Page() {
           </div>
 
           <div className="flex-1">
-            <Tags />
+            <SidebarTags tags={tags} />
             <div className="mt-6" />
             <SeriesArticles />
             <div className="mt-6" />

@@ -6,7 +6,7 @@ const baseUrl: string = BLOG_API_URL;
 // ============================================
 // API: GET /tags
 // ============================================
-export async function getTags(): Promise<Tag[]> {
+export async function listTags(): Promise<Tag[]> {
   try {
     const res = await fetch(`${baseUrl}/tags`, {
       method: "GET",
@@ -32,7 +32,7 @@ export async function getTags(): Promise<Tag[]> {
 // HELPER: Search/filter tags locally
 // ============================================
 export async function searchTags(searchTerm: string): Promise<Tag[]> {
-  const allTags = await getTags();
+  const allTags = await listTags();
 
   if (!searchTerm) {
     return allTags;

@@ -1,4 +1,5 @@
 import { ArticleStatus } from "./article";
+import { Tag } from "./tag";
 
 export type ApiArticle = {
   articleId: string;
@@ -12,8 +13,7 @@ export type ApiArticle = {
   coverImageUrl: string;
   timeToReadInMinute: number;
   likes: number;
-  tagIds: string[];
-  tagSlugs: string[];
+  tags: Tag[];
   status: ArticleStatus;
   createdAt: string; // ISO string
   updatedAt: string; // ISO string

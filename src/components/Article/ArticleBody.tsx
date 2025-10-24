@@ -52,7 +52,7 @@ export default async function ArticleBody({ article }: ArticleBodyProps) {
           </ReactMarkdown>
         </div>
 
-        <ArticleTags tags={article.tagSlugs}></ArticleTags>
+        <ArticleTags tags={article.tags}></ArticleTags>
 
         <div className="flex items-center justify-between pt-2 border-t-1 border-gray-100">
           <div className="flex gap-6">

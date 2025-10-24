@@ -1,3 +1,5 @@
+import { Tag } from "./tag";
+
 export type Article = {
   articleId: string;
   authorId: string;
@@ -10,8 +12,7 @@ export type Article = {
   coverImageUrl: string;
   readingTime: string;
   likes: number;
-  tagIds: string[];
-  tagSlugs: string[];
+  tags: Tag[];
   status: ArticleStatus;
   createdAt: string; // ISO string
   updatedAt: string; // ISO string

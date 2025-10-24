@@ -14,7 +14,7 @@ import {
 import { CreateArticleApiRequest } from "@/types/article-api";
 import ContentEditor from "@/components/Article/ContentEditor";
 import TagSelector from "@/components/Article/TagSelector";
-import { getTags } from "@/services/tag-api";
+import { listTags } from "@/services/tag-api";
 import { Tag } from "@/types/tag";
 
 interface ArticleFormData {
@@ -45,7 +45,7 @@ export default function NewArticlePage() {
   const [allTags, setAllTags] = useState<Tag[]>([]);
 
   useEffect(() => {
-    getTags()
+    listTags()
       .then((tags) => {
         setAllTags(tags);
       })
