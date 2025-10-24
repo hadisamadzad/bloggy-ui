@@ -27,7 +27,7 @@ export default function AdminBar() {
   return (
     <div className="bg-gray-200 border-b border-gray-200 h-[30px] px-4 flex items-center justify-between text-sm">
       <div className="flex items-center gap-3">
-        <div className="w-2 h-2 bg-gray-500 rounded-full"></div>
+        <div className="w-2 h-2 bg-green-700 rounded-full"></div>
         <span>
           Logged in as <strong>{userInfo.fullName}</strong> ({userInfo.email})
         </span>
@@ -44,7 +44,15 @@ export default function AdminBar() {
           href="/articles/new"
           className=" hover:underline transition-colors cursor-pointer"
         >
+          {" "}
           New Article
+        </Link>
+        {" | "}
+        <Link
+          href="/articles/manage"
+          className=" hover:underline transition-colors cursor-pointer"
+        >
+          Manage Articles
         </Link>
         {" | "}
         <Link
