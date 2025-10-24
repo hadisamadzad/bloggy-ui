@@ -69,7 +69,10 @@ export default function Page() {
   // Don't return early if no articles; show the list with an empty message instead
   return (
     <>
-      <Hero title="Manage Articles" subtitle="" />
+      <Hero
+        title="Manage Articles"
+        subtitle="Here is your space to manage articles"
+      />
       <section className="max-w-[1440px] mx-auto px-24">
         <div className="flex gap-6">
           <div className="flex-2">

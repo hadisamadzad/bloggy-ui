@@ -26,7 +26,7 @@ export default function ArticleList({
   onOnlyArchivedChange,
 }: ArticleListProps) {
   return (
-    <div className="p-4 rounded-lg border border-neutral-500">
+    <div className="p-4 rounded-lg border border-base-content/30">
       <div className="pb-4">
         <ArticleListHeader
           showPopular={showPopularSortOption}
