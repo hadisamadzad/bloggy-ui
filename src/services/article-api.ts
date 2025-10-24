@@ -1,5 +1,6 @@
 import {
   ArticleFilter,
+  ArticleStatus,
 } from "@/types/article";
 import { BLOG_API_URL } from "@/config/api";
 import { ApiArticle, ApiArticles, CreateArticleApiRequest, UpdateArticleApiRequest } from "@/types/article-api";
@@ -155,7 +156,7 @@ export async function updateArticle(
     subtitle: article.subtitle || "",
     summary: article.summary || "",
     content: article.content,
-    slug: article.title
+    slug: (article.slug || article.title)
       .toLowerCase()
       .replace(/[^a-z0-9\s-]/g, "") // Remove special characters
       .replace(/\s+/g, "-") // Replace spaces with hyphens
@@ -175,16 +176,74 @@ export async function updateArticle(
       body: JSON.stringify(requestPayload),
     });
 
+    // API returns 204 No Content on success
     if (!res.ok) {
       const errorText = await res.text();
       throw new Error(
-        `Failed to update the article ${articleId}: ${res.status} ${res.statusText} - ${errorText}`
+        `Failed to update article status: ${res.status} ${res.statusText} - ${errorText}`
       );
     }
 
     return true;
   } catch (error) {
     console.error("Error updating article:", error);
+    throw error; // Re-throw to let the component handle it
+  }
+}
+
+// ============================================
+// API: PATCH /articles/:articleId/status
+// ============================================
+export async function updateArticleStatus(
+  articleId: string,
+  status: ArticleStatus
+): Promise<boolean> {
+  try {
+    const res = await authenticatedRequest(`${baseUrl}/articles/${articleId}/status`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ status }),
+    });
+
+    // API returns 204 No Content on success
+    if (!res.ok) {
+      const errorText = await res.text();
+      throw new Error(
+        `Failed to update article status: ${res.status} ${res.statusText} - ${errorText}`
+      );
+    }
+
+    return true;
+  } catch (error) {
+    console.error("Error updating article status:", error);
+    throw error; // Re-throw to let the component handle it
+  }
+}
+
+// ============================================
+// API: DELETE /articles/:articleId
+// ============================================
+export async function deleteArticle(
+  articleId: string
+): Promise<boolean> {
+  try {
+    const res = await authenticatedRequest(`${baseUrl}/articles/${articleId}`, {
+      method: "DELETE",
+    });
+
+    // API returns 204 No Content on success
+    if (!res.ok) {
+      const errorText = await res.text();
+      throw new Error(
+        `Failed to delete article: ${res.status} ${res.statusText} - ${errorText}`
+      );
+    }
+
+    return true;
+  } catch (error) {
+    console.error("Error deleting article:", error);
     throw error; // Re-throw to let the component handle it
   }
 }

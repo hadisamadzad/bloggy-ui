@@ -10,10 +10,12 @@ import {
   Image as ImageIcon,
   Save,
   AlertCircle,
+  CheckCircle,
 } from "lucide-react";
 import { UpdateArticleApiRequest } from "@/types/article-api";
 import ContentEditor from "@/components/Article/ContentEditor";
 import TagSelector from "@/components/Article/TagSelector";
+import ArticleStatusBox from "@/components/Article/ArticleStatusBox";
 import { listTags } from "@/services/tag-api";
 import { Tag } from "@/types/tag";
 import { Article } from "@/types/article";
@@ -53,6 +55,7 @@ export default function NewArticlePage() {
   const [loading, setLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showSuccessTick, setShowSuccessTick] = useState(false);
   const [allTags, setAllTags] = useState<Tag[]>([]);
 
   useEffect(() => {
@@ -154,6 +157,15 @@ export default function NewArticlePage() {
       };
 
       await updateArticle(articleId, articleData);
+
+      // Show success message
+      setShowSuccessTick(true);
+
+      // Hide success tick after 3 seconds
+      setTimeout(() => {
+        setShowSuccessTick(false);
+      }, 3000);
+
       //router.push(`/articles/${articleData.slug}`);
     } catch (err: unknown) {
       console.error("Error in handleSubmit:", err);
@@ -204,6 +216,9 @@ export default function NewArticlePage() {
               </button>
             </div>
           )}
+
+          {/* Article Status Box */}
+          <ArticleStatusBox article={article} loading={loading} />
 
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Article Information */}
@@ -406,7 +421,12 @@ export default function NewArticlePage() {
                 {isSubmitting ? (
                   <>
                     <span className="loading loading-spinner loading-sm"></span>
-                    Creating...
+                    Saving...
+                  </>
+                ) : showSuccessTick ? (
+                  <>
+                    <CheckCircle className="w-4 h-4 mr-2" />
+                    Saved!
                   </>
                 ) : !isLoggedIn ? (
                   <>
