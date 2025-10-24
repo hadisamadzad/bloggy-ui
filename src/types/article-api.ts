@@ -37,3 +37,15 @@ export interface CreateArticleApiRequest {
   thumbnailUrl?: string;
   tagIds?: string[];
 }
+
+export interface UpdateArticleApiRequest {
+  title: string;
+  slug: string;
+  subtitle: string;
+  summary: string;
+  content: string;
+  coverImageUrl?: string;
+  thumbnailUrl?: string;
+  timeToRead: number;
+  tagIds: string[];
+}

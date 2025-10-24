@@ -2,7 +2,7 @@ import {
   ArticleFilter,
 } from "@/types/article";
 import { BLOG_API_URL } from "@/config/api";
-import { ApiArticle, ApiArticles, CreateArticleApiRequest } from "@/types/article-api";
+import { ApiArticle, ApiArticles, CreateArticleApiRequest, UpdateArticleApiRequest } from "@/types/article-api";
 import { authenticatedRequest } from "./auth-api";
 
 const baseUrl: string = BLOG_API_URL;
@@ -138,6 +138,53 @@ export async function createArticle(
     return articleSlug;
   } catch (error) {
     console.error("Error creating article:", error);
+    throw error; // Re-throw to let the component handle it
+  }
+}
+
+// ============================================
+// API: PUT /articles
+// ============================================
+export async function updateArticle(
+  articleId: string,
+  article: UpdateArticleApiRequest
+): Promise<boolean> {
+  // Create the request payload matching the blog API schema
+  const requestPayload = {
+    title: article.title,
+    subtitle: article.subtitle || "",
+    summary: article.summary || "",
+    content: article.content,
+    slug: article.title
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, "") // Remove special characters
+      .replace(/\s+/g, "-") // Replace spaces with hyphens
+      .replace(/-+/g, "-") // Replace multiple hyphens with single
+      .trim(),
+    thumbnailUrl: article.thumbnailUrl || "https://picsum.photos/540/400",
+    coverImageUrl: article.coverImageUrl || "https://picsum.photos/540/400",
+    tagIds: article.tagIds ?? [],
+  };
+
+  try {
+    const res = await authenticatedRequest(`${baseUrl}/articles/${articleId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(requestPayload),
+    });
+
+    if (!res.ok) {
+      const errorText = await res.text();
+      throw new Error(
+        `Failed to update the article ${articleId}: ${res.status} ${res.statusText} - ${errorText}`
+      );
+    }
+
+    return true;
+  } catch (error) {
+    console.error("Error updating article:", error);
     throw error; // Re-throw to let the component handle it
   }
 }
