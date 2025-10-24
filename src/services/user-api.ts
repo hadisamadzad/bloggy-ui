@@ -1,6 +1,6 @@
 import { UpdateUserProfileApiRequest as UpdateUserApiRequest } from "@/types/auth-api";
 import { IDENTITY_API_URL } from "@/config/api";
-import { authenticatedFetch } from "./auth-api";
+import { authenticatedRequest } from "./auth-api";
 
 const baseUrl: string = IDENTITY_API_URL;
 
@@ -10,7 +10,7 @@ export async function updateUser(
   profileData: UpdateUserApiRequest
 ): Promise<boolean> {
   try {
-    const res = await authenticatedFetch(`${baseUrl}/users/${userId}`, {
+    const res = await authenticatedRequest(`${baseUrl}/users/${userId}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -36,7 +36,7 @@ export async function updateUserPassword(
   newPassword: string
 ): Promise<boolean> {
   try {
-    const res = await authenticatedFetch(`${baseUrl}/users/${userId}/password`, {
+    const res = await authenticatedRequest(`${baseUrl}/users/${userId}/password`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",

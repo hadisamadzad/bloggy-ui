@@ -10,7 +10,7 @@ export interface ApiSocialLink {
   url: string;
 }
 
-export interface ApiSetting {
+export interface ApiBlogSetting {
   blogTitle: string;
   blogSubtitle: string;
   blogPageTitle: string;

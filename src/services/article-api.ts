@@ -2,12 +2,12 @@ import {
   ArticleFilter,
 } from "@/types/article";
 import { BLOG_API_URL } from "@/config/api";
-import { authenticatedFetch } from "@/services/auth-api";
 import { ApiArticle, ApiArticles, CreateArticleApiRequest } from "@/types/article-api";
+import { authenticatedRequest } from "./auth-api";
 
 const baseUrl: string = BLOG_API_URL;
 
-export async function listArticles(
+export async function listPublishedArticles(
   filter: ArticleFilter
 ): Promise<ApiArticles | null> {
   // Construct query parameters out of filter
@@ -21,7 +21,7 @@ export async function listArticles(
   });
 
   try {
-    const res = await fetch(`${baseUrl}/articles?${params.toString()}`);
+    const res = await fetch(`${baseUrl}/articles/published?${params.toString()}`);
     if (!res.ok) throw new Error("Failed to fetch articles");
 
     const data: ApiArticles = await res.json();
@@ -31,11 +31,11 @@ export async function listArticles(
   }
 }
 
-export async function getArticleBySlug(
+export async function getPublishedArticleBySlug(
   slug: string
 ): Promise<ApiArticle | null> {
   try {
-    const res = await fetch(`${baseUrl}/articles/${encodeURIComponent(slug)}`);
+    const res = await fetch(`${baseUrl}/articles/published/${encodeURIComponent(slug)}`);
     if (!res.ok) throw new Error(`Failed to fetch article ${slug}`);
 
     const data: ApiArticle = await res.json();
@@ -66,7 +66,7 @@ export async function createArticle(
   };
 
   try {
-    const res = await authenticatedFetch(`${baseUrl}/articles`, {
+    const res = await authenticatedRequest(`${baseUrl}/articles`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

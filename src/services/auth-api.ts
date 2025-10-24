@@ -125,7 +125,7 @@ export async function refreshAccessToken(): Promise<boolean> {
 }
 
 // Add authenticated fetch wrapper
-export async function authenticatedFetch(
+export async function authenticatedRequest(
   url: string,
   options: RequestInit = {}
 ): Promise<Response> {
@@ -174,7 +174,7 @@ export async function authenticatedFetch(
 // Get user profile
 export async function getUserProfile(): Promise<GetUserProfileApiResponse | null> {
   try {
-    const res = await authenticatedFetch(`${baseUrl}/auth/profile`);
+    const res = await authenticatedRequest(`${baseUrl}/auth/profile`);
 
     if (!res.ok) {
       throw new Error(`Failed to fetch user profile`);

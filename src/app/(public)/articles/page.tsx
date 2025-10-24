@@ -6,7 +6,7 @@ import AboutMe from "@/components/Sidebar/AboutMe";
 import SeriesArticleParts from "@/components/Sidebar/SeriesArticleParts";
 import SeriesArticles from "@/components/Sidebar/SeriesArticles";
 import Tags from "@/components/Sidebar/Tags";
-import { listArticles } from "@/services/article-api";
+import { listPublishedArticles } from "@/services/article-api";
 import { ArticleFilter, Article, ArticleSortBy } from "@/types/article";
 import { mapApiArticleToArticle } from "@/lib/type-mappers";
 import { useEffect, useState } from "react";
@@ -35,7 +35,7 @@ export default function Page() {
     setLoading(true);
     setError(null);
 
-    listArticles(filter)
+    listPublishedArticles(filter)
       .then((apiArticles) => {
         const articles = apiArticles?.results.map(mapApiArticleToArticle) ?? [];
         setArticles(articles);
