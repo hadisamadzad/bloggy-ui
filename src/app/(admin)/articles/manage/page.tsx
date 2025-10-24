@@ -6,7 +6,7 @@ import AboutMe from "@/components/Sidebar/AboutMe";
 import SeriesArticleParts from "@/components/Sidebar/SeriesArticleParts";
 import SeriesArticles from "@/components/Sidebar/SeriesArticles";
 import SidebarTags from "@/components/Sidebar/SidebarTags";
-import { listPublishedArticles } from "@/services/article-api";
+import { listArticles } from "@/services/article-api";
 import { ArticleFilter, Article, ArticleSortBy } from "@/types/article";
 import { mapApiArticleToArticle } from "@/lib/type-mappers";
 import { useEffect, useState } from "react";
@@ -23,13 +23,21 @@ export default function Page() {
   const [articles, setArticles] = useState<Article[]>([]);
   const [tags, setTags] = useState<Tag[]>([]);
   const [sortBy, setSortBy] = useState<ArticleSortBy>(ArticleSortBy.Latest);
+  const [onlyDrafts, setOnlyDrafts] = useState(false);
+  const [onlyArchived, setOnlyArchived] = useState(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    let statuses: string[] = [];
+    if (onlyDrafts && !onlyArchived) {
+      statuses = ["Draft"];
+    } else if (onlyArchived && !onlyDrafts) {
+      statuses = ["Archived"];
+    } // else: all selected, statuses = []
     const filter: ArticleFilter = {
       Keyword: "", //keyword || "",
-      Statuses: [],
+      Statuses: statuses,
       TagIds: [],
       SortBy: sortBy.toString(),
       Page: 1, //page ? parseInt(page) : 1,
@@ -38,25 +46,27 @@ export default function Page() {
     setLoading(true);
     setError(null);
 
-    listPublishedArticles(filter)
+    listArticles(filter)
       .then((apiArticles) => {
         const articles = apiArticles?.results.map(mapApiArticleToArticle) ?? [];
         setArticles(articles);
       })
       .catch(() => setError("Failed to load articles."))
       .finally(() => setLoading(false));
+  }, [sortBy, onlyDrafts, onlyArchived]);
 
+  useEffect(() => {
     listTags()
       .then((tags) => {
         setTags(tags);
       })
       .catch(() => setError("Failed to load tags."))
       .finally(() => setLoading(false));
-  }, [sortBy]);
+  }, []);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
-  if (articles.length === 0) return <div>No articles found.</div>;
+  // Don't return early if no articles; show the list with an empty message instead
   return (
     <>
       <Hero title="Manage Articles" subtitle="" />
@@ -68,6 +78,11 @@ export default function Page() {
               sortedBy={sortBy}
               onSortChange={setSortBy}
               showPopularSortOption={false}
+              showStatusFilters={true}
+              onlyDrafts={onlyDrafts}
+              onlyArchived={onlyArchived}
+              onOnlyDraftsChange={setOnlyDrafts}
+              onOnlyArchivedChange={setOnlyArchived}
             />
           </div>
 
