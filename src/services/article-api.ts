@@ -52,6 +52,50 @@ export async function getPublishedArticleBySlug(
 }
 
 // ============================================
+// API: GET /articles
+// ============================================
+export async function listArticles(
+  filter: ArticleFilter
+): Promise<ApiArticles | null> {
+  // Construct query parameters out of filter
+  const params = new URLSearchParams();
+  Object.entries(filter).forEach(([key, value]) => {
+    if (Array.isArray(value)) {
+      value.forEach((v) => params.append(key, v));
+    } else {
+      params.append(key, value as string);
+    }
+  });
+
+  try {
+    const res = await authenticatedRequest(`${baseUrl}/articles?${params.toString()}`);
+    if (!res.ok) throw new Error("Failed to fetch articles");
+
+    const data: ApiArticles = await res.json();
+    return data;
+  } catch {
+    return null;
+  }
+}
+
+// ============================================
+// API: GET /articles/:articleId
+// ============================================
+export async function getArticleById(
+  articleId: string
+): Promise<ApiArticle | null> {
+  try {
+    const res = await authenticatedRequest(`${baseUrl}/articles/${encodeURIComponent(articleId)}`);
+    if (!res.ok) throw new Error(`Failed to fetch article ${articleId}`);
+
+    const data: ApiArticle = await res.json();
+    return data;
+  } catch {
+    return null;
+  }
+}
+
+// ============================================
 // API: POST /articles
 // ============================================
 export async function createArticle(
