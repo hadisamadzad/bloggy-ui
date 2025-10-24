@@ -1,7 +1,7 @@
 import ArticleHeader from "@/components/Article/ArticleHeader";
 import AboutMe from "@/components/Sidebar/AboutMe";
 import SeriesArticleParts from "@/components/Sidebar/SeriesArticleParts";
-import { getArticleBySlug } from "@/services/article-api";
+import { getPublishedArticleBySlug } from "@/services/article-api";
 import { mapApiArticleToArticle } from "@/lib/type-mappers";
 import ArticleBody from "@/components/Article/ArticleBody";
 import { Article } from "@/types/article";
@@ -15,7 +15,7 @@ interface PageProps {
 export default async function Page({ params }: PageProps) {
   const { articleSlug } = await params;
 
-  const apiArticle = await getArticleBySlug(articleSlug);
+  const apiArticle = await getPublishedArticleBySlug(articleSlug);
 
   if (apiArticle === null) {
     return <div>Article not found.</div>;

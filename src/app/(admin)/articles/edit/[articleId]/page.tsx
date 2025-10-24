@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { createArticle } from "@/services/article-api";
+import { useParams, useRouter } from "next/navigation";
+import { getArticleById, updateArticle } from "@/services/article-api";
 import { useAuth } from "@/hooks/useAuth";
 import {
   FileText as FileTextIcon,
@@ -10,39 +10,89 @@ import {
   Image as ImageIcon,
   Save,
   AlertCircle,
+  CheckCircle,
 } from "lucide-react";
-import { CreateArticleApiRequest } from "@/types/article-api";
+import { UpdateArticleApiRequest } from "@/types/article-api";
 import ContentEditor from "@/components/Article/ContentEditor";
 import TagSelector from "@/components/Article/TagSelector";
+import ArticleStatusBox from "@/components/Article/ArticleStatusBox";
 import { listTags } from "@/services/tag-api";
 import { Tag } from "@/types/tag";
+import { Article } from "@/types/article";
+import { mapApiArticleToArticle } from "@/lib/type-mappers";
 
 interface ArticleFormData {
   title: string;
+  slug: string;
   subtitle: string;
   summary: string;
   content: string;
   coverImageUrl: string;
   thumbnailUrl: string;
+  timeToRead: number;
   tagIds: string[];
 }
 
 export default function NewArticlePage() {
+  const params = useParams();
+  const articleId = params.articleId as string;
+
   const router = useRouter();
   const { isLoggedIn } = useAuth();
   const [formData, setFormData] = useState<ArticleFormData>({
     title: "",
+    slug: "",
     subtitle: "",
     summary: "",
     content: "",
     coverImageUrl: "",
     thumbnailUrl: "",
+    timeToRead: 0,
     tagIds: [],
   });
 
+  const [article, setArticle] = useState<Article | null>(null);
+  const [loading, setLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showSuccessTick, setShowSuccessTick] = useState(false);
   const [allTags, setAllTags] = useState<Tag[]>([]);
+
+  useEffect(() => {
+    async function fetchArticle() {
+      try {
+        const apiArticle = await getArticleById(articleId);
+        console.log("Fetched article:", apiArticle);
+
+        if (apiArticle === null) {
+          setArticle(null);
+        } else {
+          const mappedArticle = mapApiArticleToArticle(apiArticle);
+          setArticle(mappedArticle);
+
+          // Populate form with article data
+          setFormData({
+            title: mappedArticle.title || "",
+            slug: mappedArticle.slug || "",
+            subtitle: mappedArticle.subtitle || "",
+            summary: mappedArticle.summary || "",
+            content: mappedArticle.content || "",
+            coverImageUrl: mappedArticle.coverImageUrl || "",
+            thumbnailUrl: mappedArticle.thumbnailUrl || "",
+            timeToRead: Number.parseInt(mappedArticle.readingTime),
+            tagIds: mappedArticle.tags?.map((tag) => tag.tagId) || [],
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching article:", error);
+        setArticle(null);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchArticle();
+  }, [articleId]);
 
   useEffect(() => {
     listTags()
@@ -57,7 +107,7 @@ export default function NewArticlePage() {
 
   const handleGenericInputChange = (
     field: keyof ArticleFormData,
-    value: string | string[]
+    value: string | string[] | number
   ) => {
     setFormData((prev) => ({
       ...prev,
@@ -94,23 +144,29 @@ export default function NewArticlePage() {
     setError(null);
 
     try {
-      const articleData: CreateArticleApiRequest = {
+      const articleData: UpdateArticleApiRequest = {
         title: formData.title,
-        subtitle: formData.subtitle || undefined,
-        summary: formData.summary || undefined,
+        slug: formData.slug,
+        subtitle: formData.subtitle,
+        summary: formData.summary,
         content: formData.content,
         coverImageUrl: formData.coverImageUrl || undefined,
         thumbnailUrl: formData.thumbnailUrl || undefined,
-        tagIds: formData.tagIds.length > 0 ? formData.tagIds : undefined,
+        timeToRead: formData.timeToRead,
+        tagIds: formData.tagIds.length > 0 ? formData.tagIds : [],
       };
 
-      const createdSlug = await createArticle(articleData);
+      await updateArticle(articleId, articleData);
 
-      if (createdSlug) {
-        router.push(`/articles/${createdSlug}`);
-      } else {
-        setError("Failed to create article. Please try again.");
-      }
+      // Show success message
+      setShowSuccessTick(true);
+
+      // Hide success tick after 3 seconds
+      setTimeout(() => {
+        setShowSuccessTick(false);
+      }, 3000);
+
+      //router.push(`/articles/${articleData.slug}`);
     } catch (err: unknown) {
       console.error("Error in handleSubmit:", err);
 
@@ -140,10 +196,10 @@ export default function NewArticlePage() {
           {/* Header */}
           <div className="mb-8">
             <h1 className="text-headline-md font-bold text-base-content mb-2">
-              Draft New Article
+              Edit Article
             </h1>
             <p className="text-body-md text-base-content/70">
-              Draft your article with markdown support
+              Edit your article or customise its slug and metadata.
             </p>
           </div>
 
@@ -160,6 +216,9 @@ export default function NewArticlePage() {
               </button>
             </div>
           )}
+
+          {/* Article Status Box */}
+          <ArticleStatusBox article={article} loading={loading} />
 
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Article Information */}
@@ -189,6 +248,32 @@ export default function NewArticlePage() {
                       />
                       <TypeIcon className="absolute right-3 top-3 w-5 h-5 text-base-content/40" />
                     </div>
+                  </div>
+
+                  {/* Slug */}
+                  <div className="form-control lg:col-span-2">
+                    <label className="label pb-1">
+                      <span className="label-text font-medium">Slug *</span>
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        placeholder="article-url-slug"
+                        className="input input-bordered w-full font-mono"
+                        value={formData.slug}
+                        onChange={(e) =>
+                          handleGenericInputChange("slug", e.target.value)
+                        }
+                        required
+                      />
+                      <TypeIcon className="absolute right-3 top-3 w-5 h-5 text-base-content/40" />
+                    </div>
+                    <label className="label pt-1">
+                      <span className="text-base-content/60">
+                        URL-friendly identifier for the article (e.g.,
+                        my-article-title)
+                      </span>
+                    </label>
                   </div>
 
                   {/* Subtitle */}
@@ -270,6 +355,34 @@ export default function NewArticlePage() {
                     </div>
                   </div>
 
+                  {/* Time to Read */}
+                  <div className="form-control lg:col-span-2">
+                    <label className="label pb-1">
+                      <span className="label-text font-medium">
+                        Time to Read (minutes) *
+                      </span>
+                    </label>
+                    <input
+                      type="number"
+                      placeholder="5"
+                      min="0"
+                      className="input input-bordered w-full"
+                      value={formData.timeToRead}
+                      onChange={(e) =>
+                        handleGenericInputChange(
+                          "timeToRead",
+                          parseInt(e.target.value) || 0
+                        )
+                      }
+                      required
+                    />
+                    <label className="label pt-1">
+                      <span className="text-base-content/60">
+                        Estimated reading time in minutes
+                      </span>
+                    </label>
+                  </div>
+
                   <TagSelector
                     tags={allTags}
                     selectedTagIds={formData.tagIds}
@@ -308,7 +421,12 @@ export default function NewArticlePage() {
                 {isSubmitting ? (
                   <>
                     <span className="loading loading-spinner loading-sm"></span>
-                    Creating...
+                    Saving...
+                  </>
+                ) : showSuccessTick ? (
+                  <>
+                    <CheckCircle className="w-4 h-4 mr-2" />
+                    Saved!
                   </>
                 ) : !isLoggedIn ? (
                   <>
@@ -318,7 +436,7 @@ export default function NewArticlePage() {
                 ) : (
                   <>
                     <Save className="w-4 h-4 mr-2" />
-                    Draft Article
+                    Update Article
                   </>
                 )}
               </button>

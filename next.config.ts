@@ -29,6 +29,11 @@ const nextConfig: NextConfig = {
         hostname: 'source.unsplash.com',
         pathname: '/**',  // Allows any path under picsum.photos
       },
+      {
+        protocol: 'https',
+        hostname: 'bloggy-cdn.hadisamadzad.com',
+        pathname: '/**',  // Allows any path under bloggy-cdn.hadisamadzad.com
+      },
     ]
   },
 };

@@ -1,11 +1,17 @@
-export interface UserInfo {
+import { UserRole } from "./auth";
+
+export interface LoginApiResponse {
   email: string;
   fullName: string;
-  userId: string | null;
-  role: UserRole | null;
+  accessToken: string;
 }
 
-export interface UserProfile {
+export interface UpdateUserProfileApiRequest {
+  firstName: string;
+  lastName: string;
+}
+
+export interface GetUserProfileApiResponse {
   userId: string;
   email: string;
   isEmailConfirmed: boolean;
@@ -17,10 +23,4 @@ export interface UserProfile {
   lastLoginDate: string;
   createdAt: string;
   updatedAt: string;
-}
-
-export enum UserRole {
-  Owner = "Owner",
-  Admin = "Admin",
-  User = "User",
 }

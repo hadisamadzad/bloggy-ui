@@ -1,4 +1,5 @@
-import { ApiArticle, Article } from "@/types/article";
+import { Article } from "@/types/article";
+import { ApiArticle } from "@/types/article-api";
 
 // Map API article to internal article type
 export function mapApiArticleToArticle(apiArticle: ApiArticle): Article {
@@ -14,8 +15,7 @@ export function mapApiArticleToArticle(apiArticle: ApiArticle): Article {
     coverImageUrl: apiArticle.coverImageUrl,
     readingTime: `${apiArticle.timeToReadInMinute} min read`,
     likes: apiArticle.likes,
-    tagIds: apiArticle.tagIds,
-    tagSlugs: apiArticle.tagSlugs,
+    tags: apiArticle.tags,
     status: apiArticle.status,
     createdAt: apiArticle.createdAt,
     updatedAt: apiArticle.updatedAt,

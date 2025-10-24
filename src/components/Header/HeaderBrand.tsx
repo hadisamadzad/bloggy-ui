@@ -1,10 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { getBlogSettings } from "@/services/setting-api";
-import { ApiSetting } from "@/types/setting";
+import { ApiBlogSetting } from "@/types/setting";
 
 export default async function HeaderBrand() {
-  const settings: ApiSetting | null = await getBlogSettings();
+  const settings: ApiBlogSetting | null = await getBlogSettings();
 
   return (
     <Link href="/articles">

@@ -1,39 +1,4 @@
-export type ApiArticle = {
-  articleId: string;
-  authorId: string;
-  title: string;
-  subtitle: string;
-  summary: string;
-  content: string;
-  slug: string;
-  thumbnailUrl: string;
-  coverImageUrl: string;
-  timeToReadInMinute: number;
-  likes: number;
-  tagIds: string[];
-  tagSlugs: string[];
-  status: ArticleStatus;
-  createdAt: string; // ISO string
-  updatedAt: string; // ISO string
-  publishedAt: string | null;
-  archivedAt: string | null;
-};
-
-export type ApiArticles = {
-  page: number;
-  pageSize: number;
-  totalCount: number;
-  results: ApiArticle[];
-};
-
-export type ArticleFilter = {
-  Keyword: string;
-  Statuses: string[];
-  TagIds: string[];
-  SortBy: string;
-  Page: number;
-  PageSize: number;
-};
+import { Tag } from "./tag";
 
 export type Article = {
   articleId: string;
@@ -47,13 +12,21 @@ export type Article = {
   coverImageUrl: string;
   readingTime: string;
   likes: number;
-  tagIds: string[];
-  tagSlugs: string[];
+  tags: Tag[];
   status: ArticleStatus;
   createdAt: string; // ISO string
   updatedAt: string; // ISO string
   publishedAt: string | null;
   archivedAt: string | null;
+};
+
+export type ArticleFilter = {
+  Keyword: string;
+  Statuses: string[];
+  TagIds: string[];
+  SortBy: string;
+  Page: number;
+  PageSize: number;
 };
 
 // FIX Modify to use PublishedAt for sorting

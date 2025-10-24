@@ -4,7 +4,7 @@ import { useState, FormEvent, Suspense } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { login } from "@/services/identity-api";
+import { login } from "@/services/auth-api";
 import { useRouter, useSearchParams } from "next/navigation";
 import { getRedirectUrl, getSafeRedirectUrl } from "@/lib/redirect-utils";
 
