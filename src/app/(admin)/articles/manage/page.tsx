@@ -59,10 +59,7 @@ export default function Page() {
   if (articles.length === 0) return <div>No articles found.</div>;
   return (
     <>
-      <Hero
-        title="UI / UX BLOG"
-        subtitle="Tips & Techniques from My UI/UX Journey"
-      />
+      <Hero title="Manage Articles" subtitle="" />
       <section className="max-w-[1440px] mx-auto px-24">
         <div className="flex gap-6">
           <div className="flex-2">
