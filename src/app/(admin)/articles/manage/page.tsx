@@ -67,6 +67,7 @@ export default function Page() {
               articles={articles}
               sortedBy={sortBy}
               onSortChange={setSortBy}
+              showPopularSortOption={false}
             />
           </div>
 

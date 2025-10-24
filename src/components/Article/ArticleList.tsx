@@ -6,17 +6,23 @@ type ArticleListProps = {
   articles: Article[];
   sortedBy?: ArticleSortBy;
   onSortChange?: (sortBy: ArticleSortBy) => void;
+  showPopularSortOption?: boolean;
 };
 
 export default function ArticleList({
   articles,
   sortedBy = ArticleSortBy.Latest,
   onSortChange,
+  showPopularSortOption = true,
 }: ArticleListProps) {
   return (
     <div className="p-4 rounded-lg border border-neutral-500">
       <div className="pb-4">
-        <ArticleListSortTab sortedBy={sortedBy} onSortChange={onSortChange} />
+        <ArticleListSortTab
+          showPopular={showPopularSortOption}
+          sortedBy={sortedBy}
+          onSortChange={onSortChange}
+        />
       </div>
       {articles.map((article, index) => (
         <div key={index}>

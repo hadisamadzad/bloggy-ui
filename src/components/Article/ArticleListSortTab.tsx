@@ -4,11 +4,13 @@ import React from "react";
 type ArticleListSortTabProps = {
   sortedBy?: ArticleSortBy;
   onSortChange?: (sortBy: ArticleSortBy) => void;
+  showPopular?: boolean;
 };
 
 export default function ArticleListSortTab({
   sortedBy,
   onSortChange,
+  showPopular = true,
 }: ArticleListSortTabProps) {
   return (
     <div className="h-12  -mt-3 border-b border-base-content/30">
@@ -24,17 +26,19 @@ export default function ArticleListSortTab({
         >
           Latest
         </a>
-        <a
-          role="tab"
-          className={`tab h-12 text-body-md ${
-            sortedBy === ArticleSortBy.Popular
-              ? "tab-active border-b-2 border-base-content"
-              : ""
-          }`}
-          onClick={() => onSortChange?.(ArticleSortBy.Popular)}
-        >
-          Popular
-        </a>
+        {showPopular && (
+          <a
+            role="tab"
+            className={`tab h-12 text-body-md ${
+              sortedBy === ArticleSortBy.Popular
+                ? "tab-active border-b-2 border-base-content"
+                : ""
+            }`}
+            onClick={() => onSortChange?.(ArticleSortBy.Popular)}
+          >
+            Popular
+          </a>
+        )}
         <a
           role="tab"
           className={`tab h-12 text-body-md ${
