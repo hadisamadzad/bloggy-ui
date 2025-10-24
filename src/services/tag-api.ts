@@ -3,10 +3,9 @@ import { Tag } from "@/types/tag";
 
 const baseUrl: string = BLOG_API_URL;
 
-/**
- * Fetch all available tags from the blog API
- * @returns Promise<Tag[]> - Array of all tags
- */
+// ============================================
+// API: GET /tags
+// ============================================
 export async function getTags(): Promise<Tag[]> {
   try {
     const res = await fetch(`${baseUrl}/tags`, {
@@ -29,11 +28,9 @@ export async function getTags(): Promise<Tag[]> {
   }
 }
 
-/**
- * Search/filter tags by name
- * @param searchTerm - The search term to filter tags
- * @returns Promise<Tag[]> - Filtered array of tags
- */
+// ============================================
+// HELPER: Search/filter tags locally
+// ============================================
 export async function searchTags(searchTerm: string): Promise<Tag[]> {
   const allTags = await getTags();
 

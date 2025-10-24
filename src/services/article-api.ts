@@ -7,6 +7,9 @@ import { authenticatedRequest } from "./auth-api";
 
 const baseUrl: string = BLOG_API_URL;
 
+// ============================================
+// API: GET /articles/published
+// ============================================
 export async function listPublishedArticles(
   filter: ArticleFilter
 ): Promise<ApiArticles | null> {
@@ -31,6 +34,9 @@ export async function listPublishedArticles(
   }
 }
 
+// ============================================
+// API: GET /articles/published/:slug
+// ============================================
 export async function getPublishedArticleBySlug(
   slug: string
 ): Promise<ApiArticle | null> {
@@ -45,6 +51,9 @@ export async function getPublishedArticleBySlug(
   }
 }
 
+// ============================================
+// API: POST /articles
+// ============================================
 export async function createArticle(
   article: CreateArticleApiRequest
 ): Promise<string | null> {

@@ -4,7 +4,9 @@ import { authenticatedRequest } from "./auth-api";
 
 const baseUrl: string = IDENTITY_API_URL;
 
-// Update user profile
+// ============================================
+// API: PATCH /users/:userId
+// ============================================
 export async function updateUser(
   userId: string,
   profileData: UpdateUserApiRequest
@@ -29,7 +31,9 @@ export async function updateUser(
   }
 }
 
-// Update user password
+// ============================================
+// API: PATCH /users/:userId/password
+// ============================================
 export async function updateUserPassword(
   userId: string,
   currentPassword: string,

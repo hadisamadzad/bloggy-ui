@@ -4,7 +4,9 @@ import { UserInfo } from "@/types/auth";
 
 const baseUrl: string = IDENTITY_API_URL;
 
-// Auth API functions: Login
+// ============================================
+// API: POST /auth/login
+// ============================================
 export async function login(
   email: string,
   password: string
@@ -64,7 +66,9 @@ export async function login(
   return loginResult;
 }
 
-// Auth API functions: Logout
+// ============================================
+// API: POST /auth/logout
+// ============================================
 export async function logout(): Promise<void> {
   // Clear local tokens immediately for better UX
   clearTokens();
@@ -87,8 +91,9 @@ export async function logout(): Promise<void> {
   }
 }
 
-// Auth API functions: Refresh Token
-// Add token refresh functionality using httpOnly cookie
+// ============================================
+// API: POST /auth/refresh
+// ============================================
 export async function refreshAccessToken(): Promise<boolean> {
   try {
     const res = await fetch(`${baseUrl}/auth/refresh`, {
@@ -124,7 +129,9 @@ export async function refreshAccessToken(): Promise<boolean> {
   }
 }
 
-// Add authenticated fetch wrapper
+// ============================================
+// HELPER: Authenticated request wrapper
+// ============================================
 export async function authenticatedRequest(
   url: string,
   options: RequestInit = {}
@@ -171,7 +178,9 @@ export async function authenticatedRequest(
   return response;
 }
 
-// Get user profile
+// ============================================
+// API: GET /auth/profile
+// ============================================
 export async function getUserProfile(): Promise<GetUserProfileApiResponse | null> {
   try {
     const res = await authenticatedRequest(`${baseUrl}/auth/profile`);

@@ -4,6 +4,9 @@ import { ApiBlogSetting } from "@/types/setting";
 
 const baseUrl: string = BLOG_API_URL;
 
+// ============================================
+// API: GET /settings
+// ============================================
 export async function getBlogSettings(): Promise<ApiBlogSetting | null> {
   try {
     const res = await fetch(`${baseUrl}/settings`, {
@@ -19,6 +22,9 @@ export async function getBlogSettings(): Promise<ApiBlogSetting | null> {
   }
 }
 
+// ============================================
+// API: PUT /settings
+// ============================================
 export async function updateBlogSettings(
   settings: Omit<ApiBlogSetting, "updatedAt">
 ): Promise<boolean> {
