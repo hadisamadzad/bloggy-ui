@@ -20,6 +20,7 @@ import { UpdateArticleApiRequest } from "@/types/article-api";
 import ContentEditor from "@/components/Article/ContentEditor";
 import TagSelector from "@/components/Article/TagSelector";
 import ArticleStatusBox from "@/components/Article/ArticleStatusBox";
+import ArticleDeleteModal from "@/components/Article/ArticleDeleteModal";
 import { listTags } from "@/services/tag-api";
 import { Tag } from "@/types/tag";
 import { Article } from "@/types/article";
@@ -60,6 +61,8 @@ export default function NewArticlePage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showSuccessTick, setShowSuccessTick] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
   const [allTags, setAllTags] = useState<Tag[]>([]);
 
   useEffect(() => {
@@ -192,35 +195,36 @@ export default function NewArticlePage() {
     }
   };
 
-  const handleDelete = async (articleId: string) => {
-    //e.preventDefault();
+  // Triggers modal, not delete directly
+  const handleDeleteRequest = (articleId: string) => {
+    setPendingDeleteId(articleId);
+    setShowDeleteModal(true);
+  };
 
-    // Check authentication before proceeding
+  // Actually deletes after confirmation
+  const handleDeleteConfirmed = async () => {
+    if (!pendingDeleteId) return;
+
     if (!isLoggedIn) {
       setError(
         "You must be logged in to delete an article. Please log in and try again."
       );
+      setShowDeleteModal(false);
       return;
     }
 
     setError(null);
 
     try {
-      await deleteArticle(articleId);
-
-      // Show success message
+      await deleteArticle(pendingDeleteId);
       setShowSuccessTick(true);
-
-      // Hide success tick after 3 seconds
       setTimeout(() => {
         setShowSuccessTick(false);
       }, 3000);
-
+      setShowDeleteModal(false);
       router.push(`/articles/manage`);
     } catch (err: unknown) {
-      console.error("Error in handleDelete:", err);
-
-      // Handle authentication errors specifically
+      console.error("Error in handleDeleteConfirmed:", err);
       const errorMessage = err instanceof Error ? err.message : "Unknown error";
       if (
         errorMessage.includes("authentication") ||
@@ -234,7 +238,7 @@ export default function NewArticlePage() {
           `An error occurred while deleting the article: ${errorMessage}`
         );
       }
-    } finally {
+      setShowDeleteModal(false);
     }
   };
 
@@ -271,9 +275,19 @@ export default function NewArticlePage() {
             <ArticleStatusBox
               article={article}
               loading={loading}
-              onDelete={handleDelete}
+              onDelete={handleDeleteRequest}
             />
           </div>
+
+          {/* Delete Confirmation Modal */}
+          <ArticleDeleteModal
+            open={showDeleteModal}
+            onCancel={() => {
+              setShowDeleteModal(false);
+              setPendingDeleteId(null);
+            }}
+            onConfirm={handleDeleteConfirmed}
+          />
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-6">
             {/* Article Information */}
