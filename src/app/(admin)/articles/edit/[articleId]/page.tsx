@@ -2,7 +2,11 @@
 
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { getArticleById, updateArticle } from "@/services/article-api";
+import {
+  deleteArticle,
+  getArticleById,
+  updateArticle,
+} from "@/services/article-api";
 import { useAuth } from "@/hooks/useAuth";
 import {
   FileText as FileTextIcon,
@@ -134,7 +138,7 @@ export default function NewArticlePage() {
     // Check authentication before proceeding
     if (!isLoggedIn) {
       setError(
-        "You must be logged in to create an article. Please log in and try again."
+        "You must be logged in to update an article. Please log in and try again."
       );
       return;
     }
@@ -176,15 +180,61 @@ export default function NewArticlePage() {
         errorMessage.includes("token")
       ) {
         setError(
-          "Authentication failed. Please log in again and try creating the article."
+          "Authentication failed. Please log in again and try updating the article."
         );
       } else {
         setError(
-          `An error occurred while creating the article: ${errorMessage}`
+          `An error occurred while updating the article: ${errorMessage}`
         );
       }
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handleDelete = async (articleId: string) => {
+    //e.preventDefault();
+
+    // Check authentication before proceeding
+    if (!isLoggedIn) {
+      setError(
+        "You must be logged in to delete an article. Please log in and try again."
+      );
+      return;
+    }
+
+    setError(null);
+
+    try {
+      await deleteArticle(articleId);
+
+      // Show success message
+      setShowSuccessTick(true);
+
+      // Hide success tick after 3 seconds
+      setTimeout(() => {
+        setShowSuccessTick(false);
+      }, 3000);
+
+      router.push(`/articles/manage`);
+    } catch (err: unknown) {
+      console.error("Error in handleDelete:", err);
+
+      // Handle authentication errors specifically
+      const errorMessage = err instanceof Error ? err.message : "Unknown error";
+      if (
+        errorMessage.includes("authentication") ||
+        errorMessage.includes("token")
+      ) {
+        setError(
+          "Authentication failed. Please log in again and try deleting the article."
+        );
+      } else {
+        setError(
+          `An error occurred while deleting the article: ${errorMessage}`
+        );
+      }
+    } finally {
     }
   };
 
@@ -217,7 +267,11 @@ export default function NewArticlePage() {
           )}
 
           {/* Article Status Box */}
-          <ArticleStatusBox article={article} loading={loading} />
+          <ArticleStatusBox
+            article={article}
+            loading={loading}
+            onDelete={handleDelete}
+          />
 
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Article Information */}
