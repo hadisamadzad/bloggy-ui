@@ -1,4 +1,4 @@
-import Footer from "@/components/Footer/Footer";
+import Copyright from "@/components/Footer/Copyright";
 import Header from "@/components/Header/Header";
 
 export default function RootLayout({
@@ -10,7 +10,8 @@ export default function RootLayout({
     <>
       <Header />
       {children}
-      <Footer />
+      <Copyright />
+      {/* <Footer /> */}
     </>
   );
 }
