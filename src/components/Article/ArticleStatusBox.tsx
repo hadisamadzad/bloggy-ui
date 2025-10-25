@@ -32,7 +32,7 @@ export default function ArticleStatusBox({
   }
 
   return (
-    <div className="card border border-base-content/20 mb-6">
+    <div className="card border border-base-content/20">
       <div className="card-body py-4">
         <div className="flex flex-col gap-3">
           {/* First Row - Status and Preview */}

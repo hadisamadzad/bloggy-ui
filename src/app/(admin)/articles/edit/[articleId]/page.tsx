@@ -267,13 +267,15 @@ export default function NewArticlePage() {
           )}
 
           {/* Article Status Box */}
-          <ArticleStatusBox
-            article={article}
-            loading={loading}
-            onDelete={handleDelete}
-          />
+          <div className="mb-6">
+            <ArticleStatusBox
+              article={article}
+              loading={loading}
+              onDelete={handleDelete}
+            />
+          </div>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-6">
             {/* Article Information */}
             <div className="card border border-base-content/20">
               <div className="card-body">
