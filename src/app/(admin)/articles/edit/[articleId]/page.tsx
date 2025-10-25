@@ -62,7 +62,6 @@ export default function NewArticlePage() {
     async function fetchArticle() {
       try {
         const apiArticle = await getArticleById(articleId);
-        console.log("Fetched article:", apiArticle);
 
         if (apiArticle === null) {
           setArticle(null);
