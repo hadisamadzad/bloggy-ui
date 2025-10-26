@@ -14,15 +14,19 @@ import {
 } from "lucide-react";
 
 export interface FormData {
+  authorName: string;
+  authorTitle: string;
+  aboutAuthor: string;
   blogTitle: string;
   blogSubtitle: string;
   blogDescription: string;
-  blogPageTitle: string;
+  blogUrl: string;
+  pageTitleTemplate: string;
   seoMetaTitle: string;
   seoMetaDescription: string;
-  blogUrl: string;
   blogLogoUrl: string;
   socials: SocialLink[];
+  copyrightText: string;
 }
 
 interface BlogSettingsFormProps {
@@ -87,6 +91,63 @@ export default function BlogSettingsForm({
               </h2>
 
               <div className="space-y-4">
+                {/* Author Name */}
+                <div className="form-control">
+                  <label className="label pb-1">
+                    <span className="label-text font-medium">Author Name</span>
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Your name"
+                    className="input input-bordered w-full"
+                    value={formData.authorName}
+                    onChange={(e) =>
+                      onFormDataChange({
+                        ...formData,
+                        authorName: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+
+                {/* Author Title */}
+                <div className="form-control">
+                  <label className="label pb-1">
+                    <span className="label-text font-medium">Author Title</span>
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Your title or role"
+                    className="input input-bordered w-full"
+                    value={formData.authorTitle}
+                    onChange={(e) =>
+                      onFormDataChange({
+                        ...formData,
+                        authorTitle: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+
+                {/* About Author */}
+                <div className="form-control">
+                  <label className="label pb-1">
+                    <span className="label-text font-medium">About Author</span>
+                  </label>
+                  <textarea
+                    placeholder="A short bio about yourself"
+                    className="textarea textarea-bordered h-24 w-full"
+                    value={formData.aboutAuthor}
+                    onChange={(e) =>
+                      onFormDataChange({
+                        ...formData,
+                        aboutAuthor: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+
+                {/* Blog Title */}
                 <div className="form-control">
                   <label className="label pb-1">
                     <span className="label-text font-medium">Blog Title</span>
@@ -106,6 +167,7 @@ export default function BlogSettingsForm({
                   />
                 </div>
 
+                {/* Blog Subtitle */}
                 <div className="form-control">
                   <label className="label pb-1">
                     <span className="label-text font-medium">
@@ -126,6 +188,7 @@ export default function BlogSettingsForm({
                   />
                 </div>
 
+                {/* Blog Description */}
                 <div className="form-control">
                   <label className="label pb-1">
                     <span className="label-text font-medium">
@@ -144,24 +207,6 @@ export default function BlogSettingsForm({
                     }
                   />
                 </div>
-
-                <div className="form-control">
-                  <label className="label pb-1">
-                    <span className="label-text font-medium">Page Title</span>
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Browser tab title"
-                    className="input input-bordered w-full"
-                    value={formData.blogPageTitle}
-                    onChange={(e) =>
-                      onFormDataChange({
-                        ...formData,
-                        blogPageTitle: e.target.value,
-                      })
-                    }
-                  />
-                </div>
               </div>
             </div>
           </div>
@@ -172,6 +217,27 @@ export default function BlogSettingsForm({
               <h2 className="card-title text-title-lg mb-4">SEO & Technical</h2>
 
               <div className="space-y-4">
+                {/* Page Title Template (moved from Basic Information) */}
+                <div className="form-control">
+                  <label className="label pb-1">
+                    <span className="label-text font-medium">
+                      Page Title Template
+                    </span>
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Browser tab title"
+                    className="input input-bordered w-full"
+                    value={formData.pageTitleTemplate}
+                    onChange={(e) =>
+                      onFormDataChange({
+                        ...formData,
+                        pageTitleTemplate: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+
                 <div className="form-control">
                   <label className="label pb-1">
                     <span className="label-text font-medium">Blog URL</span>
@@ -328,6 +394,30 @@ export default function BlogSettingsForm({
                   </p>
                 </div>
               )}
+            </div>
+          </div>
+        </div>
+
+        {/* Copyright Section - full width */}
+        <div className="card border border-base-content/20 mt-6">
+          <div className="card-body">
+            <h2 className="card-title text-title-lg mb-4">Copyright</h2>
+            <div className="form-control">
+              <label className="label pb-1">
+                <span className="label-text font-medium">Copyright Text</span>
+              </label>
+              <input
+                type="text"
+                placeholder="© 2025 Your Blog Name. All rights reserved."
+                className="input input-bordered w-full"
+                value={formData.copyrightText}
+                onChange={(e) =>
+                  onFormDataChange({
+                    ...formData,
+                    copyrightText: e.target.value,
+                  })
+                }
+              />
             </div>
           </div>
         </div>

@@ -11,15 +11,19 @@ export interface ApiSocialLink {
 }
 
 export interface ApiBlogSetting {
+  authorName: string;
+  authorTitle: string;
+  aboutAuthor: string;
   blogTitle: string;
   blogSubtitle: string;
-  blogPageTitle: string;
   blogDescription: string;
+  blogUrl: string;
+  pageTitleTemplate: string;
   seoMetaTitle: string;
   seoMetaDescription: string;
-  blogUrl: string;
   blogLogoUrl: string;
   socials: ApiSocialLink[];
+  copyrightText: string;
   updatedAt: string;
 }
 

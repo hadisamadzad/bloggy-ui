@@ -4,7 +4,7 @@ import { useState, useEffect, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { getLocalUserId, getUserProfile } from "@/services/auth-api";
 import { getBlogSettings, updateBlogSettings } from "@/services/setting-api";
-import { SocialLink } from "@/types/setting";
+import { ApiBlogSetting } from "@/types/setting";
 import {
   BlogSettingsForm,
   AccountSettingsForm,
@@ -20,23 +20,10 @@ import {
 } from "@/components/Settings";
 import { updateUser, updateUserPassword } from "@/services/user-api";
 
-interface BlogSettings {
-  blogTitle: string;
-  blogSubtitle: string;
-  blogDescription: string;
-  blogPageTitle: string;
-  seoMetaTitle: string;
-  seoMetaDescription: string;
-  blogUrl: string;
-  blogLogoUrl: string;
-  socials: SocialLink[];
-  updatedAt: string;
-}
-
 export default function SettingsPage() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<SettingsTab>("blog");
-  const [blogSettings, setBlogSettings] = useState<BlogSettings | null>(null);
+  const [blogSettings, setBlogSettings] = useState<ApiBlogSetting | null>(null);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -45,15 +32,19 @@ export default function SettingsPage() {
 
   // Form states
   const [blogFormData, setBlogFormData] = useState<BlogFormData>({
+    authorName: "",
+    authorTitle: "",
+    aboutAuthor: "",
     blogTitle: "",
     blogSubtitle: "",
     blogDescription: "",
-    blogPageTitle: "",
+    pageTitleTemplate: "",
+    blogUrl: "",
     seoMetaTitle: "",
     seoMetaDescription: "",
-    blogUrl: "",
     blogLogoUrl: "",
     socials: [],
+    copyrightText: "",
   });
 
   const [userFormData, setUserFormData] = useState<UserFormData>({
@@ -99,41 +90,53 @@ export default function SettingsPage() {
       if (blogSettingsData) {
         setBlogSettings(blogSettingsData);
         setBlogFormData({
+          authorName: blogSettingsData.authorName,
+          authorTitle: blogSettingsData.authorTitle,
+          aboutAuthor: blogSettingsData.aboutAuthor,
           blogTitle: blogSettingsData.blogTitle,
           blogSubtitle: blogSettingsData.blogSubtitle,
           blogDescription: blogSettingsData.blogDescription,
-          blogPageTitle: blogSettingsData.blogPageTitle,
+          blogUrl: blogSettingsData.blogUrl,
+          pageTitleTemplate: blogSettingsData.pageTitleTemplate,
           seoMetaTitle: blogSettingsData.seoMetaTitle,
           seoMetaDescription: blogSettingsData.seoMetaDescription,
-          blogUrl: blogSettingsData.blogUrl,
           blogLogoUrl: blogSettingsData.blogLogoUrl,
           socials: [...blogSettingsData.socials],
+          copyrightText: blogSettingsData.copyrightText,
         });
       } else {
         // Fallback to default settings if API fails
-        const defaultSettings: BlogSettings = {
+        const defaultSettings: ApiBlogSetting = {
+          authorName: "",
+          authorTitle: "",
+          aboutAuthor: "",
           blogTitle: "",
           blogSubtitle: "",
           blogDescription: "",
-          blogPageTitle: "",
+          blogUrl: "",
+          pageTitleTemplate: "",
           seoMetaTitle: "",
           seoMetaDescription: "",
-          blogUrl: "",
           blogLogoUrl: "",
           socials: [],
+          copyrightText: "",
           updatedAt: new Date().toISOString(),
         };
         setBlogSettings(defaultSettings);
         setBlogFormData({
+          authorName: "",
+          authorTitle: "",
+          aboutAuthor: "",
           blogTitle: "",
           blogSubtitle: "",
           blogDescription: "",
-          blogPageTitle: "",
+          blogUrl: "",
+          pageTitleTemplate: "",
           seoMetaTitle: "",
           seoMetaDescription: "",
-          blogUrl: "",
           blogLogoUrl: "",
           socials: [],
+          copyrightText: "",
         });
       }
     } catch (err) {
