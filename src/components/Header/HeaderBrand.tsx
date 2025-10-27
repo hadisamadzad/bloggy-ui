@@ -13,7 +13,7 @@ export default async function HeaderBrand() {
           <div className="avatar">
             <div className="w-12 rounded-full">
               <Image
-                alt={settings?.blogTitle ?? "Blog Logo"}
+                alt={settings?.authorName ?? "Blog Logo"}
                 src={settings?.blogLogoUrl ?? ""}
                 width={300}
                 height={300}
@@ -24,7 +24,7 @@ export default async function HeaderBrand() {
         <div className="flex flex-col gap-1">
           <p className="text-title-md">{settings?.blogTitle}</p>
           <p className="text-label-md text-base-content/70">
-            {settings?.blogSubtitle}
+            {settings?.authorTitle}
           </p>
         </div>
       </div>

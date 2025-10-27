@@ -1,4 +1,4 @@
-"use client";
+"use server";
 
 import { Tag } from "@/types/tag";
 import TagChip from "../Common/TagChip";
@@ -8,7 +8,7 @@ interface SidebarTagsProps {
   isMore?: boolean;
 }
 
-export default function SidebarTags({
+export default async function SidebarTags({
   tags,
   isMore = false,
 }: SidebarTagsProps) {

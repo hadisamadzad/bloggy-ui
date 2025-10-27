@@ -4,12 +4,6 @@ export interface SocialLink {
   url: string;
 }
 
-export interface ApiSocialLink {
-  order: number;
-  name: SocialNetworkName;
-  url: string;
-}
-
 export interface ApiBlogSetting {
   authorName: string;
   authorTitle: string;
@@ -22,7 +16,7 @@ export interface ApiBlogSetting {
   seoMetaTitle: string;
   seoMetaDescription: string;
   blogLogoUrl: string;
-  socials: ApiSocialLink[];
+  socials: SocialLink[];
   copyrightText: string;
   updatedAt: string;
 }
