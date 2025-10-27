@@ -2,6 +2,7 @@
 
 import "./globals.css";
 import AdminBar from "@/components/Auth/AdminBar";
+import { SettingsProvider } from "@/context/SettingsContext";
 
 export default function RootLayout({
   children,
@@ -17,7 +18,7 @@ export default function RootLayout({
       </head>
       <body className="flex flex-col min-h-screen">
         <AdminBar />
-        {children}
+        <SettingsProvider>{children}</SettingsProvider>
       </body>
     </html>
   );

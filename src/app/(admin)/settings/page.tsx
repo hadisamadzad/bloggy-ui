@@ -324,38 +324,62 @@ export default function SettingsPage() {
 
         {/* Blog Settings Tab */}
         {activeTab === "blog" && blogSettings && (
-          <BlogSettingsForm
-            formData={blogFormData}
-            onFormDataChange={setBlogFormData}
-            onSubmit={handleBlogSettingSubmit}
-            isSaving={isSaving}
-            showSuccessTick={showSuccessTick}
-          />
+          <>
+            <BlogSettingsForm
+              formData={blogFormData}
+              onFormDataChange={setBlogFormData}
+              onSubmit={handleBlogSettingSubmit}
+              isSaving={isSaving}
+              showSuccessTick={showSuccessTick}
+            />
+            <div className="flex items-center justify-end gap-3 mt-2">
+              <span className="inline-block text-sm text-warning bg-warning/10 px-3 py-2 rounded">
+                Note: Changes may take a few minutes to be applied due to
+                caching.
+              </span>
+            </div>
+          </>
         )}
 
         {/* Account Tab */}
         {activeTab === "account" && userProfile && (
-          <AccountSettingsForm
-            userProfile={userProfile}
-            formData={userFormData}
-            onFormDataChange={setUserFormData}
-            onSubmit={handleUserProfileSubmit}
-            onReset={handleUserReset}
-            isSaving={isSaving}
-            showSuccessTick={showSuccessTick}
-          />
+          <>
+            <AccountSettingsForm
+              userProfile={userProfile}
+              formData={userFormData}
+              onFormDataChange={setUserFormData}
+              onSubmit={handleUserProfileSubmit}
+              onReset={handleUserReset}
+              isSaving={isSaving}
+              showSuccessTick={showSuccessTick}
+            />
+            <div className="flex items-center justify-end gap-3 mt-2">
+              <span className="inline-block text-sm text-warning bg-warning/10 px-3 py-2 rounded">
+                Note: Changes may take a few minutes to be applied due to
+                caching and propagation.
+              </span>
+            </div>
+          </>
         )}
 
         {/* Security Tab */}
         {activeTab === "security" && userProfile && (
-          <SecuritySettingsForm
-            userEmail={userProfile.email}
-            passwordForm={passwordForm}
-            onPasswordFormChange={setPasswordForm}
-            onSubmit={handlePasswordChangeSubmit}
-            isSaving={isSaving}
-            showSuccessTick={showSuccessTick}
-          />
+          <>
+            <SecuritySettingsForm
+              userEmail={userProfile.email}
+              passwordForm={passwordForm}
+              onPasswordFormChange={setPasswordForm}
+              onSubmit={handlePasswordChangeSubmit}
+              isSaving={isSaving}
+              showSuccessTick={showSuccessTick}
+            />
+            <div className="flex items-center justify-end gap-3 mt-2">
+              <span className="inline-block text-sm text-warning bg-warning/10 px-3 py-2 rounded">
+                Note: Changes may take a few minutes to be applied due to
+                caching and propagation.
+              </span>
+            </div>
+          </>
         )}
       </div>
     </div>
