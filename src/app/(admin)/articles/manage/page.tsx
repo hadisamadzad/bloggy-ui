@@ -24,7 +24,7 @@ export default async function Page() {
           <div className="flex-2">
             <ClientPage /> {/* move CSR logic here */}
           </div>
-          <div className="flex-1">
+          <aside className="flex-1">
             <SidebarTags tags={tags} />
             <div className="mt-6" />
             <SeriesArticles />
@@ -37,7 +37,7 @@ export default async function Page() {
               imageUrl={settings?.blogLogoUrl ?? ""}
               socialLinks={settings?.socials ?? []}
             />
-          </div>
+          </aside>
         </div>
       </section>
     </>
