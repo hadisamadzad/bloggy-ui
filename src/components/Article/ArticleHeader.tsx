@@ -37,6 +37,23 @@ export default function ArticleHeader({ article }: ArticleHeaderProps) {
               <span className="text-body-sm">
                 Updated on {formatDate(article.updatedAt)}
               </span>
+              {article.originalArticleInfo && (
+                <>
+                  <span className="text-body-sm">|</span>
+                  <span className="text-body-sm italic">
+                    Originally published at{" "}
+                    <Link
+                      className="link"
+                      href={article.originalArticleInfo.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {article.originalArticleInfo.platform}
+                    </Link>{" "}
+                    on {formatDate(article.originalArticleInfo.publishedOn)}
+                  </span>
+                </>
+              )}
             </div>
             <span className="text-body-sm">{article.readingTime}</span>
           </div>

@@ -1,4 +1,4 @@
-import { ArticleStatus } from "./article";
+import { ArticleStatus, OriginalArticleInfo } from "./article";
 import { Tag } from "./tag";
 
 export type ApiArticle = {
@@ -11,6 +11,7 @@ export type ApiArticle = {
   slug: string;
   thumbnailUrl: string;
   coverImageUrl: string;
+  originalArticleInfo?: OriginalArticleInfo;
   timeToReadInMinute: number;
   likes: number;
   tags: Tag[];

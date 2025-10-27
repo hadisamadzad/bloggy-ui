@@ -13,6 +13,7 @@ export function mapApiArticleToArticle(apiArticle: ApiArticle): Article {
     content: apiArticle.content,
     thumbnailUrl: apiArticle.thumbnailUrl,
     coverImageUrl: apiArticle.coverImageUrl,
+    originalArticleInfo: apiArticle.originalArticleInfo,
     readingTime: `${apiArticle.timeToReadInMinute} min read`,
     likes: apiArticle.likes,
     tags: apiArticle.tags,

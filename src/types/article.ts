@@ -10,6 +10,7 @@ export type Article = {
   slug: string;
   thumbnailUrl: string;
   coverImageUrl: string;
+  originalArticleInfo?: OriginalArticleInfo;
   readingTime: string;
   likes: number;
   tags: Tag[];
@@ -18,6 +19,12 @@ export type Article = {
   updatedAt: string; // ISO string
   publishedAt: string | null;
   archivedAt: string | null;
+};
+
+export type OriginalArticleInfo = {
+  platform: string;
+  url: string;
+  publishedOn: string;
 };
 
 export type ArticleFilter = {
