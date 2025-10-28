@@ -7,12 +7,14 @@ import { formatDate } from "@/lib/date-tools";
 interface ArticleStatusBoxProps {
   article: Article | null;
   loading: boolean;
+  onStatusChange: (articleId: string, status: ArticleStatus) => void;
   onDelete: (articleId: string) => void;
 }
 
 export default function ArticleStatusBox({
   article,
   loading,
+  onStatusChange,
   onDelete,
 }: ArticleStatusBoxProps) {
   if (loading) {
@@ -104,6 +106,14 @@ export default function ArticleStatusBox({
                     ? "btn-outline"
                     : "btn-primary"
                 } gap-2`}
+                onClick={() =>
+                  onStatusChange(
+                    article.articleId,
+                    article.status === ArticleStatus.Published // Check current status
+                      ? ArticleStatus.Archived
+                      : ArticleStatus.Published
+                  )
+                }
               >
                 {article.status === ArticleStatus.Published ? (
                   <>

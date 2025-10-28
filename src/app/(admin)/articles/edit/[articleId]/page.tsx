@@ -2,10 +2,13 @@
 
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
+import ToastBar from "@/components/Common/ToastBar";
+import type { ToastMessage } from "@/components/Common/ToastBar";
 import {
   deleteArticle,
   getArticleById,
   updateArticle,
+  updateArticleStatus,
 } from "@/services/article-api";
 import { useAuth } from "@/hooks/useAuth";
 import {
@@ -23,7 +26,7 @@ import ArticleStatusBox from "@/components/Article/ArticleStatusBox";
 import ArticleDeleteModal from "@/components/Article/ArticleDeleteModal";
 import { listTags } from "@/services/tag-api";
 import { Tag } from "@/types/tag";
-import { Article, OriginalArticleInfo } from "@/types/article";
+import { Article, ArticleStatus, OriginalArticleInfo } from "@/types/article";
 import { mapApiArticleToArticle } from "@/lib/type-mappers";
 import OriginalArticleInfoBox from "@/components/Article/OriginalArticleInfoBox";
 
@@ -42,7 +45,9 @@ interface ArticleFormData {
   tagIds: string[];
 }
 
-export default function NewArticlePage() {
+export default function EditArticlePage() {
+  const [toastOpen, setToastOpen] = useState(false);
+  const [toastMessage, setToastMessage] = useState<ToastMessage | null>(null);
   const params = useParams();
   const articleId = params.articleId as string;
 
@@ -247,6 +252,28 @@ export default function NewArticlePage() {
   };
 
   // Triggers modal, not delete directly
+  const handleStatusChange = async (
+    articleId: string,
+    status: ArticleStatus
+  ) => {
+    const succeeded = await updateArticleStatus(articleId, status);
+    if (succeeded) {
+      setArticle((prev) => {
+        if (!prev) return prev;
+        return {
+          ...prev, // keep all existing fields
+          status: status, // update only one field
+        };
+      });
+      setToastMessage({
+        type: "success",
+        text: `Article ${status.toLowerCase()} successfully!`,
+      });
+      setToastOpen(true);
+    }
+  };
+
+  // Triggers modal, not delete directly
   const handleDeleteRequest = (articleId: string) => {
     setPendingDeleteId(articleId);
     setShowDeleteModal(true);
@@ -295,6 +322,13 @@ export default function NewArticlePage() {
 
   return (
     <div className="min-h-screen bg-base-100">
+      {toastMessage && (
+        <ToastBar
+          open={toastOpen}
+          message={toastMessage}
+          onClose={() => setToastOpen(false)}
+        />
+      )}
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-6xl mx-auto">
           {/* Header */}
@@ -326,6 +360,7 @@ export default function NewArticlePage() {
             <ArticleStatusBox
               article={article}
               loading={loading}
+              onStatusChange={handleStatusChange}
               onDelete={handleDeleteRequest}
             />
           </div>
