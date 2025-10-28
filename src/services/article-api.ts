@@ -103,6 +103,7 @@ export async function createArticle(
   article: CreateArticleApiRequest
 ): Promise<string | null> {
   // Create the request payload matching the blog API schema
+
   const requestPayload = {
     title: article.title,
     subtitle: article.subtitle || "",
@@ -114,10 +115,12 @@ export async function createArticle(
       .replace(/\s+/g, "-") // Replace spaces with hyphens
       .replace(/-+/g, "-") // Replace multiple hyphens with single
       .trim(),
+    originalArticleInfo: article.originalArticleInfo,
     thumbnailUrl: article.thumbnailUrl || "https://picsum.photos/540/400",
     coverImageUrl: article.coverImageUrl || "https://picsum.photos/540/400",
     tagIds: article.tagIds ?? [],
   };
+
 
   try {
     const res = await authenticatedRequest(`${baseUrl}/articles`, {
@@ -151,6 +154,7 @@ export async function updateArticle(
   article: UpdateArticleApiRequest
 ): Promise<boolean> {
   // Create the request payload matching the blog API schema
+
   const requestPayload = {
     title: article.title,
     subtitle: article.subtitle || "",
@@ -162,6 +166,8 @@ export async function updateArticle(
       .replace(/\s+/g, "-") // Replace spaces with hyphens
       .replace(/-+/g, "-") // Replace multiple hyphens with single
       .trim(),
+    originalArticleInfo: article.originalArticleInfo,
+    timeToRead: article.timeToRead,
     thumbnailUrl: article.thumbnailUrl || "https://picsum.photos/540/400",
     coverImageUrl: article.coverImageUrl || "https://picsum.photos/540/400",
     tagIds: article.tagIds ?? [],
@@ -180,7 +186,7 @@ export async function updateArticle(
     if (!res.ok) {
       const errorText = await res.text();
       throw new Error(
-        `Failed to update article status: ${res.status} ${res.statusText} - ${errorText}`
+        `Failed to update article: ${res.status} ${res.statusText} - ${errorText}`
       );
     }
 

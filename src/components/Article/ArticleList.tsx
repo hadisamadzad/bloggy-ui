@@ -44,7 +44,7 @@ export default function ArticleList({
       ) : (
         articles.map((article, index) => (
           <div key={index}>
-            <ArticleListItem article={article} showStats={!isAdmin} />
+            <ArticleListItem article={article} isAdmin={isAdmin} />
             {index < articles.length - 1 && <div className="divider" />}
           </div>
         ))

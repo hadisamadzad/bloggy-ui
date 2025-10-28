@@ -6,21 +6,25 @@ import { Pencil } from "lucide-react";
 
 interface ArticleListItemProps {
   article: Article;
-  showStats?: boolean;
+  isAdmin?: boolean;
 }
 
 export default function ArticleListItem({
   article,
-  showStats = true,
+  isAdmin = false,
 }: ArticleListItemProps) {
+  const articleUrl = isAdmin
+    ? `/articles/edit/${article.articleId}`
+    : `/articles/${article.slug}`;
+
   return (
     <div className="flex gap-4 min-h-36">
       <div className="flex-none w-[180px] h-30 pt-3">
-        <Link href={`/articles/${article.slug}`}>
+        <Link href={articleUrl}>
           <Image
             alt={article.title}
             title={article.title}
-            src={article.thumbnailUrl}
+            src={article.thumbnailUrl ?? "https://picsum.photos/540/400"}
             className="object-cover rounded-lg"
             width={540}
             height={400}
@@ -38,7 +42,7 @@ export default function ArticleListItem({
               {formatDate(article.updatedAt)}
             </time>
           </div>
-          <Link href={`/articles/${article.slug}`}>
+          <Link href={articleUrl}>
             <h2 className="text-title-lg">{article.title}</h2>
           </Link>
           {article.summary && (
@@ -46,11 +50,11 @@ export default function ArticleListItem({
           )}
         </div>
         <div className="flex justify-between items-end mt-4 text-label-md text-neutral-500">
-          {showStats ? (
+          {!isAdmin ? (
             <>
               <div className="flex gap-6">
-                <span className="flex items-center">Likes 324</span>
-                <span className="flex items-center">Views 14.5K</span>
+                <span className="flex items-center">Views {article.views}</span>
+                <span className="flex items-center">Likes {article.likes}</span>
               </div>
               <span>{article.readingTime}</span>
             </>

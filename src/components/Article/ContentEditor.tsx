@@ -7,14 +7,14 @@ import remarkGfm from "remark-gfm";
 
 interface ContentEditorProps {
   content: string;
-  handleContentChange: (value: string) => void;
+  handleChange: (value: string) => void;
 }
 
 type ContentPreviewMode = "edit" | "preview" | "split";
 
 export default function ContentEditor({
   content,
-  handleContentChange,
+  handleChange: handleContentChange,
 }: ContentEditorProps) {
   const [contentPreviewMode, setContentPreviewMode] =
     useState<ContentPreviewMode>("split");

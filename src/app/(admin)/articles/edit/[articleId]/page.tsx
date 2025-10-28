@@ -23,8 +23,9 @@ import ArticleStatusBox from "@/components/Article/ArticleStatusBox";
 import ArticleDeleteModal from "@/components/Article/ArticleDeleteModal";
 import { listTags } from "@/services/tag-api";
 import { Tag } from "@/types/tag";
-import { Article } from "@/types/article";
+import { Article, OriginalArticleInfo } from "@/types/article";
 import { mapApiArticleToArticle } from "@/lib/type-mappers";
+import OriginalArticleInfoBox from "@/components/Article/OriginalArticleInfoBox";
 
 interface ArticleFormData {
   title: string;
@@ -32,6 +33,9 @@ interface ArticleFormData {
   subtitle: string;
   summary: string;
   content: string;
+  originalArticlePlatform: string;
+  originalArticleUrl: string;
+  originalArticlePublishedOn: string;
   coverImageUrl: string;
   thumbnailUrl: string;
   timeToRead: number;
@@ -50,6 +54,9 @@ export default function NewArticlePage() {
     subtitle: "",
     summary: "",
     content: "",
+    originalArticlePlatform: "",
+    originalArticleUrl: "",
+    originalArticlePublishedOn: "",
     coverImageUrl: "",
     thumbnailUrl: "",
     timeToRead: 0,
@@ -83,6 +90,11 @@ export default function NewArticlePage() {
             subtitle: mappedArticle.subtitle || "",
             summary: mappedArticle.summary || "",
             content: mappedArticle.content || "",
+            originalArticlePlatform:
+              mappedArticle.originalArticleInfo?.platform || "",
+            originalArticleUrl: mappedArticle.originalArticleInfo?.url || "",
+            originalArticlePublishedOn:
+              mappedArticle.originalArticleInfo?.publishedOn || "",
             coverImageUrl: mappedArticle.coverImageUrl || "",
             thumbnailUrl: mappedArticle.thumbnailUrl || "",
             timeToRead: Number.parseInt(mappedArticle.readingTime),
@@ -121,6 +133,30 @@ export default function NewArticlePage() {
     }));
   };
 
+  const handleOriginalArticleInfoChange = (
+    field: keyof OriginalArticleInfo,
+    value: string
+  ) => {
+    let mappedFieldName;
+    switch (field) {
+      case "platform":
+        mappedFieldName = "originalArticlePlatform";
+        break;
+      case "url":
+        mappedFieldName = "originalArticleUrl";
+        break;
+      case "publishedOn":
+        mappedFieldName = "originalArticlePublishedOn";
+        break;
+    }
+    if (mappedFieldName) {
+      setFormData((prev) => ({
+        ...prev,
+        [mappedFieldName]: value,
+      }));
+    }
+  };
+
   const handleContentChange = (value: string) => {
     setFormData((prev) => ({
       ...prev,
@@ -149,6 +185,20 @@ export default function NewArticlePage() {
     setIsSubmitting(true);
     setError(null);
 
+    // Prepare nested originalArticleInfo only if all fields are present
+    let originalArticleInfo = undefined;
+    if (
+      formData.originalArticlePlatform &&
+      formData.originalArticleUrl &&
+      formData.originalArticlePublishedOn
+    ) {
+      originalArticleInfo = {
+        platform: formData.originalArticlePlatform,
+        url: formData.originalArticleUrl,
+        publishedOn: formData.originalArticlePublishedOn,
+      };
+    }
+
     try {
       const articleData: UpdateArticleApiRequest = {
         title: formData.title,
@@ -156,6 +206,7 @@ export default function NewArticlePage() {
         subtitle: formData.subtitle,
         summary: formData.summary,
         content: formData.content,
+        originalArticleInfo: originalArticleInfo,
         coverImageUrl: formData.coverImageUrl || undefined,
         thumbnailUrl: formData.thumbnailUrl || undefined,
         timeToRead: formData.timeToRead,
@@ -461,10 +512,18 @@ export default function NewArticlePage() {
               </div>
             </div>
 
+            {/* Original Article Information */}
+            <OriginalArticleInfoBox
+              platform={formData.originalArticlePlatform}
+              url={formData.originalArticleUrl}
+              publishedOn={formData.originalArticlePublishedOn}
+              handleChange={handleOriginalArticleInfoChange}
+            />
+
             {/* Content Editor */}
             <ContentEditor
               content={formData.content}
-              handleContentChange={handleContentChange}
+              handleChange={handleContentChange}
             />
 
             {/* Action Buttons */}
@@ -475,7 +534,7 @@ export default function NewArticlePage() {
                 onClick={() => router.back()}
                 disabled={isSubmitting}
               >
-                Cancel
+                Go Back To Articles
               </button>
               <button
                 type="submit"

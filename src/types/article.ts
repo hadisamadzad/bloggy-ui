@@ -13,6 +13,7 @@ export type Article = {
   originalArticleInfo?: OriginalArticleInfo;
   readingTime: string;
   likes: number;
+  views: number;
   tags: Tag[];
   status: ArticleStatus;
   createdAt: string; // ISO string
