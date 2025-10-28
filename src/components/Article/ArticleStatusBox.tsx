@@ -7,7 +7,7 @@ import { formatDate } from "@/lib/date-tools";
 interface ArticleStatusBoxProps {
   article: Article | null;
   loading: boolean;
-  onStatusChange: (articleId: string, status: ArticleStatus) => void;
+  onStatusChange: (status: ArticleStatus) => void;
   onDelete: (articleId: string) => void;
 }
 
@@ -108,7 +108,6 @@ export default function ArticleStatusBox({
                 } gap-2`}
                 onClick={() =>
                   onStatusChange(
-                    article.articleId,
                     article.status === ArticleStatus.Published // Check current status
                       ? ArticleStatus.Archived
                       : ArticleStatus.Published

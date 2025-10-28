@@ -23,12 +23,12 @@ import { UpdateArticleApiRequest } from "@/types/article-api";
 import ContentEditor from "@/components/Article/ContentEditor";
 import TagSelector from "@/components/Article/TagSelector";
 import ArticleStatusBox from "@/components/Article/ArticleStatusBox";
-import ArticleDeleteModal from "@/components/Article/ArticleDeleteModal";
 import { listTags } from "@/services/tag-api";
 import { Tag } from "@/types/tag";
 import { Article, ArticleStatus, OriginalArticleInfo } from "@/types/article";
 import { mapApiArticleToArticle } from "@/lib/type-mappers";
 import OriginalArticleInfoBox from "@/components/Article/OriginalArticleInfoBox";
+import ConfirmationModal from "@/components/Common/ConfirmationModal";
 
 interface ArticleFormData {
   title: string;
@@ -72,9 +72,18 @@ export default function EditArticlePage() {
   const [loading, setLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
   const [showSuccessTick, setShowSuccessTick] = useState(false);
+
+  // Status states
+  const [showStatusModal, setShowStatusModal] = useState(false);
+  const [pendingStatusChange, setPendingStatusChange] =
+    useState<ArticleStatus | null>(null);
+
+  // Delete states
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
+
   const [allTags, setAllTags] = useState<Tag[]>([]);
 
   useEffect(() => {
@@ -251,24 +260,33 @@ export default function EditArticlePage() {
     }
   };
 
-  // Triggers modal, not delete directly
-  const handleStatusChange = async (
-    articleId: string,
-    status: ArticleStatus
-  ) => {
-    const succeeded = await updateArticleStatus(articleId, status);
+  // Triggers modal, not change directly
+  const handleStatusChangeRequest = (status: ArticleStatus) => {
+    setPendingStatusChange(status);
+    setShowStatusModal(true);
+  };
+
+  const handleStatusChangeConfirmed = async () => {
+    if (!pendingStatusChange) return;
+
+    const succeeded = await updateArticleStatus(
+      articleId,
+      pendingStatusChange!
+    );
     if (succeeded) {
       setArticle((prev) => {
         if (!prev) return prev;
         return {
           ...prev, // keep all existing fields
-          status: status, // update only one field
+          status: pendingStatusChange, // update only one field
         };
       });
       setToastMessage({
         type: "success",
-        text: `Article ${status.toLowerCase()} successfully!`,
+        text: `Article ${pendingStatusChange!.toLowerCase()} successfully!`,
       });
+      setShowStatusModal(false);
+      setPendingStatusChange(null);
       setToastOpen(true);
     }
   };
@@ -360,13 +378,45 @@ export default function EditArticlePage() {
             <ArticleStatusBox
               article={article}
               loading={loading}
-              onStatusChange={handleStatusChange}
+              onStatusChange={handleStatusChangeRequest}
               onDelete={handleDeleteRequest}
             />
           </div>
 
+          {/* Publish/Archive Confirmation Modal */}
+          <ConfirmationModal
+            type="info"
+            title={
+              article?.status === ArticleStatus.Published
+                ? "Archive Article"
+                : "Publish Article"
+            }
+            description={`Are you sure you want to ${
+              article?.status === ArticleStatus.Published
+                ? "archive"
+                : "publish"
+            } this article?`}
+            confirmText={
+              article?.status === ArticleStatus.Published
+                ? "Archive"
+                : "Publish"
+            }
+            cancelText="Cancel"
+            open={showStatusModal}
+            onCancel={() => {
+              setShowStatusModal(false);
+              setPendingStatusChange(null);
+            }}
+            onConfirm={handleStatusChangeConfirmed}
+          />
+
           {/* Delete Confirmation Modal */}
-          <ArticleDeleteModal
+          <ConfirmationModal
+            type="danger"
+            title="Delete Article"
+            description="Are you sure you want to delete this article? This action cannot be undone."
+            confirmText="Delete"
+            cancelText="Cancel"
             open={showDeleteModal}
             onCancel={() => {
               setShowDeleteModal(false);
