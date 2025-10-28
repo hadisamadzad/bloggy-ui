@@ -25,7 +25,7 @@ const socialIcons: Record<string, JSX.Element> = {
   medium: <FaMedium size={24} />,
   twitter: <FaTwitter size={24} />,
   youtube: <FaYoutube size={24} />,
-  stackOverflow: <FaStackOverflow size={24} />,
+  stackoverflow: <FaStackOverflow size={24} />,
   devto: <FaDev size={24} />,
   instagram: <FaInstagram size={24} />,
   facebook: <FaFacebook size={24} />,
@@ -74,8 +74,14 @@ export default async function AboutMe({
                   rel="noopener noreferrer"
                   className="w-6 h-6 flex justify-center items-center bg-white text-secondary"
                 >
-                  {socialIcons[s.name.toLowerCase()] || <FaGithub size={24} />}{" "}
-                  {/* Default to GitHub icon */}
+                  {socialIcons[s.name.toLowerCase()] || (
+                    <span
+                      className="w-6 h-6 rounded-full bg-base-200 flex items-center justify-center text-xs font-bold text-base-content border border-base-content/20"
+                      title={s.name}
+                    >
+                      {s.name.slice(0, 2).toUpperCase()}
+                    </span>
+                  )}
                 </a>
               ) : null
             )}

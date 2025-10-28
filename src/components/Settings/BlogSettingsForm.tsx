@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent } from "react";
+import React, { FormEvent } from "react";
 import { SocialLink, SocialNetworkName } from "@/types/setting";
 import {
   Globe,
@@ -41,6 +41,30 @@ export default function BlogSettingsForm({
   onSubmit,
   isSaving,
 }: BlogSettingsFormProps) {
+  const [draggedIndex, setDraggedIndex] = React.useState<number | null>(null);
+
+  const handleDragStart = (index: number) => {
+    setDraggedIndex(index);
+  };
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>, index: number) => {
+  e.preventDefault();
+  // Optionally highlight drop target
+  };
+
+  const handleDrop = (index: number) => {
+    if (draggedIndex === null || draggedIndex === index) return;
+    const socials = [...formData.socials];
+    const [moved] = socials.splice(draggedIndex, 1);
+    socials.splice(index, 0, moved);
+    // Reassign order property
+    socials.forEach((s, i) => (s.order = i + 1));
+    onFormDataChange({
+      ...formData,
+      socials,
+    });
+    setDraggedIndex(null);
+  };
   const addSocialLink = () => {
     const newOrder = Math.max(...formData.socials.map((s) => s.order), 0) + 1;
     onFormDataChange({
@@ -341,7 +365,14 @@ export default function BlogSettingsForm({
 
             <div className="space-y-3">
               {formData.socials.map((social, index) => (
-                <div key={index} className="flex gap-3 items-center">
+                <div
+                  key={index}
+                  className={`flex gap-3 items-center cursor-move ${draggedIndex === index ? "bg-base-200" : ""}`}
+                  draggable
+                  onDragStart={() => handleDragStart(index)}
+                  onDragOver={(e) => handleDragOver(e, index)}
+                  onDrop={() => handleDrop(index)}
+                >
                   <div className="flex items-center gap-2 text-base-content/50">
                     <Move className="w-4 h-4" />
                     <span className="text-sm">#{social.order}</span>
