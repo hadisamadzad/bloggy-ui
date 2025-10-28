@@ -17,7 +17,6 @@ import {
   Image as ImageIcon,
   Save,
   AlertCircle,
-  CheckCircle,
 } from "lucide-react";
 import { UpdateArticleApiRequest } from "@/types/article-api";
 import ContentEditor from "@/components/Article/ContentEditor";
@@ -72,8 +71,6 @@ export default function EditArticlePage() {
   const [loading, setLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  const [showSuccessTick, setShowSuccessTick] = useState(false);
 
   // Status states
   const [showStatusModal, setShowStatusModal] = useState(false);
@@ -229,14 +226,13 @@ export default function EditArticlePage() {
 
       await updateArticle(articleId, articleData);
 
-      // Show success message
-      setShowSuccessTick(true);
-
-      // Hide success tick after 3 seconds
-      setTimeout(() => {
-        setShowSuccessTick(false);
-      }, 3000);
-
+      // Keep button disabled and show loader for 3 seconds
+      setIsSubmitting(true);
+      setToastMessage({
+        type: "success",
+        text: "Article updated successfully!",
+      });
+      setToastOpen(true);
       //router.push(`/articles/${articleData.slug}`);
     } catch (err: unknown) {
       console.error("Error in handleSubmit:", err);
@@ -256,7 +252,10 @@ export default function EditArticlePage() {
         );
       }
     } finally {
-      setIsSubmitting(false);
+      // Intentionally delay enabling the button to show success state
+      setTimeout(() => {
+        setIsSubmitting(false);
+      }, 1000);
     }
   };
 
@@ -313,10 +312,7 @@ export default function EditArticlePage() {
 
     try {
       await deleteArticle(pendingDeleteId);
-      setShowSuccessTick(true);
-      setTimeout(() => {
-        setShowSuccessTick(false);
-      }, 3000);
+
       setShowDeleteModal(false);
       router.push(`/articles/manage`);
     } catch (err: unknown) {
@@ -635,11 +631,6 @@ export default function EditArticlePage() {
                   <>
                     <span className="loading loading-spinner loading-sm"></span>
                     Saving...
-                  </>
-                ) : showSuccessTick ? (
-                  <>
-                    <CheckCircle className="w-4 h-4 mr-2" />
-                    Saved!
                   </>
                 ) : !isLoggedIn ? (
                   <>
