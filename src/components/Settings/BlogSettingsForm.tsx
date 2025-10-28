@@ -10,7 +10,6 @@ import {
   Trash2,
   Move,
   Save,
-  CheckCircle,
 } from "lucide-react";
 
 export interface FormData {
@@ -34,7 +33,6 @@ interface BlogSettingsFormProps {
   onFormDataChange: (data: FormData) => void;
   onSubmit: (e: FormEvent) => void;
   isSaving: boolean;
-  showSuccessTick: boolean;
 }
 
 export default function BlogSettingsForm({
@@ -42,7 +40,6 @@ export default function BlogSettingsForm({
   onFormDataChange,
   onSubmit,
   isSaving,
-  showSuccessTick,
 }: BlogSettingsFormProps) {
   const addSocialLink = () => {
     const newOrder = Math.max(...formData.socials.map((s) => s.order), 0) + 1;
@@ -424,12 +421,6 @@ export default function BlogSettingsForm({
 
         {/* Save Button */}
         <div className="flex items-center justify-end gap-3 mt-6">
-          {showSuccessTick && (
-            <div className="flex items-center gap-2 text-green-600">
-              <CheckCircle className="w-6 h-6 text-green-600" />
-              <span className="text-sm font-bold text-green-600">Saved!</span>
-            </div>
-          )}
           <button
             type="submit"
             className="btn btn-secondary"

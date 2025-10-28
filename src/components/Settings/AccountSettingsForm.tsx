@@ -1,7 +1,8 @@
 "use client";
 
 import { FormEvent } from "react";
-import { User, Mail, Calendar, Save, CheckCircle } from "lucide-react";
+import { User, Mail, Calendar, Save } from "lucide-react";
+import { formatDate } from "@/lib/date-tools";
 
 export interface UserProfile {
   userId: string;
@@ -29,7 +30,6 @@ interface AccountSettingsFormProps {
   onSubmit: (e: FormEvent) => void;
   onReset: () => void;
   isSaving: boolean;
-  showSuccessTick: boolean;
 }
 
 export default function AccountSettingsForm({
@@ -39,18 +39,7 @@ export default function AccountSettingsForm({
   onSubmit,
   onReset,
   isSaving,
-  showSuccessTick,
 }: AccountSettingsFormProps) {
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  };
-
   const getRoleBadgeColor = (role: string) => {
     switch (role) {
       case "Owner":
@@ -234,14 +223,7 @@ export default function AccountSettingsForm({
               <div className="divider"></div>
 
               <div className="flex items-center justify-end gap-3">
-                {showSuccessTick && (
-                  <div className="flex items-center gap-2 text-green-600">
-                    <CheckCircle className="w-6 h-6 text-green-600" />
-                    <span className="text-sm font-bold text-green-600">
-                      Saved!
-                    </span>
-                  </div>
-                )}
+                {/* Success tick removed; ToastBar is used for feedback */}
                 <button
                   type="button"
                   className="btn btn-outline"
