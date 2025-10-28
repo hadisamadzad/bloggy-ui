@@ -23,7 +23,12 @@ export default function OriginalArticleInfoBox({
           <FileTextIcon className="w-5 h-5" />
           Original Article Information
         </h2>
-
+        <div className="mb-4 text-sm text-warning">
+          <span>
+            All three fields below must be populated to save original article
+            info.
+          </span>
+        </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Original Platform */}
           <div className="form-control lg:col-span-1">
