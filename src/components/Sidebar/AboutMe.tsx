@@ -86,9 +86,10 @@ export default async function AboutMe({
               ) : null
             )}
           </div>
-          <button className="btn btn-secondary text-label-lg">
+          {/*Temporarily disabled*/}
+          {/*<button className="btn btn-secondary text-label-lg">
             Get in touch
-          </button>
+          </button>*/}
         </div>
       </div>
     </div>
