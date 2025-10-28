@@ -2,6 +2,7 @@
 
 import "./globals.css";
 import AdminBar from "@/components/Auth/AdminBar";
+import { SettingsProvider } from "@/context/SettingsContext";
 
 export default function RootLayout({
   children,
@@ -15,9 +16,9 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Bloggy</title>
       </head>
-      <body>
+      <body className="flex flex-col min-h-screen">
         <AdminBar />
-        {children}
+        <SettingsProvider>{children}</SettingsProvider>
       </body>
     </html>
   );

@@ -56,7 +56,8 @@ export default async function ArticleBody({ article }: ArticleBodyProps) {
 
         <div className="flex items-center justify-between pt-2 border-t-1 border-gray-100">
           <div className="flex gap-6">
-            <span className="text-label-md">{article.likes} Likes</span>
+            <span className="text-label-md">Views {article.views}</span>
+            <span className="text-label-md">Likes {article.likes}</span>
           </div>
           <Link
             className="text-body-sm underline"

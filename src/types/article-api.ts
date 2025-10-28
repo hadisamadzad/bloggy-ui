@@ -1,4 +1,4 @@
-import { ArticleStatus } from "./article";
+import { ArticleStatus, OriginalArticleInfo } from "./article";
 import { Tag } from "./tag";
 
 export type ApiArticle = {
@@ -11,8 +11,10 @@ export type ApiArticle = {
   slug: string;
   thumbnailUrl: string;
   coverImageUrl: string;
+  originalArticleInfo?: OriginalArticleInfo;
   timeToReadInMinute: number;
   likes: number;
+  views: number;
   tags: Tag[];
   status: ArticleStatus;
   createdAt: string; // ISO string
@@ -33,6 +35,11 @@ export interface CreateArticleApiRequest {
   subtitle?: string;
   summary?: string;
   content: string;
+  originalArticleInfo?: {
+    platform: string;
+    url: string;
+    publishedOn: string;
+  };
   coverImageUrl?: string;
   thumbnailUrl?: string;
   tagIds?: string[];
@@ -44,6 +51,11 @@ export interface UpdateArticleApiRequest {
   subtitle: string;
   summary: string;
   content: string;
+  originalArticleInfo?: {
+    platform: string;
+    url: string;
+    publishedOn: string;
+  };
   coverImageUrl?: string;
   thumbnailUrl?: string;
   timeToRead: number;

@@ -4,7 +4,9 @@ import { useState, useEffect, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { getLocalUserId, getUserProfile } from "@/services/auth-api";
 import { getBlogSettings, updateBlogSettings } from "@/services/setting-api";
-import { SocialLink } from "@/types/setting";
+import { ApiBlogSetting } from "@/types/setting";
+import ToastBar from "@/components/Common/ToastBar";
+import type { ToastMessage } from "@/components/Common/ToastBar";
 import {
   BlogSettingsForm,
   AccountSettingsForm,
@@ -12,48 +14,42 @@ import {
   SettingsTabNavigation,
   SettingsHeader,
   ErrorAlert,
-  type BlogFormData,
-  type UserProfile,
-  type UserFormData,
-  type PasswordFormData,
-  type SettingsTab,
+} from "@/components/Settings";
+import type {
+  BlogFormData,
+  UserProfile,
+  UserFormData,
+  PasswordFormData,
+  SettingsTab,
 } from "@/components/Settings";
 import { updateUser, updateUserPassword } from "@/services/user-api";
 
-interface BlogSettings {
-  blogTitle: string;
-  blogSubtitle: string;
-  blogDescription: string;
-  blogPageTitle: string;
-  seoMetaTitle: string;
-  seoMetaDescription: string;
-  blogUrl: string;
-  blogLogoUrl: string;
-  socials: SocialLink[];
-  updatedAt: string;
-}
-
 export default function SettingsPage() {
+  const [toastOpen, setToastOpen] = useState(false);
+  const [toastMessage, setToastMessage] = useState<ToastMessage | null>(null);
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<SettingsTab>("blog");
-  const [blogSettings, setBlogSettings] = useState<BlogSettings | null>(null);
+  const [blogSettings, setBlogSettings] = useState<ApiBlogSetting | null>(null);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState("");
-  const [showSuccessTick, setShowSuccessTick] = useState(false);
 
   // Form states
   const [blogFormData, setBlogFormData] = useState<BlogFormData>({
+    authorName: "",
+    authorTitle: "",
+    aboutAuthor: "",
     blogTitle: "",
     blogSubtitle: "",
     blogDescription: "",
-    blogPageTitle: "",
+    pageTitleTemplate: "",
+    blogUrl: "",
     seoMetaTitle: "",
     seoMetaDescription: "",
-    blogUrl: "",
     blogLogoUrl: "",
     socials: [],
+    copyrightText: "",
   });
 
   const [userFormData, setUserFormData] = useState<UserFormData>({
@@ -99,41 +95,53 @@ export default function SettingsPage() {
       if (blogSettingsData) {
         setBlogSettings(blogSettingsData);
         setBlogFormData({
+          authorName: blogSettingsData.authorName,
+          authorTitle: blogSettingsData.authorTitle,
+          aboutAuthor: blogSettingsData.aboutAuthor,
           blogTitle: blogSettingsData.blogTitle,
           blogSubtitle: blogSettingsData.blogSubtitle,
           blogDescription: blogSettingsData.blogDescription,
-          blogPageTitle: blogSettingsData.blogPageTitle,
+          blogUrl: blogSettingsData.blogUrl,
+          pageTitleTemplate: blogSettingsData.pageTitleTemplate,
           seoMetaTitle: blogSettingsData.seoMetaTitle,
           seoMetaDescription: blogSettingsData.seoMetaDescription,
-          blogUrl: blogSettingsData.blogUrl,
           blogLogoUrl: blogSettingsData.blogLogoUrl,
           socials: [...blogSettingsData.socials],
+          copyrightText: blogSettingsData.copyrightText,
         });
       } else {
         // Fallback to default settings if API fails
-        const defaultSettings: BlogSettings = {
+        const defaultSettings: ApiBlogSetting = {
+          authorName: "",
+          authorTitle: "",
+          aboutAuthor: "",
           blogTitle: "",
           blogSubtitle: "",
           blogDescription: "",
-          blogPageTitle: "",
+          blogUrl: "",
+          pageTitleTemplate: "",
           seoMetaTitle: "",
           seoMetaDescription: "",
-          blogUrl: "",
           blogLogoUrl: "",
           socials: [],
+          copyrightText: "",
           updatedAt: new Date().toISOString(),
         };
         setBlogSettings(defaultSettings);
         setBlogFormData({
+          authorName: "",
+          authorTitle: "",
+          aboutAuthor: "",
           blogTitle: "",
           blogSubtitle: "",
           blogDescription: "",
-          blogPageTitle: "",
+          blogUrl: "",
+          pageTitleTemplate: "",
           seoMetaTitle: "",
           seoMetaDescription: "",
-          blogUrl: "",
           blogLogoUrl: "",
           socials: [],
+          copyrightText: "",
         });
       }
     } catch (err) {
@@ -155,7 +163,6 @@ export default function SettingsPage() {
       const success = await updateBlogSettings(blogFormData);
 
       if (success) {
-        // Update local state with the form data and new timestamp
         setBlogSettings({
           ...blogFormData,
           updatedAt: new Date().toISOString(),
@@ -163,20 +170,20 @@ export default function SettingsPage() {
 
         // Refresh the router to update server components (like HeaderBrand)
         router.refresh();
-
-        setShowSuccessTick(true);
-
-        // Hide success tick after 3 seconds
         setTimeout(() => {
-          setShowSuccessTick(false);
-        }, 3000);
+          setIsSaving(false);
+        }, 1000);
+        setToastMessage({
+          type: "success",
+          text: "Blog settings updated successfully!",
+        });
+        setToastOpen(true);
       } else {
         throw new Error("Failed to update settings");
       }
     } catch (err) {
       setError("Failed to update blog settings. Please try again.");
       console.error("Update error:", err);
-    } finally {
       setIsSaving(false);
     }
   };
@@ -192,15 +199,11 @@ export default function SettingsPage() {
       if (!userId) {
         throw new Error("User ID not available");
       }
-
-      // Call API to update user profile
       const success = await updateUser(userId, {
         firstName: userFormData.firstName,
         lastName: userFormData.lastName,
       });
-
       if (success) {
-        // Update local state with the form data
         if (userProfile) {
           setUserProfile({
             ...userProfile,
@@ -208,20 +211,20 @@ export default function SettingsPage() {
             lastName: userFormData.lastName,
           });
         }
-
-        setShowSuccessTick(true);
-
-        // Hide success tick after 3 seconds
+        setToastMessage({
+          type: "success",
+          text: "Profile updated successfully!",
+        });
+        setToastOpen(true);
         setTimeout(() => {
-          setShowSuccessTick(false);
-        }, 3000);
+          setIsSaving(false);
+        }, 1000);
       } else {
         throw new Error("Failed to update profile");
       }
     } catch (err) {
       setError("Failed to update profile. Please try again.");
       console.error("Update error:", err);
-    } finally {
       setIsSaving(false);
     }
   };
@@ -248,14 +251,11 @@ export default function SettingsPage() {
       if (!userId) {
         throw new Error("User ID not available");
       }
-
-      // Call API to change password
       const success = await updateUserPassword(
         userId,
         passwordForm.currentPassword,
         passwordForm.newPassword
       );
-
       if (success) {
         setPasswordForm({
           currentPassword: "",
@@ -265,13 +265,14 @@ export default function SettingsPage() {
           showNewPassword: false,
           showConfirmPassword: false,
         });
-
-        setShowSuccessTick(true);
-
-        // Hide success tick after 3 seconds
+        setToastMessage({
+          type: "success",
+          text: "Password updated successfully!",
+        });
+        setToastOpen(true);
         setTimeout(() => {
-          setShowSuccessTick(false);
-        }, 3000);
+          setIsSaving(false);
+        }, 1000);
       } else {
         throw new Error("Password update failed");
       }
@@ -280,7 +281,6 @@ export default function SettingsPage() {
         "Failed to change password. Please check your current password."
       );
       console.error("Password change error:", err);
-    } finally {
       setIsSaving(false);
     }
   };
@@ -309,6 +309,13 @@ export default function SettingsPage() {
 
   return (
     <div className="container mx-auto px-4 py-8">
+      {toastMessage && (
+        <ToastBar
+          open={toastOpen}
+          message={toastMessage}
+          onClose={() => setToastOpen(false)}
+        />
+      )}
       <div className="max-w-6xl mx-auto">
         <SettingsHeader />
 
@@ -321,26 +328,40 @@ export default function SettingsPage() {
 
         {/* Blog Settings Tab */}
         {activeTab === "blog" && blogSettings && (
-          <BlogSettingsForm
-            formData={blogFormData}
-            onFormDataChange={setBlogFormData}
-            onSubmit={handleBlogSettingSubmit}
-            isSaving={isSaving}
-            showSuccessTick={showSuccessTick}
-          />
+          <>
+            <BlogSettingsForm
+              formData={blogFormData}
+              onFormDataChange={setBlogFormData}
+              onSubmit={handleBlogSettingSubmit}
+              isSaving={isSaving}
+            />
+            <div className="flex items-center justify-end gap-3 mt-2">
+              <span className="inline-block text-sm text-warning bg-warning/10 px-3 py-2 rounded">
+                Note: Changes may take a few minutes to be applied due to
+                caching.
+              </span>
+            </div>
+          </>
         )}
 
         {/* Account Tab */}
         {activeTab === "account" && userProfile && (
-          <AccountSettingsForm
-            userProfile={userProfile}
-            formData={userFormData}
-            onFormDataChange={setUserFormData}
-            onSubmit={handleUserProfileSubmit}
-            onReset={handleUserReset}
-            isSaving={isSaving}
-            showSuccessTick={showSuccessTick}
-          />
+          <>
+            <AccountSettingsForm
+              userProfile={userProfile}
+              formData={userFormData}
+              onFormDataChange={setUserFormData}
+              onSubmit={handleUserProfileSubmit}
+              onReset={handleUserReset}
+              isSaving={isSaving}
+            />
+            <div className="flex items-center justify-end gap-3 mt-2">
+              <span className="inline-block text-sm text-warning bg-warning/10 px-3 py-2 rounded">
+                Note: Changes may take a few minutes to be applied due to
+                caching and propagation.
+              </span>
+            </div>
+          </>
         )}
 
         {/* Security Tab */}
@@ -351,7 +372,6 @@ export default function SettingsPage() {
             onPasswordFormChange={setPasswordForm}
             onSubmit={handlePasswordChangeSubmit}
             isSaving={isSaving}
-            showSuccessTick={showSuccessTick}
           />
         )}
       </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import { FormEvent } from "react";
-import { Shield, Key, Mail, Eye, EyeOff, CheckCircle } from "lucide-react";
+import { Shield, Key, Mail, Eye, EyeOff } from "lucide-react";
 
 export interface PasswordFormData {
   currentPassword: string;
@@ -18,7 +18,6 @@ interface SecuritySettingsFormProps {
   onPasswordFormChange: (data: PasswordFormData) => void;
   onSubmit: (e: FormEvent) => void;
   isSaving: boolean;
-  showSuccessTick: boolean;
 }
 
 export default function SecuritySettingsForm({
@@ -27,7 +26,6 @@ export default function SecuritySettingsForm({
   onPasswordFormChange,
   onSubmit,
   isSaving,
-  showSuccessTick,
 }: SecuritySettingsFormProps) {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -154,14 +152,6 @@ export default function SecuritySettingsForm({
             <div className="divider"></div>
 
             <div className="flex items-center justify-end gap-3">
-              {showSuccessTick && (
-                <div className="flex items-center gap-2 text-green-600">
-                  <CheckCircle className="w-6 h-6 text-green-600" />
-                  <span className="text-sm font-bold text-green-600">
-                    Saved!
-                  </span>
-                </div>
-              )}
               <button
                 type="submit"
                 className="btn btn-secondary"

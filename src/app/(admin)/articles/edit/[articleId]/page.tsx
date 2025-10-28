@@ -2,7 +2,14 @@
 
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { getArticleById, updateArticle } from "@/services/article-api";
+import ToastBar from "@/components/Common/ToastBar";
+import type { ToastMessage } from "@/components/Common/ToastBar";
+import {
+  deleteArticle,
+  getArticleById,
+  updateArticle,
+  updateArticleStatus,
+} from "@/services/article-api";
 import { useAuth } from "@/hooks/useAuth";
 import {
   FileText as FileTextIcon,
@@ -10,7 +17,6 @@ import {
   Image as ImageIcon,
   Save,
   AlertCircle,
-  CheckCircle,
 } from "lucide-react";
 import { UpdateArticleApiRequest } from "@/types/article-api";
 import ContentEditor from "@/components/Article/ContentEditor";
@@ -18,8 +24,10 @@ import TagSelector from "@/components/Article/TagSelector";
 import ArticleStatusBox from "@/components/Article/ArticleStatusBox";
 import { listTags } from "@/services/tag-api";
 import { Tag } from "@/types/tag";
-import { Article } from "@/types/article";
+import { Article, ArticleStatus, OriginalArticleInfo } from "@/types/article";
 import { mapApiArticleToArticle } from "@/lib/type-mappers";
+import OriginalArticleInfoBox from "@/components/Article/OriginalArticleInfoBox";
+import ConfirmationModal from "@/components/Common/ConfirmationModal";
 
 interface ArticleFormData {
   title: string;
@@ -27,13 +35,18 @@ interface ArticleFormData {
   subtitle: string;
   summary: string;
   content: string;
+  originalArticlePlatform: string;
+  originalArticleUrl: string;
+  originalArticlePublishedOn: string;
   coverImageUrl: string;
   thumbnailUrl: string;
   timeToRead: number;
   tagIds: string[];
 }
 
-export default function NewArticlePage() {
+export default function EditArticlePage() {
+  const [toastOpen, setToastOpen] = useState(false);
+  const [toastMessage, setToastMessage] = useState<ToastMessage | null>(null);
   const params = useParams();
   const articleId = params.articleId as string;
 
@@ -45,6 +58,9 @@ export default function NewArticlePage() {
     subtitle: "",
     summary: "",
     content: "",
+    originalArticlePlatform: "",
+    originalArticleUrl: "",
+    originalArticlePublishedOn: "",
     coverImageUrl: "",
     thumbnailUrl: "",
     timeToRead: 0,
@@ -55,14 +71,22 @@ export default function NewArticlePage() {
   const [loading, setLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [showSuccessTick, setShowSuccessTick] = useState(false);
+
+  // Status states
+  const [showStatusModal, setShowStatusModal] = useState(false);
+  const [pendingStatusChange, setPendingStatusChange] =
+    useState<ArticleStatus | null>(null);
+
+  // Delete states
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
+
   const [allTags, setAllTags] = useState<Tag[]>([]);
 
   useEffect(() => {
     async function fetchArticle() {
       try {
         const apiArticle = await getArticleById(articleId);
-        console.log("Fetched article:", apiArticle);
 
         if (apiArticle === null) {
           setArticle(null);
@@ -77,6 +101,11 @@ export default function NewArticlePage() {
             subtitle: mappedArticle.subtitle || "",
             summary: mappedArticle.summary || "",
             content: mappedArticle.content || "",
+            originalArticlePlatform:
+              mappedArticle.originalArticleInfo?.platform || "",
+            originalArticleUrl: mappedArticle.originalArticleInfo?.url || "",
+            originalArticlePublishedOn:
+              mappedArticle.originalArticleInfo?.publishedOn || "",
             coverImageUrl: mappedArticle.coverImageUrl || "",
             thumbnailUrl: mappedArticle.thumbnailUrl || "",
             timeToRead: Number.parseInt(mappedArticle.readingTime),
@@ -115,6 +144,30 @@ export default function NewArticlePage() {
     }));
   };
 
+  const handleOriginalArticleInfoChange = (
+    field: keyof OriginalArticleInfo,
+    value: string
+  ) => {
+    let mappedFieldName;
+    switch (field) {
+      case "platform":
+        mappedFieldName = "originalArticlePlatform";
+        break;
+      case "url":
+        mappedFieldName = "originalArticleUrl";
+        break;
+      case "publishedOn":
+        mappedFieldName = "originalArticlePublishedOn";
+        break;
+    }
+    if (mappedFieldName) {
+      setFormData((prev) => ({
+        ...prev,
+        [mappedFieldName]: value,
+      }));
+    }
+  };
+
   const handleContentChange = (value: string) => {
     setFormData((prev) => ({
       ...prev,
@@ -135,13 +188,27 @@ export default function NewArticlePage() {
     // Check authentication before proceeding
     if (!isLoggedIn) {
       setError(
-        "You must be logged in to create an article. Please log in and try again."
+        "You must be logged in to update an article. Please log in and try again."
       );
       return;
     }
 
     setIsSubmitting(true);
     setError(null);
+
+    // Prepare nested originalArticleInfo only if all fields are present
+    let originalArticleInfo = undefined;
+    if (
+      formData.originalArticlePlatform &&
+      formData.originalArticleUrl &&
+      formData.originalArticlePublishedOn
+    ) {
+      originalArticleInfo = {
+        platform: formData.originalArticlePlatform,
+        url: formData.originalArticleUrl,
+        publishedOn: formData.originalArticlePublishedOn,
+      };
+    }
 
     try {
       const articleData: UpdateArticleApiRequest = {
@@ -150,6 +217,7 @@ export default function NewArticlePage() {
         subtitle: formData.subtitle,
         summary: formData.summary,
         content: formData.content,
+        originalArticleInfo: originalArticleInfo,
         coverImageUrl: formData.coverImageUrl || undefined,
         thumbnailUrl: formData.thumbnailUrl || undefined,
         timeToRead: formData.timeToRead,
@@ -158,14 +226,13 @@ export default function NewArticlePage() {
 
       await updateArticle(articleId, articleData);
 
-      // Show success message
-      setShowSuccessTick(true);
-
-      // Hide success tick after 3 seconds
-      setTimeout(() => {
-        setShowSuccessTick(false);
-      }, 3000);
-
+      // Keep button disabled and show loader for 3 seconds
+      setIsSubmitting(true);
+      setToastMessage({
+        type: "success",
+        text: "Article updated successfully!",
+      });
+      setToastOpen(true);
       //router.push(`/articles/${articleData.slug}`);
     } catch (err: unknown) {
       console.error("Error in handleSubmit:", err);
@@ -177,20 +244,105 @@ export default function NewArticlePage() {
         errorMessage.includes("token")
       ) {
         setError(
-          "Authentication failed. Please log in again and try creating the article."
+          "Authentication failed. Please log in again and try updating the article."
         );
       } else {
         setError(
-          `An error occurred while creating the article: ${errorMessage}`
+          `An error occurred while updating the article: ${errorMessage}`
         );
       }
     } finally {
-      setIsSubmitting(false);
+      // Intentionally delay enabling the button to show success state
+      setTimeout(() => {
+        setIsSubmitting(false);
+      }, 1000);
+    }
+  };
+
+  // Triggers modal, not change directly
+  const handleStatusChangeRequest = (status: ArticleStatus) => {
+    setPendingStatusChange(status);
+    setShowStatusModal(true);
+  };
+
+  const handleStatusChangeConfirmed = async () => {
+    if (!pendingStatusChange) return;
+
+    const succeeded = await updateArticleStatus(
+      articleId,
+      pendingStatusChange!
+    );
+    if (succeeded) {
+      setArticle((prev) => {
+        if (!prev) return prev;
+        return {
+          ...prev, // keep all existing fields
+          status: pendingStatusChange, // update only one field
+        };
+      });
+      setToastMessage({
+        type: "success",
+        text: `Article ${pendingStatusChange!.toLowerCase()} successfully!`,
+      });
+      setShowStatusModal(false);
+      setPendingStatusChange(null);
+      setToastOpen(true);
+    }
+  };
+
+  // Triggers modal, not delete directly
+  const handleDeleteRequest = (articleId: string) => {
+    setPendingDeleteId(articleId);
+    setShowDeleteModal(true);
+  };
+
+  // Actually deletes after confirmation
+  const handleDeleteConfirmed = async () => {
+    if (!pendingDeleteId) return;
+
+    if (!isLoggedIn) {
+      setError(
+        "You must be logged in to delete an article. Please log in and try again."
+      );
+      setShowDeleteModal(false);
+      return;
+    }
+
+    setError(null);
+
+    try {
+      await deleteArticle(pendingDeleteId);
+
+      setShowDeleteModal(false);
+      router.push(`/articles/manage`);
+    } catch (err: unknown) {
+      console.error("Error in handleDeleteConfirmed:", err);
+      const errorMessage = err instanceof Error ? err.message : "Unknown error";
+      if (
+        errorMessage.includes("authentication") ||
+        errorMessage.includes("token")
+      ) {
+        setError(
+          "Authentication failed. Please log in again and try deleting the article."
+        );
+      } else {
+        setError(
+          `An error occurred while deleting the article: ${errorMessage}`
+        );
+      }
+      setShowDeleteModal(false);
     }
   };
 
   return (
     <div className="min-h-screen bg-base-100">
+      {toastMessage && (
+        <ToastBar
+          open={toastOpen}
+          message={toastMessage}
+          onClose={() => setToastOpen(false)}
+        />
+      )}
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-6xl mx-auto">
           {/* Header */}
@@ -218,9 +370,58 @@ export default function NewArticlePage() {
           )}
 
           {/* Article Status Box */}
-          <ArticleStatusBox article={article} loading={loading} />
+          <div className="mb-6">
+            <ArticleStatusBox
+              article={article}
+              loading={loading}
+              onStatusChange={handleStatusChangeRequest}
+              onDelete={handleDeleteRequest}
+            />
+          </div>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Publish/Archive Confirmation Modal */}
+          <ConfirmationModal
+            type="info"
+            title={
+              article?.status === ArticleStatus.Published
+                ? "Archive Article"
+                : "Publish Article"
+            }
+            description={`Are you sure you want to ${
+              article?.status === ArticleStatus.Published
+                ? "archive"
+                : "publish"
+            } this article?`}
+            confirmText={
+              article?.status === ArticleStatus.Published
+                ? "Archive"
+                : "Publish"
+            }
+            cancelText="Cancel"
+            open={showStatusModal}
+            onCancel={() => {
+              setShowStatusModal(false);
+              setPendingStatusChange(null);
+            }}
+            onConfirm={handleStatusChangeConfirmed}
+          />
+
+          {/* Delete Confirmation Modal */}
+          <ConfirmationModal
+            type="danger"
+            title="Delete Article"
+            description="Are you sure you want to delete this article? This action cannot be undone."
+            confirmText="Delete"
+            cancelText="Cancel"
+            open={showDeleteModal}
+            onCancel={() => {
+              setShowDeleteModal(false);
+              setPendingDeleteId(null);
+            }}
+            onConfirm={handleDeleteConfirmed}
+          />
+
+          <form onSubmit={handleSubmit} className="flex flex-col gap-6">
             {/* Article Information */}
             <div className="card border border-base-content/20">
               <div className="card-body">
@@ -392,10 +593,18 @@ export default function NewArticlePage() {
               </div>
             </div>
 
+            {/* Original Article Information */}
+            <OriginalArticleInfoBox
+              platform={formData.originalArticlePlatform}
+              url={formData.originalArticleUrl}
+              publishedOn={formData.originalArticlePublishedOn}
+              handleChange={handleOriginalArticleInfoChange}
+            />
+
             {/* Content Editor */}
             <ContentEditor
               content={formData.content}
-              handleContentChange={handleContentChange}
+              handleChange={handleContentChange}
             />
 
             {/* Action Buttons */}
@@ -406,7 +615,7 @@ export default function NewArticlePage() {
                 onClick={() => router.back()}
                 disabled={isSubmitting}
               >
-                Cancel
+                Go Back To Articles
               </button>
               <button
                 type="submit"
@@ -422,11 +631,6 @@ export default function NewArticlePage() {
                   <>
                     <span className="loading loading-spinner loading-sm"></span>
                     Saving...
-                  </>
-                ) : showSuccessTick ? (
-                  <>
-                    <CheckCircle className="w-4 h-4 mr-2" />
-                    Saved!
                   </>
                 ) : !isLoggedIn ? (
                   <>

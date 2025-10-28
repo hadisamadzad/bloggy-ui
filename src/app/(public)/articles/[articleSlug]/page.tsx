@@ -5,6 +5,7 @@ import { getPublishedArticleBySlug } from "@/services/article-api";
 import { mapApiArticleToArticle } from "@/lib/type-mappers";
 import ArticleBody from "@/components/Article/ArticleBody";
 import { Article } from "@/types/article";
+import { getBlogSettings } from "@/services/setting-api";
 
 interface PageProps {
   params: Promise<{
@@ -16,6 +17,7 @@ export default async function Page({ params }: PageProps) {
   const { articleSlug } = await params;
 
   const apiArticle = await getPublishedArticleBySlug(articleSlug);
+  const settings = await getBlogSettings();
 
   if (apiArticle === null) {
     return <div>Article not found.</div>;
@@ -33,7 +35,12 @@ export default async function Page({ params }: PageProps) {
         <div className="flex-1">
           <SeriesArticleParts />
           <div className="mt-6" />
-          <AboutMe />
+          <AboutMe
+            authorName={settings?.authorName ?? ""}
+            aboutAuthor={settings?.aboutAuthor ?? ""}
+            imageUrl={settings?.blogLogoUrl ?? ""}
+            socialLinks={settings?.socials ?? []}
+          />
         </div>
       </div>
     </section>

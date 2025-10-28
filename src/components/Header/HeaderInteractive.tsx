@@ -1,21 +1,32 @@
 "use client";
 
-import { FormEvent } from "react";
+import { FormEvent, useState } from "react";
+import ToastBar from "@/components/Common/ToastBar";
+import type { ToastMessage } from "@/components/Common/ToastBar";
+import SubscribeModal from "./SubscribeModal";
 
 export default function HeaderInteractive() {
+  const [modalOpen, setModalOpen] = useState(false);
+  const [toastOpen, setToastOpen] = useState(false);
+  const [toastMessage, setToastMessage] = useState<ToastMessage | null>(null);
   const handleSearch = (e: FormEvent) => {
     e.preventDefault();
     // TODO: Handle search logic
     console.log("Search submitted");
   };
-
   const handleNewsletter = () => {
-    // TODO: Handle newsletter signup
-    console.log("Newsletter signup clicked");
+    setModalOpen(true);
   };
 
   return (
     <div className="flex flex-row gap-2">
+      {toastMessage && (
+        <ToastBar
+          open={toastOpen}
+          message={toastMessage}
+          onClose={() => setToastOpen(false)}
+        />
+      )}
       <form onSubmit={handleSearch}>
         <label className="input w-72 flex items-center gap-2">
           <svg
@@ -43,6 +54,17 @@ export default function HeaderInteractive() {
       >
         Join newsletter
       </button>
+      <SubscribeModal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        onSubscribed={(msg, type = "success") => {
+          setToastMessage({
+            type,
+            text: msg,
+          });
+          setToastOpen(true);
+        }}
+      />
     </div>
   );
 }

@@ -1,17 +1,21 @@
 "use client";
 
-import { Article } from "@/types/article";
+import { Article, ArticleStatus } from "@/types/article";
 import { Eye, Archive, ExternalLink, Trash2 } from "lucide-react";
 import { formatDate } from "@/lib/date-tools";
 
 interface ArticleStatusBoxProps {
   article: Article | null;
   loading: boolean;
+  onStatusChange: (status: ArticleStatus) => void;
+  onDelete: (articleId: string) => void;
 }
 
 export default function ArticleStatusBox({
   article,
   loading,
+  onStatusChange,
+  onDelete,
 }: ArticleStatusBoxProps) {
   if (loading) {
     return (
@@ -30,7 +34,7 @@ export default function ArticleStatusBox({
   }
 
   return (
-    <div className="card border border-base-content/20 mb-6">
+    <div className="card border border-base-content/20">
       <div className="card-body py-4">
         <div className="flex flex-col gap-3">
           {/* First Row - Status and Preview */}
@@ -40,7 +44,9 @@ export default function ArticleStatusBox({
               <span className="text-sm text-base-content/60">Status:</span>
               <span
                 className={`badge px-3 ${
-                  article.status === "Draft" ? "badge-outline" : "badge-neutral"
+                  article.status === ArticleStatus.Draft
+                    ? "badge-outline"
+                    : "badge-neutral"
                 }`}
               >
                 {article.status}
@@ -96,10 +102,19 @@ export default function ArticleStatusBox({
               <button
                 type="button"
                 className={`btn btn-sm btn-secondary ${
-                  article.status === "Published" ? "btn-outline" : "btn-primary"
+                  article.status === ArticleStatus.Published
+                    ? "btn-outline"
+                    : "btn-primary"
                 } gap-2`}
+                onClick={() =>
+                  onStatusChange(
+                    article.status === ArticleStatus.Published // Check current status
+                      ? ArticleStatus.Archived
+                      : ArticleStatus.Published
+                  )
+                }
               >
-                {article.status === "Published" ? (
+                {article.status === ArticleStatus.Published ? (
                   <>
                     <Archive className="w-4 h-4" />
                     Archive
@@ -116,6 +131,7 @@ export default function ArticleStatusBox({
               <button
                 type="button"
                 className="btn btn-sm btn-error btn-dash gap-2"
+                onClick={() => onDelete(article.articleId)}
               >
                 <Trash2 className="w-4 h-4" />
                 Delete

@@ -10,14 +10,22 @@ export type Article = {
   slug: string;
   thumbnailUrl: string;
   coverImageUrl: string;
+  originalArticleInfo?: OriginalArticleInfo;
   readingTime: string;
   likes: number;
+  views: number;
   tags: Tag[];
   status: ArticleStatus;
   createdAt: string; // ISO string
   updatedAt: string; // ISO string
   publishedAt: string | null;
   archivedAt: string | null;
+};
+
+export type OriginalArticleInfo = {
+  platform: string;
+  url: string;
+  publishedOn: string;
 };
 
 export type ArticleFilter = {

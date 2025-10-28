@@ -16,12 +16,17 @@ import ContentEditor from "@/components/Article/ContentEditor";
 import TagSelector from "@/components/Article/TagSelector";
 import { listTags } from "@/services/tag-api";
 import { Tag } from "@/types/tag";
+import OriginalArticleInfoBox from "@/components/Article/OriginalArticleInfoBox";
+import { OriginalArticleInfo } from "@/types/article";
 
 interface ArticleFormData {
   title: string;
   subtitle: string;
   summary: string;
   content: string;
+  originalArticlePlatform: string;
+  originalArticleUrl: string;
+  originalArticlePublishedOn: string;
   coverImageUrl: string;
   thumbnailUrl: string;
   tagIds: string[];
@@ -35,6 +40,9 @@ export default function NewArticlePage() {
     subtitle: "",
     summary: "",
     content: "",
+    originalArticlePlatform: "",
+    originalArticleUrl: "",
+    originalArticlePublishedOn: "",
     coverImageUrl: "",
     thumbnailUrl: "",
     tagIds: [],
@@ -65,6 +73,30 @@ export default function NewArticlePage() {
     }));
   };
 
+  const handleOriginalArticleInfoChange = (
+    field: keyof OriginalArticleInfo,
+    value: string
+  ) => {
+    let mappedFieldName;
+    switch (field) {
+      case "platform":
+        mappedFieldName = "originalArticlePlatform";
+        break;
+      case "url":
+        mappedFieldName = "originalArticleUrl";
+        break;
+      case "publishedOn":
+        mappedFieldName = "originalArticlePublishedOn";
+        break;
+    }
+    if (mappedFieldName) {
+      setFormData((prev) => ({
+        ...prev,
+        [mappedFieldName]: value,
+      }));
+    }
+  };
+
   const handleContentChange = (value: string) => {
     setFormData((prev) => ({
       ...prev,
@@ -93,12 +125,27 @@ export default function NewArticlePage() {
     setIsSubmitting(true);
     setError(null);
 
+    // Prepare nested originalArticleInfo only if all fields are present
+    let originalArticleInfo = undefined;
+    if (
+      formData.originalArticlePlatform &&
+      formData.originalArticleUrl &&
+      formData.originalArticlePublishedOn
+    ) {
+      originalArticleInfo = {
+        platform: formData.originalArticlePlatform,
+        url: formData.originalArticleUrl,
+        publishedOn: formData.originalArticlePublishedOn,
+      };
+    }
+
     try {
       const articleData: CreateArticleApiRequest = {
         title: formData.title,
         subtitle: formData.subtitle || undefined,
         summary: formData.summary || undefined,
         content: formData.content,
+        originalArticleInfo: originalArticleInfo,
         coverImageUrl: formData.coverImageUrl || undefined,
         thumbnailUrl: formData.thumbnailUrl || undefined,
         tagIds: formData.tagIds.length > 0 ? formData.tagIds : undefined,
@@ -107,7 +154,7 @@ export default function NewArticlePage() {
       const createdSlug = await createArticle(articleData);
 
       if (createdSlug) {
-        router.push(`/articles/${createdSlug}`);
+        router.push(`/articles/manage`);
       } else {
         setError("Failed to create article. Please try again.");
       }
@@ -279,10 +326,18 @@ export default function NewArticlePage() {
               </div>
             </div>
 
+            {/* Original Article Information */}
+            <OriginalArticleInfoBox
+              platform={formData.originalArticlePlatform}
+              url={formData.originalArticleUrl}
+              publishedOn={formData.originalArticlePublishedOn}
+              handleChange={handleOriginalArticleInfoChange}
+            />
+
             {/* Content Editor */}
             <ContentEditor
               content={formData.content}
-              handleContentChange={handleContentChange}
+              handleChange={handleContentChange}
             />
 
             {/* Action Buttons */}
