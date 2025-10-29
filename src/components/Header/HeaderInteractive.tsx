@@ -27,7 +27,8 @@ export default function HeaderInteractive() {
           onClose={() => setToastOpen(false)}
         />
       )}
-      <form onSubmit={handleSearch}>
+      {/*TODO Future feature */}
+      {/*<form onSubmit={handleSearch}>
         <label className="input w-72 flex items-center gap-2">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -47,7 +48,7 @@ export default function HeaderInteractive() {
             placeholder="Search for a keyword ..."
           />
         </label>
-      </form>
+      </form>*/}
       <button
         className="btn btn-secondary text-label-lg"
         onClick={handleNewsletter}

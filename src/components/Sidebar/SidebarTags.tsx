@@ -5,11 +5,13 @@ import TagChip from "../Common/TagChip";
 
 interface SidebarTagsProps {
   tags: Tag[];
+  selectedTagId?: string;
   isMore?: boolean;
 }
 
 export default async function SidebarTags({
   tags,
+  selectedTagId,
   isMore = false,
 }: SidebarTagsProps) {
   return (
@@ -23,6 +25,7 @@ export default async function SidebarTags({
             tagId={tag.tagId}
             slug={tag.slug}
             name={tag.name}
+            isSelected={tag.tagId === selectedTagId}
           />
         ))}
       </div>
