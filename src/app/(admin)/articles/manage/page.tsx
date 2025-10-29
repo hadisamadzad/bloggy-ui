@@ -17,7 +17,7 @@ export default async function Page() {
     <>
       <Hero
         title="Manage Articles"
-        subtitle="Here is your space to manage articles"
+        subtitle={<span>Here is your space to manage articles</span>}
       />
       <section className="max-w-[1440px] mx-auto px-24">
         <div className="flex gap-6">

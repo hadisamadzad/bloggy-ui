@@ -1,6 +1,12 @@
 import Page from "@/app/(public)/articles/page";
 
-export default function TagPage({ params }: { params: { tagSlug: string } }) {
+export default async function TagPage({
+  params,
+}: {
+  params: { tagSlug: string };
+}) {
+  const resolvedParams = await params; // Await to get rid of warnings
+
   // Returns the articles page with the tagSlug prop
-  return <Page tagSlug={params.tagSlug} />;
+  return <Page tagSlug={resolvedParams.tagSlug} />;
 }
