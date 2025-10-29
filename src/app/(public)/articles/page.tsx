@@ -27,7 +27,7 @@ export default async function Page({ tagSlug }: PageProps) {
         }
         subtitle={
           tagSlug ? (
-            <span className="font-mono">
+            <span>
               filtered results for {searchedTagName}, explore{" "}
               <Link href="/articles" className="underline" scroll={false}>
                 all articles!
