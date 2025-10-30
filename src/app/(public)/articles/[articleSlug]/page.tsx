@@ -4,6 +4,7 @@ import SeriesArticleParts from "@/components/Sidebar/SeriesArticleParts";
 import { getPublishedArticleBySlug } from "@/services/article-api";
 import { mapApiArticleToArticle } from "@/lib/type-mappers";
 import ArticleBody from "@/components/Article/ArticleBody";
+import ArticleViewTracker from "@/components/Article/ArticleViewTracker";
 import { Article } from "@/types/article";
 import { getBlogSettings } from "@/services/setting-api";
 
@@ -31,6 +32,8 @@ export default async function Page({ params }: PageProps) {
       <div className="flex gap-6">
         <div className="flex-2">
           <ArticleBody article={article} />
+          {/* Client-side tracker: ensures visitorId in localStorage and records a view */}
+          <ArticleViewTracker articleId={article.articleId} />
         </div>
         <div className="flex-1">
           <SeriesArticleParts />
