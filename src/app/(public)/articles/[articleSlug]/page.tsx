@@ -1,6 +1,5 @@
 import ArticleHeader from "@/components/Article/ArticleHeader";
 import AboutMe from "@/components/Sidebar/AboutMe";
-import SeriesArticleParts from "@/components/Sidebar/SeriesArticleParts";
 import { getPublishedArticleBySlug } from "@/services/article-api";
 import { mapApiArticleToArticle } from "@/lib/type-mappers";
 import ArticleBody from "@/components/Article/ArticleBody";
