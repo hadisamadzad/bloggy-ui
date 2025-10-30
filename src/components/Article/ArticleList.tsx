@@ -1,7 +1,7 @@
 import { Article, ArticleSortBy } from "@/types/article";
 import ArticleListItem from "./ArticleListItem";
 import ArticleListHeader from "./ArticleListHeader";
-import { useEffect, useRef } from "react";
+import React from "react";
 
 type ArticleListProps = {
   articles: Article[];
@@ -12,46 +12,19 @@ type ArticleListProps = {
   onOnlyDraftsChange?: (checked: boolean) => void;
   onOnlyArchivedChange?: (checked: boolean) => void;
   isAdmin?: boolean;
-  onReachEnd?: () => void;
 };
 
-export default function ArticleList({
-  articles,
-  sortedBy = ArticleSortBy.Latest,
-  onSortChange,
-  onlyDrafts = false,
-  onlyArchived = false,
-  onOnlyDraftsChange,
-  onOnlyArchivedChange,
-  isAdmin = false,
-  onReachEnd,
-}: ArticleListProps) {
-  // IntersectionObserver for end of list
-  const endOfListRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    if (!onReachEnd || articles.length === 0) return;
-
-    let isRunningHandler = false;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const [entry] = entries;
-        if (entry.isIntersecting && !isRunningHandler) {
-          isRunningHandler = true;
-          onReachEnd();
-          setTimeout(() => (isRunningHandler = false), 800);
-        }
-      },
-      { threshold: 0.5 }
-    );
-
-    const current = endOfListRef.current;
-    if (current) observer.observe(current);
-
-    return () => {
-      if (current) observer.unobserve(current);
-      observer.disconnect();
-    };
-  }, [onReachEnd]);
+export default function ArticleList(props: ArticleListProps) {
+  const {
+    articles,
+    sortedBy = ArticleSortBy.Latest,
+    onSortChange,
+    onlyDrafts = false,
+    onlyArchived = false,
+    onOnlyDraftsChange,
+    onOnlyArchivedChange,
+    isAdmin = false,
+  } = props;
   return (
     <>
       <div className="p-4 rounded-lg border border-base-content/30">
@@ -79,14 +52,15 @@ export default function ArticleList({
                 {index < articles.length - 1 && <div className="divider" />}
               </div>
             ))}
-            <div ref={endOfListRef} /> {/* Empty div to trigger onReachEnd */}
+            {/* Loader div for parent observer, use id for selection */}
+            <div id="article-list-loader" />
           </>
         )}
       </div>
       {articles.length > 0 && (
         <div className="text-body-md italic mt-6 text-center text-base-content/50">
           You have reached the end of the articles!
-        </div> /* Empty div to trigger onReachEnd */
+        </div>
       )}
     </>
   );

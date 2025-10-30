@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { listPublishedArticles } from "@/services/article-api";
 import { mapApiArticleToArticle } from "@/lib/type-mappers";
 import { Article, ArticleFilter, ArticleSortBy } from "@/types/article";
@@ -21,7 +21,7 @@ export default function ClientPage({ selectedTagId }: ClientPageProps) {
   const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const loaderRef = useRef<HTMLDivElement | null>(null);
+  // No need for loaderRef, will use getElementById
 
   // Reset articles and paging when filters change
   useEffect(() => {
@@ -81,7 +81,7 @@ export default function ClientPage({ selectedTagId }: ClientPageProps) {
       },
       { threshold: 0.5 }
     );
-    const node = loaderRef.current;
+    const node = document.getElementById("article-list-loader");
     if (node) observer.observe(node);
     return () => {
       if (node) observer.unobserve(node);
@@ -98,7 +98,6 @@ export default function ClientPage({ selectedTagId }: ClientPageProps) {
         sortedBy={sortBy}
         onSortChange={setSortBy}
       />
-      {!lastPageReached && <div ref={loaderRef} className="h-10" />}
     </>
   );
 }
