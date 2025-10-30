@@ -36,8 +36,9 @@ export default async function Page({ params }: PageProps) {
           <ArticleViewTracker articleId={article.articleId} />
         </div>
         <div className="flex-1">
-          <SeriesArticleParts />
-          <div className="mt-6" />
+          {/*TODO Future Release*/}
+          {/*<SeriesArticleParts />
+          <div className="mt-6" />*/}
           <AboutMe
             authorName={settings?.authorName ?? ""}
             aboutAuthor={settings?.aboutAuthor ?? ""}
