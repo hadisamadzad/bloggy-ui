@@ -7,7 +7,7 @@ import SeriesArticles from "@/components/Sidebar/SeriesArticles";
 import SidebarTags from "@/components/Sidebar/SidebarTags";
 import { getBlogSettings } from "@/services/setting-api";
 import { listTags } from "@/services/tag-api";
-import ClientPage from "./pageClient";
+import ClientPage from "./clientPage";
 
 export default async function Page() {
   const settings = await getBlogSettings();

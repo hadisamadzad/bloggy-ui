@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { useState } from "react";
 import ToastBar from "@/components/Common/ToastBar";
 import type { ToastMessage } from "@/components/Common/ToastBar";
 import SubscribeModal from "./SubscribeModal";
@@ -9,11 +9,7 @@ export default function HeaderInteractive() {
   const [modalOpen, setModalOpen] = useState(false);
   const [toastOpen, setToastOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState<ToastMessage | null>(null);
-  const handleSearch = (e: FormEvent) => {
-    e.preventDefault();
-    // TODO: Handle search logic
-    console.log("Search submitted");
-  };
+
   const handleNewsletter = () => {
     setModalOpen(true);
   };
