@@ -134,6 +134,16 @@ export default function EditArticlePage() {
       });
   }, []);
 
+  // Centralize error -> toast behavior: any code that sets `error` will
+  // automatically show an error toast. This keeps individual catch blocks
+  // simple (they only call `setError(msg)`).
+  useEffect(() => {
+    if (error) {
+      setToastMessage({ type: "error", text: error });
+      setToastOpen(true);
+    }
+  }, [error]);
+
   const handleGenericInputChange = (
     field: keyof ArticleFormData,
     value: string | string[] | number
