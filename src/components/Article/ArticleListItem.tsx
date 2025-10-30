@@ -54,7 +54,7 @@ export default function ArticleListItem({
             <>
               <div className="flex gap-6">
                 <span className="flex items-center">Views {article.views}</span>
-                <span className="flex items-center">Likes {article.likes}</span>
+                {/*<span className="flex items-center">Likes {article.likes}</span>*/}
               </div>
               <span>{article.readingTime}</span>
             </>

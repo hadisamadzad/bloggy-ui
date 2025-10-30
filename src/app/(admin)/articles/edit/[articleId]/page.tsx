@@ -134,6 +134,16 @@ export default function EditArticlePage() {
       });
   }, []);
 
+  // Centralize error -> toast behavior: any code that sets `error` will
+  // automatically show an error toast. This keeps individual catch blocks
+  // simple (they only call `setError(msg)`).
+  useEffect(() => {
+    if (error) {
+      setToastMessage({ type: "error", text: error });
+      setToastOpen(true);
+    }
+  }, [error]);
+
   const handleGenericInputChange = (
     field: keyof ArticleFormData,
     value: string | string[] | number
@@ -355,20 +365,6 @@ export default function EditArticlePage() {
             </p>
           </div>
 
-          {/* Error Alert */}
-          {error && (
-            <div className="alert alert-error mb-6">
-              <AlertCircle className="w-5 h-5" />
-              <span>{error}</span>
-              <button
-                onClick={() => setError(null)}
-                className="btn btn-sm btn-ghost"
-              >
-                ✕
-              </button>
-            </div>
-          )}
-
           {/* Article Status Box */}
           <div className="mb-6">
             <ArticleStatusBox
@@ -434,7 +430,7 @@ export default function EditArticlePage() {
                   {/* Title */}
                   <div className="form-control lg:col-span-2">
                     <label className="label pb-1">
-                      <span className="label-text font-medium">Title *</span>
+                      <span className="text-label-lg font-medium">Title *</span>
                     </label>
                     <div className="relative">
                       <input
@@ -454,7 +450,7 @@ export default function EditArticlePage() {
                   {/* Slug */}
                   <div className="form-control lg:col-span-2">
                     <label className="label pb-1">
-                      <span className="label-text font-medium">Slug *</span>
+                      <span className="text-label-lg font-medium">Slug *</span>
                     </label>
                     <div className="relative">
                       <input
@@ -470,7 +466,7 @@ export default function EditArticlePage() {
                       <TypeIcon className="absolute right-3 top-3 w-5 h-5 text-base-content/40" />
                     </div>
                     <label className="label pt-1">
-                      <span className="text-base-content/60">
+                      <span className="text-label-md text-base-content/60">
                         URL-friendly identifier for the article (e.g.,
                         my-article-title)
                       </span>
@@ -480,7 +476,9 @@ export default function EditArticlePage() {
                   {/* Subtitle */}
                   <div className="form-control lg:col-span-2">
                     <label className="label pb-1">
-                      <span className="label-text font-medium">Subtitle</span>
+                      <span className="text-label-lg font-medium">
+                        Subtitle
+                      </span>
                     </label>
                     <input
                       type="text"
@@ -496,7 +494,7 @@ export default function EditArticlePage() {
                   {/* Summary */}
                   <div className="form-control lg:col-span-2">
                     <label className="label pb-1">
-                      <span className="label-text font-medium">Summary</span>
+                      <span className="text-label-lg font-medium">Summary</span>
                     </label>
                     <textarea
                       placeholder="Write a compelling summary that will appear in article previews and search results..."
@@ -511,7 +509,7 @@ export default function EditArticlePage() {
                   {/* Cover Image URL */}
                   <div className="form-control">
                     <label className="label pb-1">
-                      <span className="label-text font-medium">
+                      <span className="text-label-lg font-medium">
                         Cover Image URL
                       </span>
                     </label>
@@ -535,7 +533,7 @@ export default function EditArticlePage() {
                   {/* Thumbnail URL */}
                   <div className="form-control">
                     <label className="label pb-1">
-                      <span className="label-text font-medium">
+                      <span className="text-label-lg font-medium">
                         Thumbnail URL
                       </span>
                     </label>
@@ -559,7 +557,7 @@ export default function EditArticlePage() {
                   {/* Time to Read */}
                   <div className="form-control lg:col-span-2">
                     <label className="label pb-1">
-                      <span className="label-text font-medium">
+                      <span className="text-label-lg font-medium">
                         Time to Read (minutes) *
                       </span>
                     </label>
@@ -578,7 +576,7 @@ export default function EditArticlePage() {
                       required
                     />
                     <label className="label pt-1">
-                      <span className="text-base-content/60">
+                      <span className="text-label-md text-base-content/60">
                         Estimated reading time in minutes
                       </span>
                     </label>

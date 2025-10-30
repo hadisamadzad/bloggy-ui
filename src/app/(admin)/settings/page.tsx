@@ -13,7 +13,6 @@ import {
   SecuritySettingsForm,
   SettingsTabNavigation,
   SettingsHeader,
-  ErrorAlert,
 } from "@/components/Settings";
 import type {
   BlogFormData,
@@ -34,6 +33,14 @@ export default function SettingsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState("");
+
+  // Centralize error -> toast behavior: show toast whenever `error` is set.
+  useEffect(() => {
+    if (error) {
+      setToastMessage({ type: "error", text: error });
+      setToastOpen(true);
+    }
+  }, [error]);
 
   // Form states
   const [blogFormData, setBlogFormData] = useState<BlogFormData>({
@@ -313,13 +320,17 @@ export default function SettingsPage() {
         <ToastBar
           open={toastOpen}
           message={toastMessage}
-          onClose={() => setToastOpen(false)}
+          onClose={() => {
+            setToastOpen(false);
+            // clear page-level error so any inline banners are removed
+            setError("");
+          }}
         />
       )}
       <div className="max-w-6xl mx-auto">
         <SettingsHeader />
 
-        <ErrorAlert error={error} onDismiss={() => setError("")} />
+        {/* Error banner removed: errors are surfaced via ToastBar only */}
 
         <SettingsTabNavigation
           activeTab={activeTab}

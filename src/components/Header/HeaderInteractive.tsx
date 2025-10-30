@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { useState } from "react";
 import ToastBar from "@/components/Common/ToastBar";
 import type { ToastMessage } from "@/components/Common/ToastBar";
 import SubscribeModal from "./SubscribeModal";
@@ -9,11 +9,7 @@ export default function HeaderInteractive() {
   const [modalOpen, setModalOpen] = useState(false);
   const [toastOpen, setToastOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState<ToastMessage | null>(null);
-  const handleSearch = (e: FormEvent) => {
-    e.preventDefault();
-    // TODO: Handle search logic
-    console.log("Search submitted");
-  };
+
   const handleNewsletter = () => {
     setModalOpen(true);
   };
@@ -27,7 +23,8 @@ export default function HeaderInteractive() {
           onClose={() => setToastOpen(false)}
         />
       )}
-      <form onSubmit={handleSearch}>
+      {/*TODO Future feature */}
+      {/*<form onSubmit={handleSearch}>
         <label className="input w-72 flex items-center gap-2">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -47,7 +44,7 @@ export default function HeaderInteractive() {
             placeholder="Search for a keyword ..."
           />
         </label>
-      </form>
+      </form>*/}
       <button
         className="btn btn-secondary text-label-lg"
         onClick={handleNewsletter}

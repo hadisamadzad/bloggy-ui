@@ -70,7 +70,7 @@ export default function ContentEditor({
             contentPreviewMode === "split") && (
             <div className="form-control">
               <label className="label pb-1">
-                <span className="label-text font-medium">
+                <span className="text-label-lg font-medium">
                   Markdown Content * [Supports GitHub flavoured markdown]
                 </span>
               </label>
@@ -109,7 +109,7 @@ Remember to make your content engaging and informative!`}
             contentPreviewMode === "split") && (
             <div className="form-control">
               <label className="label pb-1">
-                <span className="label-text font-medium">Live Preview</span>
+                <span className="text-label-lg font-medium">Live Preview</span>
               </label>
               <div className="border border-base-content/20 rounded-lg p-4 bg-base-50 h-96 overflow-y-auto">
                 {content ? (
