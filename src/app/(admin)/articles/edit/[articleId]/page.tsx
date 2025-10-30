@@ -355,20 +355,6 @@ export default function EditArticlePage() {
             </p>
           </div>
 
-          {/* Error Alert */}
-          {error && (
-            <div className="alert alert-error mb-6">
-              <AlertCircle className="w-5 h-5" />
-              <span>{error}</span>
-              <button
-                onClick={() => setError(null)}
-                className="btn btn-sm btn-ghost"
-              >
-                ✕
-              </button>
-            </div>
-          )}
-
           {/* Article Status Box */}
           <div className="mb-6">
             <ArticleStatusBox
