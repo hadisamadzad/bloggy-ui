@@ -37,6 +37,14 @@ export default function ManageTagsPage() {
       .finally(() => setLoading(false));
   }, []);
 
+  // Centralize error -> toast behavior so callers only set `error`.
+  useEffect(() => {
+    if (error) {
+      setToastMessage({ type: "error", text: error });
+      setToastOpen(true);
+    }
+  }, [error]);
+
   const handleCreateTag = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newTagName || !newTagSlug) return;
@@ -57,8 +65,6 @@ export default function ManageTagsPage() {
       setToastOpen(true);
     } catch {
       setError("Failed to create tag.");
-      setToastMessage({ type: "error", text: "Failed to create tag." });
-      setToastOpen(true);
     } finally {
       // keep loader visible briefly to avoid flicker
       setTimeout(() => setCreating(false), 700);
@@ -100,8 +106,6 @@ export default function ManageTagsPage() {
       setToastOpen(true);
     } catch {
       setError("Failed to update tag.");
-      setToastMessage({ type: "error", text: "Failed to update tag." });
-      setToastOpen(true);
     } finally {
       // brief delay so users see the saving spinner
       setTimeout(() => setEditing(false), 700);
@@ -126,8 +130,6 @@ export default function ManageTagsPage() {
       setToastOpen(true);
     } catch {
       setError("Failed to delete tag.");
-      setToastMessage({ type: "error", text: "Failed to delete tag." });
-      setToastOpen(true);
     } finally {
       setProcessingDelete(false);
     }
