@@ -56,6 +56,13 @@ export default function AdminBar() {
         </Link>
         {" | "}
         <Link
+          href="/tags"
+          className=" hover:underline transition-colors cursor-pointer"
+        >
+          Manage Tags
+        </Link>
+        {" | "}
+        <Link
           href="/settings"
           className=" hover:underline transition-colors cursor-pointer"
         >

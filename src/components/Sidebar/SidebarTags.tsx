@@ -1,7 +1,7 @@
 "use server";
 
 import { Tag } from "@/types/tag";
-import TagChip from "../Common/TagChip";
+import TagChip from "../Tag/TagChip";
 
 interface SidebarTagsProps {
   tags: Tag[];

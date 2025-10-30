@@ -221,7 +221,7 @@ export default function NewArticlePage() {
                   {/* Title */}
                   <div className="form-control lg:col-span-2">
                     <label className="label pb-1">
-                      <span className="label-text font-medium">Title *</span>
+                      <span className="text-label-lg font-medium">Title *</span>
                     </label>
                     <div className="relative">
                       <input
@@ -241,7 +241,9 @@ export default function NewArticlePage() {
                   {/* Subtitle */}
                   <div className="form-control lg:col-span-2">
                     <label className="label pb-1">
-                      <span className="label-text font-medium">Subtitle</span>
+                      <span className="text-label-lg font-medium">
+                        Subtitle
+                      </span>
                     </label>
                     <input
                       type="text"
@@ -257,7 +259,7 @@ export default function NewArticlePage() {
                   {/* Summary */}
                   <div className="form-control lg:col-span-2">
                     <label className="label pb-1">
-                      <span className="label-text font-medium">Summary</span>
+                      <span className="text-label-lg font-medium">Summary</span>
                     </label>
                     <textarea
                       placeholder="Write a compelling summary that will appear in article previews and search results..."
@@ -272,7 +274,7 @@ export default function NewArticlePage() {
                   {/* Cover Image URL */}
                   <div className="form-control">
                     <label className="label pb-1">
-                      <span className="label-text font-medium">
+                      <span className="text-label-lg font-medium">
                         Cover Image URL
                       </span>
                     </label>
@@ -296,7 +298,7 @@ export default function NewArticlePage() {
                   {/* Thumbnail URL */}
                   <div className="form-control">
                     <label className="label pb-1">
-                      <span className="label-text font-medium">
+                      <span className="text-label-lg font-medium">
                         Thumbnail URL
                       </span>
                     </label>

@@ -136,9 +136,9 @@ export default function TagSelector({
   return (
     <div className="form-control col-span-2" ref={dropdownRef}>
       <label className="label">
-        <span className="label-text font-medium">Tags: </span>
+        <span className="text-label-lg font-medium">Tags: </span>
         <span
-          className={`label-text-alt ${isMaxTagsReached ? "text-info" : ""}`}
+          className={`text-label-lg ${isMaxTagsReached ? "text-info" : ""}`}
         >
           {selectedTags.length} / {maxTags} tags selected
         </span>
@@ -239,7 +239,7 @@ export default function TagSelector({
 
       {/* Helper Text */}
       <label className="label pt-1">
-        <span className="text-base-content/60">
+        <span className="text-label-md text-base-content/60">
           {isMaxTagsReached
             ? `Maximum ${maxTags} tags reached. Remove a tag to add more.`
             : "↑↓ Navigate • Enter to select • Backspace to remove • Esc to close"}

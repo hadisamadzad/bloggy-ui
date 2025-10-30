@@ -33,7 +33,9 @@ export default function OriginalArticleInfoBox({
           {/* Original Platform */}
           <div className="form-control lg:col-span-1">
             <label className="label pb-1">
-              <span className="label-text font-medium">Original Platform</span>
+              <span className="text-label-lg font-medium">
+                Original Platform
+              </span>
             </label>
             <input
               type="text"
@@ -47,7 +49,7 @@ export default function OriginalArticleInfoBox({
           {/* Published On */}
           <div className="form-control lg:col-span-1">
             <label className="label pb-1">
-              <span className="label-text font-medium">Published On</span>
+              <span className="text-label-lg font-medium">Published On</span>
             </label>
             <input
               type="date"
@@ -59,7 +61,7 @@ export default function OriginalArticleInfoBox({
           {/* Original Article URL */}
           <div className="form-control lg:col-span-2">
             <label className="label pb-1">
-              <span className="label-text font-medium">
+              <span className="text-label-lg font-medium">
                 Original Article URL
               </span>
             </label>
