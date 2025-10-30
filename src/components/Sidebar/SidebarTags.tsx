@@ -22,7 +22,6 @@ export default async function SidebarTags({
         {tags.map((tag) => (
           <TagChip
             key={tag.slug}
-            tagId={tag.tagId}
             slug={tag.slug}
             name={tag.name}
             isSelected={tag.tagId === selectedTagId}

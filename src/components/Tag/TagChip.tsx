@@ -1,12 +1,11 @@
 import { Tag as Tag } from "@/types/tag";
 import Link from "next/link";
 
-export interface TagChipProps extends Tag {
+export interface TagChipProps extends Omit<Tag, "tagId"> {
   isSelected?: boolean;
 }
 
 export default async function TagChip({
-  tagId,
   slug,
   name,
   isSelected = false,
