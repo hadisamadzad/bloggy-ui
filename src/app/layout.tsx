@@ -1,10 +1,17 @@
-"use client";
-
 import "./globals.css";
 import AdminBar from "@/components/Auth/AdminBar";
 import { SettingsProvider } from "@/context/SettingsContext";
+import { buildBlogSeoMetadata } from "@/lib/seo";
+import { getBlogSettings } from "@/services/setting-api";
+import { Metadata } from "next";
 
-export default function RootLayout({
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getBlogSettings();
+
+  return buildBlogSeoMetadata(settings);
+}
+
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -14,7 +21,6 @@ export default function RootLayout({
       <head>
         <meta charSet="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Bloggy</title>
       </head>
       <body className="flex flex-col min-h-screen">
         <AdminBar />
