@@ -5,9 +5,10 @@ import { Article } from "@/types/article";
 
 interface ArticleHeaderProps {
   article: Article;
+  author: string;
 }
 
-export default function ArticleHeader({ article }: ArticleHeaderProps) {
+export default function ArticleHeader({ article, author }: ArticleHeaderProps) {
   return (
     <>
       <div className="flex flex-col gap-12 pt-20 pb-8">
@@ -28,20 +29,20 @@ export default function ArticleHeader({ article }: ArticleHeaderProps) {
         <div className="flex flex-col gap-4">
           <div className="flex justify-between">
             <div className="flex gap-2">
-              <span className="text-body-sm">Published by Author</span>
-              <span className="text-body-sm">|</span>
+              <span className="text-body-sm">Published by {author}</span>
+              <span className="text-body-sm">•</span>
               <span className="text-body-sm">
                 {formatDate(article.createdAt)}
               </span>
-              <span className="text-body-sm">|</span>
+              <span className="text-body-sm">•</span>
               <span className="text-body-sm">
-                Updated on {formatDate(article.updatedAt)}
+                Updated {formatDate(article.updatedAt)}
               </span>
               {article.originalArticleInfo && (
                 <>
-                  <span className="text-body-sm">|</span>
-                  <span className="text-body-sm italic">
-                    Originally published at{" "}
+                  <span className="text-body-sm">•</span>
+                  <span className="text-body-sm">
+                    Originally on{" "}
                     <Link
                       className="link"
                       href={article.originalArticleInfo.url}

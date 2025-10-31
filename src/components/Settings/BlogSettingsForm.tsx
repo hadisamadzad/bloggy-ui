@@ -253,12 +253,12 @@ export default function BlogSettingsForm({
                 <div className="form-control">
                   <label className="label pb-1">
                     <span className="text-label-lg font-medium">
-                      Page Title Template
+                      Article Page Title Template
                     </span>
                   </label>
                   <input
                     type="text"
-                    placeholder="Browser tab title"
+                    placeholder="Browser tab title, parameter: {{title}} for article title"
                     className="input input-bordered w-full"
                     value={formData.pageTitleTemplate}
                     onChange={(e) =>
