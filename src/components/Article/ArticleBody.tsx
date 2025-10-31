@@ -61,7 +61,7 @@ export default async function ArticleBody({ article }: ArticleBodyProps) {
           </div>
           <Link
             className="text-body-sm underline"
-            href={`/articles/${article.slug}`}
+            href={`/${article.slug}`}
             target="_blank"
             rel="noopener noreferrer"
           >

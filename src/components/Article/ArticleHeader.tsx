@@ -30,17 +30,17 @@ export default function ArticleHeader({ article, author }: ArticleHeaderProps) {
           <div className="flex justify-between">
             <div className="flex gap-2">
               <span className="text-body-sm">Published by {author}</span>
-              <span className="text-body-sm">•</span>
+              <span className="text-body-sm">&bull;</span>
               <span className="text-body-sm">
                 {formatDate(article.createdAt)}
               </span>
-              <span className="text-body-sm">•</span>
+              <span className="text-body-sm">&bull;</span>
               <span className="text-body-sm">
                 Updated {formatDate(article.updatedAt)}
               </span>
               {article.originalArticleInfo && (
                 <>
-                  <span className="text-body-sm">•</span>
+                  <span className="text-body-sm">&bull;</span>
                   <span className="text-body-sm">
                     Originally on{" "}
                     <Link
@@ -66,7 +66,7 @@ export default function ArticleHeader({ article, author }: ArticleHeaderProps) {
             </div>
             <Link
               className="text-body-sm underline"
-              href={`/articles/${article.slug}`}
+              href={`/${article.slug}`}
               target="_blank"
               rel="noopener noreferrer"
             >

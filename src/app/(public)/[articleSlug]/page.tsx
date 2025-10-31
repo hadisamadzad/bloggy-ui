@@ -37,7 +37,7 @@ export async function generateMetadata(
       ),
       description: settings?.seoMetaDescription ?? settings?.blogSubtitle,
       alternates: {
-        canonical: `${settings?.blogUrl ?? ""}/articles/${articleSlug}`,
+        canonical: `${settings?.blogUrl ?? ""}/${articleSlug}`,
       },
       authors: settings?.authorName ? [{ name: settings.authorName }] : [],
     };

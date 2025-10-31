@@ -83,7 +83,7 @@ export function buildArticleSeo(article: Article, settings?: ApiBlogSetting, sit
   const site = settings?.blogTitle ?? "My Blog";
   const title = formatTitle(settings?.pageTitleTemplate, { title: article.title, site, subtitle: settings?.blogSubtitle ?? "" }, site);
   const description = article.summary ?? settings?.seoMetaDescription ?? settings?.blogSubtitle ?? "";
-  const canonical = siteBase ? new URL(`/articles/${article.slug}`, siteBase).toString() : `/articles/${article.slug}`;
+  const canonical = siteBase ? new URL(`/${article.slug}`, siteBase).toString() : `/${article.slug}`;
   const image = article.coverImageUrl ? (siteBase ? new URL(article.coverImageUrl, siteBase).toString() : article.coverImageUrl) : settings?.blogLogoUrl;
 
   const jsonLd = buildJsonLdArticle({
