@@ -163,7 +163,7 @@ export default function AccountSettingsForm({
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="form-control">
                   <label className="label pb-1">
-                    <span className="label-text">First Name</span>
+                    <span className="text-label-lg">First Name</span>
                   </label>
                   <input
                     type="text"
@@ -182,7 +182,7 @@ export default function AccountSettingsForm({
 
                 <div className="form-control">
                   <label className="label pb-1">
-                    <span className="label-text">Last Name</span>
+                    <span className="text-label-lg">Last Name</span>
                   </label>
                   <input
                     type="text"
@@ -202,7 +202,7 @@ export default function AccountSettingsForm({
 
               <div className="form-control">
                 <label className="label pb-1">
-                  <span className="label-text">Email Address</span>
+                  <span className="text-label-lg">Email Address</span>
                 </label>
                 <div className="relative">
                   <input
@@ -214,7 +214,7 @@ export default function AccountSettingsForm({
                   <Mail className="absolute right-3 top-3 w-5 h-5 text-base-content/40" />
                 </div>
                 <label className="label">
-                  <span className="label-text-alt text-base-content/60">
+                  <span className="text-label-lg-alt text-base-content/60">
                     Email address cannot be changed. Contact support if needed.
                   </span>
                 </label>

@@ -47,9 +47,12 @@ export default function BlogSettingsForm({
     setDraggedIndex(index);
   };
 
-  const handleDragOver = (e: React.DragEvent<HTMLDivElement>, index: number) => {
-  e.preventDefault();
-  // Optionally highlight drop target
+  const handleDragOver = (
+    e: React.DragEvent<HTMLDivElement>,
+    index: number
+  ) => {
+    e.preventDefault();
+    // Optionally highlight drop target
   };
 
   const handleDrop = (index: number) => {
@@ -115,7 +118,9 @@ export default function BlogSettingsForm({
                 {/* Author Name */}
                 <div className="form-control">
                   <label className="label pb-1">
-                    <span className="label-text font-medium">Author Name</span>
+                    <span className="text-label-lg font-medium">
+                      Author Name
+                    </span>
                   </label>
                   <input
                     type="text"
@@ -134,7 +139,9 @@ export default function BlogSettingsForm({
                 {/* Author Title */}
                 <div className="form-control">
                   <label className="label pb-1">
-                    <span className="label-text font-medium">Author Title</span>
+                    <span className="text-label-lg font-medium">
+                      Author Title
+                    </span>
                   </label>
                   <input
                     type="text"
@@ -153,7 +160,9 @@ export default function BlogSettingsForm({
                 {/* About Author */}
                 <div className="form-control">
                   <label className="label pb-1">
-                    <span className="label-text font-medium">About Author</span>
+                    <span className="text-label-lg font-medium">
+                      About Author
+                    </span>
                   </label>
                   <textarea
                     placeholder="A short bio about yourself"
@@ -171,7 +180,9 @@ export default function BlogSettingsForm({
                 {/* Blog Title */}
                 <div className="form-control">
                   <label className="label pb-1">
-                    <span className="label-text font-medium">Blog Title</span>
+                    <span className="text-label-lg font-medium">
+                      Blog Title
+                    </span>
                   </label>
                   <input
                     type="text"
@@ -191,7 +202,7 @@ export default function BlogSettingsForm({
                 {/* Blog Subtitle */}
                 <div className="form-control">
                   <label className="label pb-1">
-                    <span className="label-text font-medium">
+                    <span className="text-label-lg font-medium">
                       Blog Subtitle
                     </span>
                   </label>
@@ -212,7 +223,7 @@ export default function BlogSettingsForm({
                 {/* Blog Description */}
                 <div className="form-control">
                   <label className="label pb-1">
-                    <span className="label-text font-medium">
+                    <span className="text-label-lg font-medium">
                       Blog Description
                     </span>
                   </label>
@@ -241,13 +252,13 @@ export default function BlogSettingsForm({
                 {/* Page Title Template (moved from Basic Information) */}
                 <div className="form-control">
                   <label className="label pb-1">
-                    <span className="label-text font-medium">
-                      Page Title Template
+                    <span className="text-label-lg font-medium">
+                      Article Page Title Template
                     </span>
                   </label>
                   <input
                     type="text"
-                    placeholder="Browser tab title"
+                    placeholder="Browser tab title, parameter: {{title}} for article title"
                     className="input input-bordered w-full"
                     value={formData.pageTitleTemplate}
                     onChange={(e) =>
@@ -261,7 +272,7 @@ export default function BlogSettingsForm({
 
                 <div className="form-control">
                   <label className="label pb-1">
-                    <span className="label-text font-medium">Blog URL</span>
+                    <span className="text-label-lg font-medium">Blog URL</span>
                   </label>
                   <div className="relative">
                     <input
@@ -282,7 +293,7 @@ export default function BlogSettingsForm({
 
                 <div className="form-control">
                   <label className="label pb-1">
-                    <span className="label-text font-medium">Logo URL</span>
+                    <span className="text-label-lg font-medium">Logo URL</span>
                   </label>
                   <div className="relative">
                     <input
@@ -299,11 +310,16 @@ export default function BlogSettingsForm({
                     />
                     <ImageIcon className="absolute right-3 top-3 w-5 h-5 text-base-content/40" />
                   </div>
+                  <label className="label pt-1">
+                    <span className="text-label-sm text-base-content/60">
+                      Recommended size: 540 x 400
+                    </span>
+                  </label>
                 </div>
 
                 <div className="form-control">
                   <label className="label pb-1">
-                    <span className="label-text font-medium">
+                    <span className="text-label-lg font-medium">
                       SEO Meta Title
                     </span>
                   </label>
@@ -323,7 +339,7 @@ export default function BlogSettingsForm({
 
                 <div className="form-control">
                   <label className="label pb-1">
-                    <span className="label-text font-medium">
+                    <span className="text-label-lg font-medium">
                       SEO Meta Description
                     </span>
                   </label>
@@ -367,7 +383,9 @@ export default function BlogSettingsForm({
               {formData.socials.map((social, index) => (
                 <div
                   key={index}
-                  className={`flex gap-3 items-center cursor-move ${draggedIndex === index ? "bg-base-200" : ""}`}
+                  className={`flex gap-3 items-center cursor-move ${
+                    draggedIndex === index ? "bg-base-200" : ""
+                  }`}
                   draggable
                   onDragStart={() => handleDragStart(index)}
                   onDragOver={(e) => handleDragOver(e, index)}
@@ -432,7 +450,9 @@ export default function BlogSettingsForm({
             <h2 className="card-title text-title-lg mb-4">Copyright</h2>
             <div className="form-control">
               <label className="label pb-1">
-                <span className="label-text font-medium">Copyright Text</span>
+                <span className="text-label-lg font-medium">
+                  Copyright Text
+                </span>
               </label>
               <input
                 type="text"

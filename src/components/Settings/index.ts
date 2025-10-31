@@ -3,7 +3,6 @@ export { default as AccountSettingsForm } from "./AccountSettingsForm";
 export { default as SecuritySettingsForm } from "./SecuritySettingsForm";
 export { default as SettingsTabNavigation } from "./SettingsTabNavigation";
 export { default as SettingsHeader } from "./SettingsHeader";
-export { default as ErrorAlert } from "./ErrorAlert";
 export { default as SocialLinksManager } from "./SocialLinksManager";
 
 // Export types

@@ -40,7 +40,7 @@ export default function SecuritySettingsForm({
           <form onSubmit={onSubmit} className="space-y-4">
             <div className="form-control">
               <label className="label pb-1">
-                <span className="label-text">Current Password</span>
+                <span className="text-label-lg">Current Password</span>
               </label>
               <div className="relative">
                 <input
@@ -77,7 +77,7 @@ export default function SecuritySettingsForm({
 
             <div className="form-control">
               <label className="label pb-1">
-                <span className="label-text">New Password</span>
+                <span className="text-label-lg">New Password</span>
               </label>
               <div className="relative">
                 <input
@@ -114,7 +114,7 @@ export default function SecuritySettingsForm({
 
             <div className="form-control">
               <label className="label pb-1">
-                <span className="label-text">Confirm New Password</span>
+                <span className="text-label-lg">Confirm New Password</span>
               </label>
               <div className="relative">
                 <input

@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import ToastBar from "@/components/Common/ToastBar";
+import type { ToastMessage } from "@/components/Common/ToastBar";
 import { createArticle } from "@/services/article-api";
 import { useAuth } from "@/hooks/useAuth";
 import {
@@ -52,6 +54,9 @@ export default function NewArticlePage() {
   const [error, setError] = useState<string | null>(null);
   const [allTags, setAllTags] = useState<Tag[]>([]);
 
+  const [toastOpen, setToastOpen] = useState(false);
+  const [toastMessage, setToastMessage] = useState<ToastMessage | null>(null);
+
   useEffect(() => {
     listTags()
       .then((tags) => {
@@ -62,6 +67,14 @@ export default function NewArticlePage() {
         setAllTags([]);
       });
   }, []);
+
+  // Centralize error -> toast behavior: when `error` is set show an error toast.
+  useEffect(() => {
+    if (error) {
+      setToastMessage({ type: "error", text: error });
+      setToastOpen(true);
+    }
+  }, [error]);
 
   const handleGenericInputChange = (
     field: keyof ArticleFormData,
@@ -182,6 +195,17 @@ export default function NewArticlePage() {
 
   return (
     <div className="min-h-screen bg-base-100">
+      {toastMessage && (
+        <ToastBar
+          open={toastOpen}
+          message={toastMessage}
+          onClose={() => {
+            setToastOpen(false);
+            // clear the page error so any inline banners disappear as well
+            setError(null);
+          }}
+        />
+      )}
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-6xl mx-auto">
           {/* Header */}
@@ -193,20 +217,6 @@ export default function NewArticlePage() {
               Draft your article with markdown support
             </p>
           </div>
-
-          {/* Error Alert */}
-          {error && (
-            <div className="alert alert-error mb-6">
-              <AlertCircle className="w-5 h-5" />
-              <span>{error}</span>
-              <button
-                onClick={() => setError(null)}
-                className="btn btn-sm btn-ghost"
-              >
-                ✕
-              </button>
-            </div>
-          )}
 
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Article Information */}
@@ -221,7 +231,7 @@ export default function NewArticlePage() {
                   {/* Title */}
                   <div className="form-control lg:col-span-2">
                     <label className="label pb-1">
-                      <span className="label-text font-medium">Title *</span>
+                      <span className="text-label-lg font-medium">Title *</span>
                     </label>
                     <div className="relative">
                       <input
@@ -241,7 +251,9 @@ export default function NewArticlePage() {
                   {/* Subtitle */}
                   <div className="form-control lg:col-span-2">
                     <label className="label pb-1">
-                      <span className="label-text font-medium">Subtitle</span>
+                      <span className="text-label-lg font-medium">
+                        Subtitle
+                      </span>
                     </label>
                     <input
                       type="text"
@@ -257,7 +269,7 @@ export default function NewArticlePage() {
                   {/* Summary */}
                   <div className="form-control lg:col-span-2">
                     <label className="label pb-1">
-                      <span className="label-text font-medium">Summary</span>
+                      <span className="text-label-lg font-medium">Summary</span>
                     </label>
                     <textarea
                       placeholder="Write a compelling summary that will appear in article previews and search results..."
@@ -272,7 +284,7 @@ export default function NewArticlePage() {
                   {/* Cover Image URL */}
                   <div className="form-control">
                     <label className="label pb-1">
-                      <span className="label-text font-medium">
+                      <span className="text-label-lg font-medium">
                         Cover Image URL
                       </span>
                     </label>
@@ -296,7 +308,7 @@ export default function NewArticlePage() {
                   {/* Thumbnail URL */}
                   <div className="form-control">
                     <label className="label pb-1">
-                      <span className="label-text font-medium">
+                      <span className="text-label-lg font-medium">
                         Thumbnail URL
                       </span>
                     </label>

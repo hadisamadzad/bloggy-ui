@@ -44,12 +44,3 @@ export const { IDENTITY_BASE_URL, BLOG_BASE_URL, IDENTITY_API_URL, BLOG_API_URL 
 export const getApiBaseUrl = (service: 'identity' | 'blog'): string => {
   return service === 'identity' ? IDENTITY_API_URL : BLOG_API_URL;
 };
-
-// Debug helper
-export const logApiConfig = () => {
-  console.log('API Configuration:', {
-    NODE_ENV: process.env.NODE_ENV,
-    IDENTITY_URL: IDENTITY_API_URL,
-    BLOG_URL: BLOG_API_URL,
-  });
-};

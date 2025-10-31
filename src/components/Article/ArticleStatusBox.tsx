@@ -3,6 +3,7 @@
 import { Article, ArticleStatus } from "@/types/article";
 import { Eye, Archive, ExternalLink, Trash2 } from "lucide-react";
 import { formatDate } from "@/lib/date-tools";
+import Link from "next/link";
 
 interface ArticleStatusBoxProps {
   article: Article | null;
@@ -54,10 +55,16 @@ export default function ArticleStatusBox({
             </div>
 
             {/* Preview Button */}
-            <button type="button" className="btn btn-sm btn-ghost gap-2">
-              <ExternalLink className="w-4 h-4" />
-              Preview
-            </button>
+            {article.status === ArticleStatus.Published && (
+              <Link
+                href={`/${article.slug}`}
+                className="btn btn-sm btn-ghost gap-2"
+                target="_blank"
+              >
+                <ExternalLink className="w-4 h-4" />
+                Preview
+              </Link>
+            )}
           </div>
 
           {/* Second Row - Date Info and Actions */}

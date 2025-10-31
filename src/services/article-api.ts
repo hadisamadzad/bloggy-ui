@@ -12,7 +12,8 @@ const baseUrl: string = BLOG_API_URL;
 // API: GET /articles/published
 // ============================================
 export async function listPublishedArticles(
-  filter: ArticleFilter
+  filter: ArticleFilter,
+  revalidateSeconds?: number
 ): Promise<ApiArticles | null> {
   // Construct query parameters out of filter
   const params = new URLSearchParams();
@@ -25,7 +26,13 @@ export async function listPublishedArticles(
   });
 
   try {
-    const res = await fetch(`${baseUrl}/articles/published?${params.toString()}`);
+    const url = `${baseUrl}/articles/published?${params.toString()}`;
+    let res: Response;
+    if (typeof revalidateSeconds === "number") {
+      res = await fetch(url, ({ next: { revalidate: revalidateSeconds } } as unknown) as RequestInit);
+    } else {
+      res = await fetch(url, ({ cache: "no-store" } as unknown) as RequestInit);
+    }
     if (!res.ok) throw new Error("Failed to fetch articles");
 
     const data: ApiArticles = await res.json();
@@ -39,10 +46,17 @@ export async function listPublishedArticles(
 // API: GET /articles/published/:slug
 // ============================================
 export async function getPublishedArticleBySlug(
-  slug: string
+  slug: string,
+  revalidateSeconds?: number
 ): Promise<ApiArticle | null> {
   try {
-    const res = await fetch(`${baseUrl}/articles/published/${encodeURIComponent(slug)}`);
+    const url = `${baseUrl}/articles/published/${encodeURIComponent(slug)}`;
+    let res: Response;
+    if (typeof revalidateSeconds === "number") {
+      res = await fetch(url, ({ next: { revalidate: revalidateSeconds } } as unknown) as RequestInit);
+    } else {
+      res = await fetch(url, ({ cache: "no-store" } as unknown) as RequestInit);
+    }
     if (!res.ok) throw new Error(`Failed to fetch article ${slug}`);
 
     const data: ApiArticle = await res.json();

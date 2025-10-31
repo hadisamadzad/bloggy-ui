@@ -7,10 +7,10 @@ const baseUrl: string = BLOG_API_URL;
 // ============================================
 // API: GET /settings
 // ============================================
-export async function getBlogSettings(): Promise<ApiBlogSetting | null> {
+export async function getBlogSettings(): Promise<ApiBlogSetting> {
   try {
     const res = await fetch(`${baseUrl}/settings`, {
-      next: { revalidate: 60 }, // Revalidate every 60 seconds
+      next: { revalidate: 30 }, // Revalidate every 30 seconds
     });
 
     if (!res.ok) throw new Error(`Failed to fetch blog settings`);
@@ -18,7 +18,22 @@ export async function getBlogSettings(): Promise<ApiBlogSetting | null> {
     const data: ApiBlogSetting = await res.json();
     return data;
   } catch {
-    return null;
+    return {
+      authorName: "",
+      authorTitle: "",
+      aboutAuthor: "",
+      blogTitle: "My Blog",
+      blogSubtitle: "",
+      blogDescription: "My Personal Blog",
+      blogUrl: "https://myblog.com",
+      pageTitleTemplate: "{{title}} - My Blog",
+      seoMetaTitle: "{{title}} - My Blog",
+      seoMetaDescription: "My Personal Blog",
+      blogLogoUrl: "",
+      socials: [],
+      copyrightText: "Copyright © My Blog",
+      updatedAt: "",
+    }
   }
 }
 

@@ -70,12 +70,12 @@ export default function ContentEditor({
             contentPreviewMode === "split") && (
             <div className="form-control">
               <label className="label pb-1">
-                <span className="label-text font-medium">
+                <span className="text-label-lg font-medium">
                   Markdown Content * [Supports GitHub flavoured markdown]
                 </span>
               </label>
               <textarea
-                className="textarea textarea-bordered font-mono text-sm leading-relaxed h-96 w-full"
+                className="textarea textarea-bordered font-mono text-sm leading-relaxed h-[30rem] w-full"
                 value={content}
                 onChange={(e) => handleContentChange(e.target.value)}
                 placeholder={`# Your Article Title
@@ -109,9 +109,9 @@ Remember to make your content engaging and informative!`}
             contentPreviewMode === "split") && (
             <div className="form-control">
               <label className="label pb-1">
-                <span className="label-text font-medium">Live Preview</span>
+                <span className="text-label-lg font-medium">Live Preview</span>
               </label>
-              <div className="border border-base-content/20 rounded-lg p-4 bg-base-50 h-96 overflow-y-auto">
+              <div className="border border-base-content/20 rounded-lg p-4 bg-base-50 h-[30rem] overflow-y-auto">
                 {content ? (
                   <div className="prose prose-base max-w-none">
                     <ReactMarkdown remarkPlugins={[remarkGfm]}>

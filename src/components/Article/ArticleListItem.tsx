@@ -15,7 +15,7 @@ export default function ArticleListItem({
 }: ArticleListItemProps) {
   const articleUrl = isAdmin
     ? `/articles/edit/${article.articleId}`
-    : `/articles/${article.slug}`;
+    : `/${article.slug}`;
 
   return (
     <div className="flex gap-4 min-h-36">
@@ -39,7 +39,7 @@ export default function ArticleListItem({
               {article.publishedAt ? formatDate(article.publishedAt) : ""}
             </time>
             <time className="text-label-md">
-              {formatDate(article.updatedAt)}
+              Updated {formatDate(article.updatedAt)}
             </time>
           </div>
           <Link href={articleUrl}>
@@ -54,7 +54,7 @@ export default function ArticleListItem({
             <>
               <div className="flex gap-6">
                 <span className="flex items-center">Views {article.views}</span>
-                <span className="flex items-center">Likes {article.likes}</span>
+                {/*<span className="flex items-center">Likes {article.likes}</span>*/}
               </div>
               <span>{article.readingTime}</span>
             </>
@@ -62,7 +62,7 @@ export default function ArticleListItem({
             <>
               <div />
               <Link
-                href={`/articles/edit/${article.articleId}`}
+                href={articleUrl}
                 className="btn btn-sm btn-secondary btn-outline gap-2"
               >
                 <Pencil size={14} />

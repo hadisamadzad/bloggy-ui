@@ -1,15 +1,17 @@
 "use server";
 
 import { Tag } from "@/types/tag";
-import TagChip from "../Common/TagChip";
+import TagChip from "../Tag/TagChip";
 
 interface SidebarTagsProps {
   tags: Tag[];
+  selectedTagId?: string;
   isMore?: boolean;
 }
 
 export default async function SidebarTags({
   tags,
+  selectedTagId,
   isMore = false,
 }: SidebarTagsProps) {
   return (
@@ -20,9 +22,9 @@ export default async function SidebarTags({
         {tags.map((tag) => (
           <TagChip
             key={tag.slug}
-            tagId={tag.tagId}
             slug={tag.slug}
             name={tag.name}
+            isSelected={tag.tagId === selectedTagId}
           />
         ))}
       </div>
