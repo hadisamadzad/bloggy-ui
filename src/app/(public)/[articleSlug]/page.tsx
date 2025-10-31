@@ -7,20 +7,19 @@ import ArticleViewTracker from "@/components/Article/ArticleViewTracker";
 import { Article } from "@/types/article";
 import { getBlogSettings } from "@/services/setting-api";
 import { Metadata } from "next";
-import { formatTitle, buildArticleSeo } from "@/lib/seo";
+import { buildArticleSeoMetadata, buildBlogSeoMetadata } from "@/lib/seo";
 
 type RoutePageProps = {
   params?: Promise<{ articleSlug: string }>;
   searchParams?: Promise<unknown>;
 };
-
+// Generate SEO metadata for the article page
 export async function generateMetadata(
   props: RoutePageProps
 ): Promise<Metadata> {
   const { params } = props;
   const { articleSlug } = (await params) as { articleSlug: string };
   const settings = await getBlogSettings();
-  const site = settings?.blogTitle ?? "My Blog";
 
   const REVALIDATE_SECONDS = 30; // hard-coded, do not change
   const apiArticle = await getPublishedArticleBySlug(
@@ -29,25 +28,12 @@ export async function generateMetadata(
   );
 
   if (!apiArticle) {
-    return {
-      title: formatTitle(
-        settings?.pageTitleTemplate,
-        { title: "Article not found", site },
-        site
-      ),
-      description: settings?.seoMetaDescription ?? settings?.blogSubtitle,
-      alternates: {
-        canonical: `${settings?.blogUrl ?? ""}/${articleSlug}`,
-      },
-      authors: settings?.authorName ? [{ name: settings.authorName }] : [],
-    };
+    return buildBlogSeoMetadata(settings);
   }
 
   const article = mapApiArticleToArticle(apiArticle);
-  const siteBase = settings?.blogUrl ?? process.env.NEXT_PUBLIC_SITE_URL ?? "";
 
-  const metadata = buildArticleSeo(article, settings ?? undefined, siteBase);
-  return metadata;
+  return buildArticleSeoMetadata(settings, article);
 }
 
 export default async function Page(props: RoutePageProps) {

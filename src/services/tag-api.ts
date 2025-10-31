@@ -7,15 +7,16 @@ const baseUrl: string = BLOG_API_URL;
 // ============================================
 // API: GET /tags
 // ============================================
-export async function listTags(): Promise<Tag[]> {
+export async function listTags(revalidateSeconds?: number): Promise<Tag[]> {
   try {
-    const res = await fetch(`${baseUrl}/tags`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      cache: "no-store", // Always fetch fresh tags
-    });
+    const url = `${baseUrl}/tags`;
+    let res: Response;
+
+    if (typeof revalidateSeconds === "number") {
+      res = await fetch(url, ({ next: { revalidate: revalidateSeconds } } as unknown) as RequestInit);
+    } else {
+      res = await fetch(url, ({ cache: "no-store" } as unknown) as RequestInit);
+    }
 
     if (!res.ok) {
       throw new Error(`Failed to fetch tags: ${res.status} ${res.statusText}`);
@@ -25,7 +26,7 @@ export async function listTags(): Promise<Tag[]> {
     return tags;
   } catch (error) {
     console.error("Error fetching tags:", error);
-    throw error;
+    return []
   }
 }
 

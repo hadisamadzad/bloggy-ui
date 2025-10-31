@@ -5,15 +5,29 @@ import AboutMe from "@/components/Sidebar/AboutMe";
 import SidebarTags from "@/components/Sidebar/SidebarTags";
 import { listTags } from "@/services/tag-api";
 import Link from "next/link";
+import { Metadata } from "next";
+import { buildBlogSeoMetadata } from "@/lib/seo";
 
-export interface PageProps {
-  tagSlug?: string;
+type RoutePageProps = {
+  params?: Promise<{ tagSlug?: string }>;
+  searchParams?: Promise<unknown>;
+};
+
+// Generate SEO metadata for the article page
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getBlogSettings();
+
+  return buildBlogSeoMetadata(settings);
 }
 
-export default async function Page({ tagSlug }: PageProps) {
+export default async function Page(props: RoutePageProps) {
+  const { params } = props;
+  const { tagSlug } = (await params) as { tagSlug: string };
+  const REVALIDATE_SECONDS = 30; // hard-coded, do not change
+
   // Fetch blog settings and tags
   const settings = await getBlogSettings();
-  const allTags = (await listTags()) ?? [];
+  const allTags = await listTags(REVALIDATE_SECONDS);
 
   // Find the tagId and name for the given tagSlug
   const searchedTagId = allTags.find((tag) => tag.slug === tagSlug)?.tagId;

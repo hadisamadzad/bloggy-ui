@@ -8,7 +8,7 @@ import {
   buildOpenGraph,
   buildTwitterCard,
   buildJsonLdArticle,
-  formatTitle,
+  formatPageTitle,
 } from "@/lib/seo";
 
 type Props = SeoParams & { settings?: ApiBlogSetting };
@@ -25,7 +25,7 @@ export default function SeoClient({
   modifiedTime,
 }: Props) {
   const siteMeta = defaultMetaFromSettings(settings);
-  const finalTitle = formatTitle(
+  const finalTitle = formatPageTitle(
     settings?.pageTitleTemplate || undefined,
     {
       title: title || settings?.seoMetaTitle || "",
