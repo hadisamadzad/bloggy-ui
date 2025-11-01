@@ -305,7 +305,7 @@ export default function NewArticlePage() {
                     </div>
                     <label className="label pt-1">
                       <span className="text-label-sm text-base-content/60">
-                        Recommended size: 540 x 400
+                        Recommended size: 1000 x 740 pixels
                       </span>
                     </label>
                   </div>
@@ -334,7 +334,7 @@ export default function NewArticlePage() {
                     </div>
                     <label className="label pt-1">
                       <span className="text-label-sm text-base-content/60">
-                        Recommended size: 540 x 400
+                        Recommended size: 200 x 150 pixels
                       </span>
                     </label>
                   </div>
