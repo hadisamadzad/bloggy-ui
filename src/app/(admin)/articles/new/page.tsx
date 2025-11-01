@@ -303,6 +303,11 @@ export default function NewArticlePage() {
                       />
                       <ImageIcon className="absolute right-3 top-3 w-5 h-5 text-base-content/40" />
                     </div>
+                    <label className="label pt-1">
+                      <span className="text-label-sm text-base-content/60">
+                        Recommended size: 540 x 400
+                      </span>
+                    </label>
                   </div>
 
                   {/* Thumbnail URL */}
@@ -327,6 +332,11 @@ export default function NewArticlePage() {
                       />
                       <ImageIcon className="absolute right-3 top-3 w-5 h-5 text-base-content/40" />
                     </div>
+                    <label className="label pt-1">
+                      <span className="text-label-sm text-base-content/60">
+                        Recommended size: 540 x 400
+                      </span>
+                    </label>
                   </div>
 
                   <TagSelector
