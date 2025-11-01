@@ -38,7 +38,7 @@ function LoginForm() {
   };
 
   return (
-    <div className="flex min-h-svh items-top m-30 justify-center">
+    <div className="flex min-h-svh items-start m-30 justify-center">
       <div className="w-full max-w-sm flex flex-col gap-4">
         <div className="text-center flex flex-col gap-4">
           <h1 className="text-headline-lg">Sign in</h1>
