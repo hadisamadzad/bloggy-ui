@@ -14,9 +14,9 @@ export default function ArticleHeader({ article, author }: ArticleHeaderProps) {
       <div className="flex flex-col gap-12 pt-20 pb-8">
         <div className="w-3/4 flex flex-col gap-4">
           <h1 className="text-headline-lg">{article.title}</h1>
-          <h3 className="text-body-md text-base-content/50">
+          <p className="text-body-md text-base-content/50">
             {article.subtitle}
-          </h3>
+          </p>
         </div>
 
         <div className="w-3/4">

@@ -43,7 +43,7 @@ export default async function Page(props: RoutePageProps) {
           tagSlug ? (
             <span>
               filtered results for {searchedTagName}, explore{" "}
-              <Link href="/articles" className="underline" scroll={false}>
+              <Link href="/" className="underline" scroll={false}>
                 all articles!
               </Link>
             </span>

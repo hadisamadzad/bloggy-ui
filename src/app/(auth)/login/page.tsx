@@ -27,7 +27,7 @@ function LoginForm() {
       await login(email, password);
 
       // Redirect to intended page using safe redirect logic
-      const targetUrl = getSafeRedirectUrl(redirectUrl, "/articles");
+      const targetUrl = getSafeRedirectUrl(redirectUrl, "/");
       router.push(targetUrl);
     } catch (err) {
       setError("Login failed. Please check your credentials.");

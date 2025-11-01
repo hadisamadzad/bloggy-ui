@@ -16,7 +16,7 @@ export default async function TagChip({
         isSelected ? "text-primary bg-secondary hover:bg-secondary/80" : ""
       }`}
     >
-      <Link href={`/articles/tags/${slug}`} scroll={false}>
+      <Link href={`/tags/${slug}`} scroll={false}>
         {name}
       </Link>
     </div>

@@ -1,0 +1,11 @@
+# robots.txt for bloggy-ui
+# Default policy: allow most paths, but explicitly disallow some admin/edit routes.
+
+User-agent: *
+# Disallow login and article creation/editing pages
+Disallow: /login
+Disallow: /articles/new/
+Disallow: /articles/edit/
+
+# Sitemap location
+Sitemap: https://hadisamadzad.com/sitemap.xml
