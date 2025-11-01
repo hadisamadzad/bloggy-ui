@@ -20,8 +20,8 @@ export default async function ArticleBody({ article }: ArticleBodyProps) {
         <Image
           src={article.coverImageUrl}
           alt={article.title}
-          width={1000}
-          height={600}
+          width={1000} // pixels
+          height={740} // pixels
           className="w-full max-h-[500px] rounded-lg object-cover"
         />
         <div className="prose max-w-none">
