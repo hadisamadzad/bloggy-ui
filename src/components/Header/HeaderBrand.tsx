@@ -7,7 +7,7 @@ export default async function HeaderBrand() {
   const settings: ApiBlogSetting | null = await getBlogSettings();
 
   return (
-    <Link href="/articles">
+    <Link href="/">
       <div className="flex flex-row items-center">
         <div className="mr-2">
           <div className="avatar">

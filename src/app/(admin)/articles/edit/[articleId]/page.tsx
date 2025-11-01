@@ -243,7 +243,6 @@ export default function EditArticlePage() {
         text: "Article updated successfully!",
       });
       setToastOpen(true);
-      //router.push(`/articles/${articleData.slug}`);
     } catch (err: unknown) {
       console.error("Error in handleSubmit:", err);
 

@@ -52,7 +52,7 @@ export function isSafeRedirectUrl(url: string): boolean {
  * @param fallback - Fallback URL if the original is unsafe
  * @returns Safe redirect URL
  */
-export function getSafeRedirectUrl(url: string | null, fallback: string = '/articles'): string {
+export function getSafeRedirectUrl(url: string | null, fallback: string = '/'): string {
   if (!url) return fallback;
   return isSafeRedirectUrl(url) ? url : fallback;
 }

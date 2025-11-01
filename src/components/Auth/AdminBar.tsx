@@ -16,7 +16,7 @@ export default function AdminBar() {
     window.dispatchEvent(new Event("auth-change"));
 
     // Redirect to home page
-    router.push("/articles");
+    router.push("/");
   };
 
   // Don't render anything if user is not logged in
@@ -34,7 +34,7 @@ export default function AdminBar() {
       </div>
       <div className="flex items-center gap-4">
         <Link
-          href="/articles"
+          href="/"
           className=" hover:underline transition-colors cursor-pointer"
         >
           Home

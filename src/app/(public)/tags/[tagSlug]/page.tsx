@@ -1,4 +1,4 @@
-import Page from "@/app/(public)/articles/page";
+import Page from "@/app/(public)/page";
 import { buildBlogSeoMetadata } from "@/lib/seo";
 import { getBlogSettings } from "@/services/setting-api";
 import { listTags } from "@/services/tag-api";
