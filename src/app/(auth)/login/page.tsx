@@ -2,7 +2,6 @@
 
 import { useState, FormEvent, Suspense } from "react";
 import { Eye, EyeOff } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { login } from "@/services/auth-api";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -39,7 +38,7 @@ function LoginForm() {
   };
 
   return (
-    <div className="flex min-h-svh items-center -m-6 justify-center">
+    <div className="flex min-h-svh items-top m-30 justify-center">
       <div className="w-full max-w-sm flex flex-col gap-4">
         <div className="text-center flex flex-col gap-4">
           <h1 className="text-headline-lg">Sign in</h1>
@@ -126,7 +125,7 @@ function LoginForm() {
           </button>
         </form>
 
-        <div className="divider">or</div>
+        {/*<div className="divider">or</div>
 
         <div className="flex flex-col gap-4">
           <button className="btn btn-outline w-full h-12 flex items-center gap-2">
@@ -150,7 +149,7 @@ function LoginForm() {
             />
             Sign in with Apple ID
           </button>
-        </div>
+        </div>*/}
       </div>
     </div>
   );

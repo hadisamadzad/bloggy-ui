@@ -8,13 +8,13 @@ const getBaseUrl = (service: string): string => {
   const baseUrls = {
     // Production URLs
     production: {
-      identity: "https://bloggy.hadisamadzad.com/api/identity",
-      blog: "https://bloggy.hadisamadzad.com/api/blog",
+      identity: "https://hadisamadzad.com/api/identity",
+      blog: "https://hadisamadzad.com/api/blog",
     },
     // Development URLs
     development: {
-      identity: "https://bloggy.hadisamadzad.com/api/identity",
-      blog: "https://bloggy.hadisamadzad.com/api/blog",
+      identity: "https://hadisamadzad.com/api/identity",
+      blog: "https://hadisamadzad.com/api/blog",
     }
   };
 
