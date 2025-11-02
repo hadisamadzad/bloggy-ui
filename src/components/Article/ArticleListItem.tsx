@@ -24,10 +24,10 @@ export default function ArticleListItem({
           <Image
             alt={article.title}
             title={article.title}
-            src={article.thumbnailUrl ?? "https://picsum.photos/200/150"}
+            src={article.thumbnailUrl ?? "https://picsum.photos/500/375"}
             className="object-cover rounded-lg w-full"
-            width={200} // pixels
-            height={150} // pixels
+            width={500} // pixels
+            height={375} // pixels
           />
         </Link>
       </div>
