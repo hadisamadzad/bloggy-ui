@@ -8,7 +8,15 @@ import { Metadata } from "next";
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getBlogSettings();
 
-  return buildBlogSeoMetadata(settings);
+  const metadata = buildBlogSeoMetadata(settings);
+  
+  return {
+    ...metadata,
+    themeColor: [
+      { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+      { media: '(prefers-color-scheme: dark)', color: '#1a1a1a' },
+    ],
+  };
 }
 
 export default async function RootLayout({
