@@ -27,7 +27,7 @@ export default function ArticleList(props: ArticleListProps) {
   } = props;
   return (
     <>
-      <div className="p-4 rounded-lg border border-base-content/30">
+      <div className="p-3 sm:p-4 rounded-lg border border-base-content/30 ">
         <div className="pb-4">
           <ArticleListHeader
             showPopular={!isAdmin}

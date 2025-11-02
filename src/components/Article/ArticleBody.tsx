@@ -16,15 +16,15 @@ interface ArticleBodyProps {
 export default async function ArticleBody({ article }: ArticleBodyProps) {
   return (
     <>
-      <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-6">
         <Image
           src={article.coverImageUrl}
           alt={article.title}
           width={1000} // pixels
           height={740} // pixels
-          className="w-full max-h-[500px] rounded-lg object-cover"
+          className="w-full max-h-[300px] md:max-h-[500px] rounded-lg object-cover"
         />
-        <div className="prose max-w-none">
+        <div className="prose prose-sm sm:prose-base max-w-none">
           <ReactMarkdown
             remarkPlugins={[remarkGfm]}
             components={{
@@ -54,13 +54,13 @@ export default async function ArticleBody({ article }: ArticleBodyProps) {
 
         <ArticleTags tags={article.tags}></ArticleTags>
 
-        <div className="flex items-center justify-between pt-2 border-t-1 border-gray-100">
+        <div className="flex items-center justify-between py-2 border-t-1 border-b-1 border-gray-100">
           <div className="flex gap-6">
-            <span className="text-label-md">Views {article.views}</span>
-            {/*<span className="text-label-md">Likes {article.likes}</span>*/}
+            <span className="text-xs sm:text-sm">Views {article.views}</span>
+            {/*<span className="text-xs sm:text-sm md:text-label-md">Likes {article.likes}</span>*/}
           </div>
           <Link
-            className="text-body-sm underline"
+            className="text-xs sm:text-sm underline"
             href={`/${article.slug}`}
             target="_blank"
             rel="noopener noreferrer"

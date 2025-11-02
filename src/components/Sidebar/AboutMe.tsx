@@ -18,6 +18,7 @@ import {
 } from "react-icons/fa";
 
 import React, { JSX } from "react";
+import Link from "next/link";
 
 const socialIcons: Record<string, JSX.Element> = {
   github: <FaGithub size={24} />,
@@ -67,11 +68,12 @@ export default async function AboutMe({
           <div className=" flex gap-3 justify-end">
             {(socialLinks || []).map((s, idx) =>
               s?.url ? (
-                <a
+                <Link
                   key={idx}
                   href={s.url}
                   target="_blank"
                   rel="noopener noreferrer"
+                  aria-label={`Visit my ${s.name} profile`}
                   className="w-6 h-6 flex justify-center items-center bg-white text-secondary"
                 >
                   {socialIcons[s.name.toLowerCase()] || (
@@ -82,7 +84,7 @@ export default async function AboutMe({
                       {s.name.slice(0, 2).toUpperCase()}
                     </span>
                   )}
-                </a>
+                </Link>
               ) : null
             )}
           </div>
