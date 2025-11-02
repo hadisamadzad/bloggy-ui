@@ -54,8 +54,8 @@ export default async function Page(props: RoutePageProps) {
           )
         }
       />
-      <section className="max-w-[1440px] mx-auto px-24">
-        <div className="flex gap-6">
+      <section className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-12 lg:px-24">
+        <div className="flex flex-col lg:flex-row gap-6">
           <div className="flex-2">
             <ClientPage selectedTagId={searchedTagId} />
           </div>

@@ -22,7 +22,7 @@ export default async function HeaderBrand() {
           </div>
         </div>
         <div className="flex flex-col gap-1">
-          <p className="text-title-md">{settings?.blogTitle}</p>
+          <p className="text-title-md">{settings?.authorName}</p>
           <p className="text-label-md text-base-content/70">
             {settings?.authorTitle}
           </p>

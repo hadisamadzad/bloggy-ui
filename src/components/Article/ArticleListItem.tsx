@@ -18,14 +18,14 @@ export default function ArticleListItem({
     : `/${article.slug}`;
 
   return (
-    <div className="flex gap-4 min-h-36">
-      <div className="flex-none w-[180px] h-30 pt-3">
+    <div className="flex flex-col sm:flex-row gap-4 min-h-36">
+      <div className="flex-none  sm:w-[180px] h-auto sm:h-30 pt-0 sm:pt-1">
         <Link href={articleUrl}>
           <Image
             alt={article.title}
             title={article.title}
             src={article.thumbnailUrl ?? "https://picsum.photos/200/150"}
-            className="object-cover rounded-lg"
+            className="object-cover rounded-lg w-full"
             width={200} // pixels
             height={150} // pixels
           />
@@ -36,17 +36,21 @@ export default function ArticleListItem({
         <div>
           <div className="flex justify-between text-neutral-600 mb-1">
             <time className="text-label-md">
-              {article.publishedAt ? formatDate(article.publishedAt) : ""}
+              {article.publishedAt
+                ? formatDate(article.publishedAt)
+                : `${formatDate(article.createdAt)} - Unpublished`}
             </time>
             <time className="text-label-md">
               Updated {formatDate(article.updatedAt)}
             </time>
           </div>
           <Link href={articleUrl}>
-            <h2 className="text-title-lg">{article.title}</h2>
+            <h2 className="text-2xl sm:text-xl font-bold">{article.title}</h2>
           </Link>
           {article.summary && (
-            <p className="text-body-sm text-neutral-500">{article.summary}</p>
+            <p className="text-sm sm:text-md text-neutral-500">
+              {article.summary}
+            </p>
           )}
         </div>
         <div className="flex justify-between items-end mt-4 text-label-md text-neutral-500">

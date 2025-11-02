@@ -53,12 +53,12 @@ export default async function Page(props: RoutePageProps) {
   const article: Article = mapApiArticleToArticle(apiArticle);
 
   return (
-    <section className="max-w-[1440px] mx-auto px-24">
+    <section className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-12 lg:px-24">
       <ArticleHeader
         article={article}
         author={settings?.authorName ?? "Author"}
       />
-      <div className="flex gap-6">
+      <div className="flex flex-col lg:flex-row gap-6">
         <div className="flex-2">
           <ArticleBody article={article} />
           {/* Client-side tracker: ensures visitorId in localStorage and records a view */}
