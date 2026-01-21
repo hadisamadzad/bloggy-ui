@@ -12,7 +12,7 @@ export default async function TagChip({
 }: TagChipProps) {
   return (
     <div
-      className={`bg-base-content/10 text-sm font-mono py-2 px-4 rounded-full w-fit hover:bg-base-content/20 ${
+      className={`bg-base-content/10 text-sm py-1 px-3 rounded-full w-fit hover:bg-base-content/20 ${
         isSelected ? "text-primary bg-secondary hover:bg-secondary/80" : ""
       }`}
     >
