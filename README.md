@@ -1,3 +1,5 @@
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=hadisamadzad_bloggy-ui&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=hadisamadzad_bloggy-ui)
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
